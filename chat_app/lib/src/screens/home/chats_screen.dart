@@ -12,15 +12,15 @@ import '../../models/chat_user_model.dart';
 
 import '../../service_locators.dart';
 
-class HomeScreen extends StatefulWidget {
+class GlobalChat extends StatefulWidget {
   static const String route = 'home-screen';
-  const HomeScreen({Key? key}) : super(key: key);
+  const GlobalChat({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<GlobalChat> createState() => _GlobalChatState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _GlobalChatState extends State<GlobalChat> {
   final AuthController _auth = locator<AuthController>();
   final ChatController _chatController = ChatController();
 

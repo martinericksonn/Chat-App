@@ -1,7 +1,6 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/screens/authentication/login_screen.dart';
 import 'package:chat_app/src/screens/home/home_screen.dart';
-import 'package:chat_app/src/service_locators.dart';
 import 'package:flutter/material.dart';
 
 class Wrapper extends StatelessWidget {

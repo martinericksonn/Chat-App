@@ -73,12 +73,12 @@ class AuthController with ChangeNotifier {
   Future ressetPassword({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+      print('seneeeeeeeeeeed emailllllllllllllllllllllllllllllll');
       return true;
     } on FirebaseAuthException catch (error) {
       print(error.message);
       return Future.error(error.message.toString());
     }
-    
   }
 
   Future register(

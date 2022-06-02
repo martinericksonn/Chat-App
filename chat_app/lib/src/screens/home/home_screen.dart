@@ -3,6 +3,7 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/chats_screen.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -73,6 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => GlobalChat(),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.abc)),
             searchBar(context),
             IconButton(
               onPressed: () {

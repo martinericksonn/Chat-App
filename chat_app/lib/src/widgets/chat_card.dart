@@ -79,8 +79,10 @@ class _ChatCardState extends State<ChatCard> {
               // Text('asd'),
               Visibility(
                 visible: chat[index].isEdited
-                    ? chat[index].sentBy ==
-                        FirebaseAuth.instance.currentUser?.uid
+                    ? chat[index].isDeleted
+                        ? false
+                        : chat[index].sentBy ==
+                            FirebaseAuth.instance.currentUser?.uid
                     : false,
                 child: Padding(
                   padding: EdgeInsets.all(5),
@@ -165,10 +167,12 @@ class _ChatCardState extends State<ChatCard> {
               ),
               Visibility(
                 visible: chat[index].isEdited
-                    ? chat[index].sentBy ==
-                            FirebaseAuth.instance.currentUser?.uid
+                    ? chat[index].isDeleted
                         ? false
-                        : true
+                        : chat[index].sentBy ==
+                                FirebaseAuth.instance.currentUser?.uid
+                            ? false
+                            : true
                     : false,
                 child: Padding(
                   padding: EdgeInsets.all(5),
