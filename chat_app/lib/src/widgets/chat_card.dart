@@ -136,15 +136,15 @@ class _ChatCardState extends State<ChatCard> {
                         decoration: BoxDecoration(
                           border: Border.all(
                               color: chat[index].isDeleted
-                                  ? Theme.of(context).primaryColorDark
+                                  ? Theme.of(context).colorScheme.primary
                                   : Colors.transparent),
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: chat[index].isDeleted
                               ? Colors.transparent
                               : chat[index].sentBy ==
                                       FirebaseAuth.instance.currentUser?.uid
-                                  ? Theme.of(context).primaryColorDark
-                                  : Theme.of(context).primaryColor,
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.secondary,
                         ),
                         // color: Colors.black,
                         child: Text(

@@ -21,13 +21,35 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       restorationScopeId: 'app',
       debugShowCheckedModeBanner: false,
+      // ignore: prefer_const_constructors
+      // appBarTheme: AppBarTheme(
+      //   // systemOverlayStyle: SystemUiOverlayStyle.light, // 2
+      // ),
+      //     colorScheme: ColorScheme(
+      //   primary: Colors.red,
+      //   onPrimary: Colors.red,
+      //   secondary: Colors.red,
+      //   onSecondary: Colors.red,
+      //   error: Colors.red,
+      //   onError: Colors.red,
+      //   background: Colors.red,
+      //   onBackground: Colors.red,
+      //   surface: Colors.red,
+      //   onSurface: Colors.red,
+      //   brightness: Brightness.light,
+      // )
       theme: ThemeData(
-        // ignore: prefer_const_constructors
-        appBarTheme: AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle.light, // 2
-        ),
-      ),
-      darkTheme: ThemeData.dark(),
+          colorScheme: const ColorScheme.light().copyWith(
+        primary: const Color(0xff6C63FF),
+        secondary: Colors.black54,
+      )),
+      darkTheme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: Colors.black,
+          colorScheme: const ColorScheme.dark(
+            primary: Color(0xffD3D0FF),
+            secondary: Colors.white54,
+            onBackground: Colors.white,
+          )),
       builder: (context, Widget? child) => child as Widget,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: NavigationService.generateRoute,

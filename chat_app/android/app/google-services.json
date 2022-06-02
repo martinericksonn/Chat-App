@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "461456300473",
+    "project_id": "tabi-chat-app-1ff51",
+    "storage_bucket": "tabi-chat-app-1ff51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461456300473:android:7b0305361d750490807e68",
+        "android_client_info": {
+          "package_name": "com.tabi.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461456300473-j370mccqhapn7sk8fkeif3sbie6rcq4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtCVuYRb6sFHR_dXZ3lphKygS3l_ZyDuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461456300473-j370mccqhapn7sk8fkeif3sbie6rcq4d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

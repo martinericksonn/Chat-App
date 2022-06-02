@@ -70,6 +70,17 @@ class AuthController with ChangeNotifier {
     }
   }
 
+  Future ressetPassword({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return true;
+    } on FirebaseAuthException catch (error) {
+      print(error.message);
+      return Future.error(error.message.toString());
+    }
+    ;
+  }
+
   Future register(
       {required String email,
       required String password,
@@ -82,6 +93,7 @@ class AuthController with ChangeNotifier {
       if (createdUser.user != null) {
         ChatUser userModel = ChatUser(createdUser.user!.uid, username, email,
             '', Timestamp.now(), Timestamp.now());
+        print("WwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwHY NOT WORKING!");
         return FirebaseFirestore.instance
             .collection('users')
             .doc(userModel.uid)

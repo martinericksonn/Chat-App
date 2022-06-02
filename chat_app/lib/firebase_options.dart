@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -47,30 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAQNm9HOup_VoiYc-MVHxE0NxiPPasWD3g',
-    appId: '1:844741810062:web:0ec565f0d735b27bfe76df',
-    messagingSenderId: '844741810062',
-    projectId: 'lapetaje-chat-app',
-    authDomain: 'lapetaje-chat-app.firebaseapp.com',
-    storageBucket: 'lapetaje-chat-app.appspot.com',
+    apiKey: 'AIzaSyB5wbrg9ZJC2zR2aQMeBDL8y3KMwpNwK-g',
+    appId: '1:461456300473:web:a7497bfd2feca4bb807e68',
+    messagingSenderId: '461456300473',
+    projectId: 'tabi-chat-app-1ff51',
+    authDomain: 'tabi-chat-app-1ff51.firebaseapp.com',
+    storageBucket: 'tabi-chat-app-1ff51.appspot.com',
+    measurementId: 'G-CBSRV2FFCH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB9B0zsQ3dGEpOOJMIZlo8iolVzchu2onw',
-    appId: '1:844741810062:android:6c6f8f696546187ffe76df',
-    messagingSenderId: '844741810062',
-    projectId: 'lapetaje-chat-app',
-    storageBucket: 'lapetaje-chat-app.appspot.com',
+    apiKey: 'AIzaSyDtCVuYRb6sFHR_dXZ3lphKygS3l_ZyDuA',
+    appId: '1:461456300473:android:7b0305361d750490807e68',
+    messagingSenderId: '461456300473',
+    projectId: 'tabi-chat-app-1ff51',
+    storageBucket: 'tabi-chat-app-1ff51.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBA1fAwZFGHGll2J03M03eA8NMspC-bs10',
-    appId: '1:844741810062:ios:9731809eaa5ce2f3fe76df',
-    messagingSenderId: '844741810062',
-    projectId: 'lapetaje-chat-app',
-    storageBucket: 'lapetaje-chat-app.appspot.com',
-    iosClientId:
-        '844741810062-o33eescoe1hf0mtdgn2ag8brnavlod6i.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDT2QxKbJBZK7M3S6S1J5Iz4Sn541t8i2E',
+    appId: '1:461456300473:ios:28d07aa5631b86b1807e68',
+    messagingSenderId: '461456300473',
+    projectId: 'tabi-chat-app-1ff51',
+    storageBucket: 'tabi-chat-app-1ff51.appspot.com',
+    iosClientId: '461456300473-6uneub6416lc6mm0dkdvrp4rub1hmnde.apps.googleusercontent.com',
+    iosBundleId: 'com.example.chatApp',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDT2QxKbJBZK7M3S6S1J5Iz4Sn541t8i2E',
+    appId: '1:461456300473:ios:28d07aa5631b86b1807e68',
+    messagingSenderId: '461456300473',
+    projectId: 'tabi-chat-app-1ff51',
+    storageBucket: 'tabi-chat-app-1ff51.appspot.com',
+    iosClientId: '461456300473-6uneub6416lc6mm0dkdvrp4rub1hmnde.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatApp',
   );
 }

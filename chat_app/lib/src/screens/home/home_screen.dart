@@ -149,12 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           borderSide: BorderSide(
                             width: 1,
-                            color: Theme.of(context).primaryColorDark,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).primaryColorDark,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: Icon(
                       Icons.send_rounded,
-                      color: Theme.of(context).primaryColorDark,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: send,
                   )

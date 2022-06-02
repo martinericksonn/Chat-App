@@ -4,29 +4,24 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/auth_controller.dart';
 
-class RegisterScreen extends StatefulWidget {
+class ForgetPassScreen extends StatefulWidget {
   final AuthController auth;
 
-  const RegisterScreen(
+  const ForgetPassScreen(
     this.auth, {
     Key? key,
   }) : super(key: key);
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _ForgetPassScreenState extends State<ForgetPassScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isEmailEmpty = false;
-  bool isPasswordEmpty = false;
-  bool isUsernameEmpty = false;
-  bool isRegisterSuccess = false;
   String prompts = '';
-
+  bool isResetSuccess = false;
   final TextEditingController _emailCon = TextEditingController();
-  final TextEditingController _passCon = TextEditingController();
-  final TextEditingController _unCon = TextEditingController();
 
   AuthController get _auth => widget.auth;
   @override
@@ -75,16 +70,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               children: [
                 title(),
-                // SizedBox(height: 15),
-                usernameTextField(context),
                 emailTextField(context),
-                passwordTextField(context),
               ],
             ),
             promptMessage(),
             Column(
               children: [
-                registerButton(context),
+                resetButton(context),
                 loginButton(context),
               ],
             ),
@@ -99,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Text(
       prompts,
       style: TextStyle(
-        color: isRegisterSuccess ? Colors.green : Colors.red,
+        color: isResetSuccess ? Colors.green : Colors.red,
       ),
       textAlign: TextAlign.center,
     );
@@ -112,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Joined us before? ",
+            "Back to",
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
           TextButton(
@@ -136,12 +128,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Future<void> register() async {
+  Future<void> resetPass() async {
     try {
-      await _auth.register(
-          username: _unCon.text.trim(),
-          email: _emailCon.text.trim(),
-          password: _passCon.text.trim());
+      bool result = await _auth.ressetPassword(email: _emailCon.text.trim());
+      if (result) {
+        FocusScope.of(context).unfocus();
+        final snackBar = SnackBar(
+          content: const Text('Check your email for passwod reset link'),
+          action: SnackBarAction(
+            label: 'ok',
+            onPressed: () {},
+          ),
+        );
+
+        // Find the ScaffoldMessenger in the widget tree
+        // and use it to show a SnackBar.
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } catch (error) {
       setState(() {
         prompts = error.toString();
@@ -149,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Widget registerButton(BuildContext context) {
+  Widget resetButton(BuildContext context) {
     return Container(
       // color: Colors.red,
       width: 320,
@@ -161,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onPressed: () {
           if (_formKey.currentState!.validate() && isFieldEmpty()) {
             setState(() {
-              register();
+              resetPass();
             });
           } else {
             setState(() {
@@ -171,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
         child: Center(
           child: Text(
-            "Register",
+            "Reset Password",
             style: TextStyle(
               fontSize: 18,
               color: Theme.of(context).scaffoldBackgroundColor,
@@ -203,96 +206,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       alignment: Alignment.topLeft,
-      child: Text(
-        "Join Tabi now.",
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          Text(
+            "Forget Password?.",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+            child: Text(
+              "Dont worry, we've been there! ",
+              style: TextStyle(),
+            ),
+          )
+        ],
       ),
     );
-  }
-
-  Container passwordTextField(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: isPasswordEmpty
-                  ? Colors.red
-                  : Theme.of(context).colorScheme.primary, // set border
-
-              width: isPasswordEmpty ? 2.0 : 1.0,
-            ), // set
-            // color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(20)),
-        child: TextFormField(
-          controller: _passCon,
-          validator: (value) {
-            setState(() {
-              isPasswordEmpty = (value == null || value.isEmpty) ? true : false;
-            });
-            return null;
-          },
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          style: TextStyle(fontWeight: FontWeight.bold),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            hintStyle: TextStyle(
-                color: isPasswordEmpty
-                    ? Colors.red
-                    : Theme.of(context).colorScheme.primary),
-            hintText: "Password",
-            contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-          ),
-        ));
-  }
-
-  Container usernameTextField(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: isUsernameEmpty
-                  ? Colors.red
-                  : Theme.of(context).colorScheme.primary,
-              width: isUsernameEmpty ? 2.0 : 1.0,
-            ), // set
-            // color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(20)),
-        child: TextFormField(
-          controller: _unCon,
-          validator: (value) {
-            setState(() {
-              isUsernameEmpty = (value == null || value.isEmpty) ? true : false;
-            });
-            return null;
-          },
-          style: TextStyle(fontWeight: FontWeight.bold),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            hintStyle: TextStyle(
-                color: isUsernameEmpty
-                    ? Colors.red
-                    : Theme.of(context).colorScheme.primary),
-            hintText: "Username",
-            contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-          ),
-        ));
   }
 
   Container emailTextField(BuildContext context) {
@@ -356,7 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         height: MediaQuery.of(context).size.height * 0.40,
         padding: EdgeInsets.only(top: 18.0),
         child: Image(
-          image: AssetImage("assets/images/register.png"),
+          image: AssetImage("assets/images/forget.png"),
         ),
       )
     ]);
@@ -379,6 +313,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool isFieldEmpty() {
-    return !(isEmailEmpty || isPasswordEmpty || isUsernameEmpty);
+    return !(isEmailEmpty);
   }
 }
