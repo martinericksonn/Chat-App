@@ -13,8 +13,22 @@ class Themes {
         secondary: Colors.black54,
         tertiary: tertiaryLight,
       ),
-      textTheme: const TextTheme(
-        titleLarge: TextStyle(color: Color(0xff6C63FF)),
+      dividerTheme: const DividerThemeData(
+        space: 20,
+        thickness: 1,
+        indent: 20,
+        endIndent: 20,
+      ),
+      textTheme: TextTheme(
+        titleMedium: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: TextStyle(
+          color: primaryLight,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -28,7 +42,18 @@ class Themes {
         onBackground: Colors.white,
         tertiary: tertiaryDark,
       ),
+      dividerTheme: DividerThemeData(
+        color: tertiaryDark,
+        space: 20,
+        thickness: 1,
+        indent: 20,
+        endIndent: 20,
+      ),
       textTheme: TextTheme(
+        titleMedium: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
         titleLarge: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
