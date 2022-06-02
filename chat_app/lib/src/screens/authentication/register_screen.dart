@@ -204,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       alignment: Alignment.topLeft,
       child: Text(
-        "Join Tabi now.",
+        "Join Tabi-Tabi now.",
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -338,17 +338,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Stack upperBody(BuildContext context) {
     return Stack(children: [
-      Container(
-        alignment: Alignment.topRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
-          child: Text(
-            "Tabi",
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
-          ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset("assets/images/tabi-tabi.png", width: 45, height: 45),
+            Text(
+              "Tabi-Tabi",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+          ],
         ),
       ),
       Container(
@@ -369,7 +372,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       title: Container(
         alignment: Alignment.centerRight,
         child: Text(
-          "Tabi",
+          "Tabi-Tabi",
           style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold),

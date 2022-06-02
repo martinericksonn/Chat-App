@@ -221,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(left: 10),
       alignment: Alignment.topLeft,
       child: Text(
-        "Be productive.",
+        "Communicate and connect.",
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -317,17 +317,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Stack upperBody(BuildContext context) {
     return Stack(children: [
-      Container(
-        alignment: Alignment.topRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
-          child: Text(
-            "Tabi-Tabi",
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
-          ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset("assets/images/tabi-tabi.png", width: 45, height: 45),
+            Text(
+              "Tabi-Tabi",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+          ],
         ),
       ),
       Container(
