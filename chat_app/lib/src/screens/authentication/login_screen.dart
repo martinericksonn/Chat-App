@@ -51,8 +51,16 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Theme.of(context).bottomAppBarColor,
-      statusBarColor: Theme.of(context).primaryColor,
+      systemNavigationBarIconBrightness:
+          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
+              ? Brightness.dark
+              : Brightness.light,
+      statusBarIconBrightness:
+          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
+              ? Brightness.dark
+              : Brightness.light,
+      systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      statusBarColor: Theme.of(context).scaffoldBackgroundColor,
       //color set to transperent or set your own color
     ));
     return SafeArea(
