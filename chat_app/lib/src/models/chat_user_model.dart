@@ -25,6 +25,20 @@ class ChatUser {
     return ChatUser.fromDocumentSnap(snap);
   }
 
+  static Future<List<ChatUser>> getUsers() async {
+    List<ChatUser> users = [];
+    await FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        users.add(ChatUser.fromDocumentSnap(doc));
+      }
+    });
+
+    return users;
+  }
+
   Map<String, dynamic> get json => {
         'uid': uid,
         'username': username,

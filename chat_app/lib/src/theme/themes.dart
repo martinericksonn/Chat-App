@@ -8,6 +8,12 @@ class Themes {
 
   ThemeData light() {
     return ThemeData(
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+            color:
+                primaryLight), // set backbutton color here which will reflect in all screens.
+      ),
       colorScheme: const ColorScheme.light().copyWith(
         primary: primaryLight,
         secondary: Colors.black54,
@@ -21,6 +27,10 @@ class Themes {
       ),
       textTheme: TextTheme(
         titleMedium: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: const TextStyle(
+          fontSize: 16,
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -35,6 +45,12 @@ class Themes {
 
   ThemeData dark() {
     return ThemeData.dark().copyWith(
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(
+            color:
+                primaryDark), // set backbutton color here which will reflect in all screens.
+      ),
       scaffoldBackgroundColor: Colors.black,
       colorScheme: ColorScheme.dark(
         primary: primaryDark,
@@ -51,6 +67,12 @@ class Themes {
       ),
       textTheme: TextTheme(
         titleMedium: const TextStyle(
+          // fontSize: 16,
+
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: const TextStyle(
+          fontSize: 16,
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),

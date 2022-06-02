@@ -3,7 +3,9 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen.dart';
+import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -72,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => {},
-        label:
-            Text("Find Nearby", style: Theme.of(context).textTheme.titleMedium),
+        label: Text("Find Nearby",
+            style: Theme.of(context).textTheme.headlineMedium),
       ),
     );
   }
@@ -85,20 +87,20 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              searchBar(context),
-              chat_tile(context),
+              Searchbar(),
+              chatTile(context),
               Divider(),
-              chat_tile(context),
-              chat_tile(context),
-              chat_tile(context),
-              chat_tile(context),
-              chat_tile(context),
+              chatTile(context),
+              chatTile(context),
+              chatTile(context),
+              chatTile(context),
+              chatTile(context),
               Divider(),
-              chat_tile(context),
-              chat_tile(context),
-              chat_tile(context),
-              chat_tile(context),
-              chat_tile(context),
+              chatTile(context),
+              chatTile(context),
+              chatTile(context),
+              chatTile(context),
+              chatTile(context),
               IconButton(
                   onPressed: () {
                     Navigator.of(context).push(
@@ -120,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  ListTile chat_tile(BuildContext context) {
+  ListTile chatTile(BuildContext context) {
     return ListTile(
       onTap: () => {
         Navigator.of(context).push(
@@ -129,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )
       },
-      leading: Container(
+      leading: SizedBox(
         // color: Colors.red,
         height: 50,
         width: 50,
@@ -140,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       title: Text(
         "Tabi-Tabi",
-        style: Theme.of(context).textTheme.bodyLarge,
+        // style: Theme.of(context).textTheme.bodyLarge,
       ),
       subtitle: Container(
         child: Text(
@@ -195,7 +197,11 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         IconButton(
           onPressed: () {
-            _auth.logout();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => NewMessage(),
+              ),
+            );
           },
           icon: const Icon(Icons.edit_rounded),
           color: Theme.of(context).colorScheme.primary,

@@ -345,7 +345,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Image.asset("assets/images/tabi-tabi.png", width: 45, height: 45),
             Text(
-              "Tabi-Tabi",
+              " Tabi-Tabi",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
