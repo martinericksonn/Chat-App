@@ -78,7 +78,7 @@ class AuthController with ChangeNotifier {
       print(error.message);
       return Future.error(error.message.toString());
     }
-    ;
+    
   }
 
   Future register(

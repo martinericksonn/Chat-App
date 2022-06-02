@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "New to Tabi?",
+            "New to Tabi-Tabi?",
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
           TextButton(
@@ -257,6 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           style: TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
+            prefixIcon: Icon(Icons.key),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -297,6 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           style: TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
+            prefixIcon: Icon(Icons.email),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -320,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
           child: Text(
-            "Tabi",
+            "Tabi-Tabi",
             style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
@@ -350,7 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
       title: Container(
         alignment: Alignment.centerRight,
         child: Text(
-          "Tabi",
+          "Tabi-Tabi",
           style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold),
