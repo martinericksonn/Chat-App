@@ -1,8 +1,10 @@
 import 'package:chat_app/src/screens/authentication/login_screen.dart';
 import 'package:chat_app/src/screens/home/home_screen.dart';
+import 'package:chat_app/wrapper.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
+
 part 'navigation_animations.dart';
 part 'navigation_routing.dart';
 
