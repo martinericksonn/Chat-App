@@ -23,6 +23,9 @@ class Wrapper extends StatelessWidget {
                   width: 50, height: 50, child: CircularProgressIndicator()),
             ),
           );
+          if (_authController.currentUser != null) {
+            print('hello world');
+          }
           switch (settings.name) {
             case LoginScreen.route:
               print(settings.name);

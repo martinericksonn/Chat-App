@@ -3,9 +3,7 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
-import 'package:chat_app/src/widgets/chat_card.dart';
 import 'package:flutter/services.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:flutter/material.dart';
 
@@ -27,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
-  final ScrollController _scrollController = ScrollController();
 
   ChatUser? user;
   @override
@@ -39,151 +36,101 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     });
-    _chatController.addListener(scrollToBottom);
+
     super.initState();
   }
 
   @override
   void dispose() {
-    _chatController.removeListener(scrollToBottom);
     _messageFN.dispose();
     _messageController.dispose();
     _chatController.dispose();
     super.dispose();
   }
 
-  scrollToBottom() async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    print('scrolling to bottom');
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          curve: Curves.easeIn, duration: const Duration(milliseconds: 250));
-    }
-  }
-
-  scrollBottom() async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    print('scrolling to bottom');
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-          _scrollController.position.viewportDimension +
-              _scrollController.position.maxScrollExtent,
-          curve: Curves.easeIn,
-          duration: const Duration(milliseconds: 250));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Theme.of(context).bottomAppBarColor,
-      statusBarColor: Theme.of(context).primaryColor,
+      systemNavigationBarIconBrightness:
+          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
+              ? Brightness.dark
+              : Brightness.light,
+      statusBarIconBrightness:
+          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
+              ? Brightness.dark
+              : Brightness.light,
+      systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      statusBarColor: Theme.of(context).scaffoldBackgroundColor,
       //color set to transperent or set your own color
     ));
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        // backgroundColor: Theme.of(context).colorScheme.,
-        elevation: 0,
-        title: Text('Chatting from ${user?.username ?? '...'}'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _auth.logout();
-              },
-              icon: const Icon(Icons.logout_rounded))
-        ],
-      ),
-      body: SizedBox(
+        resizeToAvoidBottomInset: true, appBar: appBar(), body: body(context));
+  }
+
+  SizedBox body(BuildContext context) {
+    return SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
-            Expanded(
-              child: AnimatedBuilder(
-                  animation: _chatController,
-                  builder: (context, Widget? w) {
-                    return SingleChildScrollView(
-                      physics: ScrollPhysics(),
-                      controller: _scrollController,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: _chatController.chats.length,
-                                itemBuilder: (context, index) {
-                                  return ChatCard(
-                                      scrollController: _scrollController,
-                                      index: index,
-                                      chat: _chatController.chats);
-                                }),
-                            // for (ChatMessage chat in _chatController.chats)
-                            //   ChatCard(
-                            //       chat: chat, chatController: _chatController)
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
+            searchBar(context),
+            IconButton(
+              onPressed: () {
+                _auth.logout();
+              },
+              icon: const Icon(Icons.logout_rounded),
+              color: Theme.of(context).colorScheme.primary,
             ),
-            Container(
-              height: MediaQuery.of(context).size.height / 15,
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      onFieldSubmitted: (String text) {
-                        send();
-                      },
-                      focusNode: _messageFN,
-                      controller: _messageController,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.all(12),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.send_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onPressed: send,
-                  )
-                ],
-              ),
-            )
           ],
+        ));
+  }
+
+  Container searchBar(BuildContext context) {
+    return Container(
+      height: 42,
+      width: MediaQuery.of(context).size.width / 1.1,
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.tertiary,
+          borderRadius: BorderRadius.circular(50)),
+      child: TextButton(
+        onPressed: () {},
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Row(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              SizedBox(
+                width: 5,
+              ),
+              Icon(Icons.search_rounded),
+              SizedBox(
+                width: 5,
+              ),
+              Text('Search'),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  send() {
-    _messageFN.unfocus();
-    if (_messageController.text.isNotEmpty) {
-      _chatController.sendMessage(message: _messageController.text.trim());
-      _messageController.text = '';
-    }
+  AppBar appBar() {
+    return AppBar(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0,
+      title: Text(
+        user?.username ?? '...',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            _auth.logout();
+          },
+          icon: const Icon(Icons.edit_rounded),
+          color: Theme.of(context).colorScheme.primary,
+        )
+      ],
+    );
   }
 }
