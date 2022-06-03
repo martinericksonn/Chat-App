@@ -93,11 +93,19 @@ class AuthController with ChangeNotifier {
       if (createdUser.user != null) {
         ChatUser userModel = ChatUser(createdUser.user!.uid, username, email,
             '', Timestamp.now(), Timestamp.now());
-        print("WwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwHY NOT WORKING!");
+
         return FirebaseFirestore.instance
             .collection('users')
             .doc(userModel.uid)
-            .set(userModel.json);
+            .set(userModel.json)
+            .then((value) => {
+                  FirebaseFirestore.instance
+                      .collection('chats')
+                      .doc("XMGXGoTYNnhOiDHOg5aa")
+                      .update({
+                    "memebers": FieldValue.arrayUnion([userModel.uid])
+                  })
+                });
       }
     } on FirebaseAuthException catch (e) {
       print("adsfadsf ${e.message}");

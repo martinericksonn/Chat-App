@@ -65,11 +65,14 @@ class ChatMessage {
     });
   }
 
-  static Stream<List<ChatMessage>> currentChats() => FirebaseFirestore.instance
-      .collection('chats')
-      .orderBy('ts')
-      .snapshots()
-      .map(ChatMessage.fromQuerySnap);
+  static Stream<List<ChatMessage>> currentChats(String chatroom) =>
+      FirebaseFirestore.instance
+          .collection('chats')
+          .doc(chatroom)
+          .collection('messages')
+          .orderBy('ts')
+          .snapshots()
+          .map(ChatMessage.fromQuerySnap);
 
   Future updateMessage(String newMessage) {
     return FirebaseFirestore.instance.collection("chats").doc(uid) //edite  d

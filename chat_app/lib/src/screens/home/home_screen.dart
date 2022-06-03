@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AuthController _auth = locator<AuthController>();
-  final ChatController _chatController = ChatController();
+  // final ChatController _chatController = ChatController();
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _messageFN.dispose();
     _messageController.dispose();
-    _chatController.dispose();
+    // _chatController.dispose();
     super.dispose();
   }
 
@@ -199,11 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         InkWell(
-            onTap: () {
-              ImageService.updateProfileImage();
-            },
-            child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
-          ),
+          onTap: () {
+            ImageService.updateProfileImage();
+          },
+          child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+        ),
         IconButton(
           onPressed: () {
             Navigator.of(context).push(

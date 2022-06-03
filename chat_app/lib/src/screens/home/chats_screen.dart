@@ -13,7 +13,6 @@ import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
 
 class GlobalChat extends StatefulWidget {
-  static const String route = 'home-screen';
   const GlobalChat({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +21,7 @@ class GlobalChat extends StatefulWidget {
 
 class _GlobalChatState extends State<GlobalChat> {
   final AuthController _auth = locator<AuthController>();
-  final ChatController _chatController = ChatController();
+  final ChatController _chatController = ChatController("XMGXGoTYNnhOiDHOg5aa");
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
@@ -181,7 +180,8 @@ class _GlobalChatState extends State<GlobalChat> {
   send() {
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
-      _chatController.sendMessage(message: _messageController.text.trim());
+      _chatController.sendMessage(
+          message: _messageController.text.trim(), chatID: "asdasd");
       _messageController.text = '';
     }
   }

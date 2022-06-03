@@ -3,6 +3,7 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:flutter/services.dart';
 
@@ -10,43 +11,10 @@ import 'package:flutter/material.dart';
 
 import '../../models/chat_user_model.dart';
 
-import '../../service_locators.dart';
+class NewMessage extends StatelessWidget {
+  NewMessage({Key? key}) : super(key: key);
 
-class NewMessage extends StatefulWidget {
-  static const String route = 'home-screen';
-  const NewMessage({Key? key}) : super(key: key);
-
-  @override
-  State<NewMessage> createState() => _NewMessageState();
-}
-
-class _NewMessageState extends State<NewMessage> {
-  final AuthController _auth = locator<AuthController>();
-  final ChatController _chatController = ChatController();
-
-  final TextEditingController _messageController = TextEditingController();
-  final FocusNode _messageFN = FocusNode();
-
-  late Future<List<ChatUser>> gettingUsers;
-  @override
-  void initState() {
-    gettingUsers = ChatUser.getUsers();
-    ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _messageFN.dispose();
-    _messageController.dispose();
-    _chatController.dispose();
-    super.dispose();
-  }
+  // late Future<List<ChatUser>> gettingUsers;
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +59,13 @@ class _NewMessageState extends State<NewMessage> {
     );
   }
 
+  // ignore: prefer_typing_uninitialized_variables
+  var getUsers;
   Expanded showUserList() {
+    getUsers ??= ChatUser.getUsers();
     return Expanded(
       child: FutureBuilder<List<ChatUser>>(
-          future: gettingUsers,
+          future: getUsers,
           builder: (
             BuildContext context,
             AsyncSnapshot<List<ChatUser>> snapshot,
@@ -105,8 +76,14 @@ class _NewMessageState extends State<NewMessage> {
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  print(index);
                   return ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                                selectedUser: snapshot.data![index])),
+                      );
+                    },
                     leading: CircleAvatar(
                       child: Icon(Icons.person_rounded),
                       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -123,6 +100,11 @@ class _NewMessageState extends State<NewMessage> {
 
   ListTile newGroupChat(BuildContext context) {
     return ListTile(
+      onTap: () {
+        // _chatController.sendFirstMessage(
+        //     "test", _auth.currentUser!.uid, 'private');
+        // print("DONE");
+      },
       leading: CircleAvatar(
         child: Icon(Icons.group_rounded),
         backgroundColor: Theme.of(context).colorScheme.primary,

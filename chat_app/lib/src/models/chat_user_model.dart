@@ -26,6 +26,7 @@ class ChatUser {
   }
 
   static Future<List<ChatUser>> getUsers() async {
+    print("SOME ONE CALLED ME");
     List<ChatUser> users = [];
     await FirebaseFirestore.instance
         .collection('users')
@@ -54,5 +55,5 @@ class ChatUser {
         'image': image,
         'created': created,
         'updated': updated
-      };  
+      };
 }
