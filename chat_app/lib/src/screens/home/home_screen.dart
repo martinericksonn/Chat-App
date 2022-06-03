@@ -5,7 +5,10 @@ import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen.dart';
+import 'package:chat_app/src/services/image_service.dart';
+import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -195,6 +198,12 @@ class _HomeScreenState extends State<HomeScreen> {
         style: Theme.of(context).textTheme.titleLarge,
       ),
       actions: [
+        InkWell(
+            onTap: () {
+              ImageService.updateProfileImage();
+            },
+            child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+          ),
         IconButton(
           onPressed: () {
             Navigator.of(context).push(

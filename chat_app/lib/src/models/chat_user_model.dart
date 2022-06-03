@@ -39,6 +39,14 @@ class ChatUser {
     return users;
   }
 
+  static Stream<ChatUser> fromUidStream({required String uid}) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .map(ChatUser.fromDocumentSnap);
+  }
+
   Map<String, dynamic> get json => {
         'uid': uid,
         'username': username,
@@ -46,5 +54,5 @@ class ChatUser {
         'image': image,
         'created': created,
         'updated': updated
-      };
+      };  
 }
