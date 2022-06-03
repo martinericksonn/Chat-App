@@ -5,6 +5,7 @@ import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/widgets/chat_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -15,7 +16,8 @@ import '../../service_locators.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser selectedUser;
-  ChatScreen({Key? key, required this.selectedUser});
+  final String chatroom;
+  ChatScreen({Key? key, required this.selectedUser, this.chatroom = ""});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -23,43 +25,19 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final AuthController _auth = locator<AuthController>();
-  late final ChatController _chatController;
-
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
   final ScrollController _scrollController = ScrollController();
+  final ChatController _chatController = ChatController();
   ChatUser? get selectedUser => widget.selectedUser;
+  String get chatroom => widget.chatroom;
 
   @override
   void initState() {
+    if (chatroom == "") {
+      _chatController.stream;
+    }
     super.initState();
-  }
-
-  Future<String> getChatController() async {
-    String snapshot = 'null';
-    await FirebaseFirestore.instance
-        .collection("chats")
-        .where("id", isEqualTo: "${selectedUser?.uid}${_auth.currentUser!.uid}")
-        .where("${_auth.currentUser!.uid}${selectedUser?.uid}")
-        .get()
-        .then((value) => {
-              if (value.docs.isEmpty)
-                {
-                  print(value.docs),
-                  print('1'),
-                  snapshot = "empty",
-                }
-              else
-                {
-                  for (var data in value.docs) {print(data.id)},
-                  print('2'),
-                  _chatController = ChatController(value.docs.first.id),
-                  _chatController.addListener(scrollToBottom),
-                  snapshot = "success",
-                }
-            });
-    print('4');
-    return snapshot;
   }
 
   scrollToBottom() async {
@@ -96,35 +74,39 @@ class _ChatScreenState extends State<ChatScreen> {
         elevation: 0,
         title: Text(selectedUser?.username ?? ""),
       ),
-      body: FutureBuilder(
-        future: getChatController(),
+      body: StreamBuilder(
+        stream: _chatController.stream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data == "null") {
-              return Center(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Loading"),
-                    ),
-                  ]));
+              return loadingScreen("1");
             } else if (snapshot.data == "success") {
               return hasMessage(context);
             } else if (snapshot.data == 'empty') {
               return noMessageYet(context);
             }
           } else if (snapshot.hasError) {
-            return Text("asaaaaaaaaaadsss");
+            return loadingScreen(snapshot.error.toString());
           }
-          return Text("hsaaaaaaaaaadsss");
+          return loadingScreen("3");
         },
       ),
     );
+  }
+
+  Center loadingScreen(String num) {
+    return Center(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: <Widget>[
+          CircularProgressIndicator(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Loading" + num),
+          ),
+        ]));
   }
 
   SizedBox hasMessage(BuildContext context) {
@@ -175,8 +157,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     onFieldSubmitted: (String text) {
                       send();
                     },
-                    // focusNode: _messageFN,
-                    // controller: _messageController,
+                    focusNode: _messageFN,
+                    controller: _messageController,
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.all(12),
@@ -219,7 +201,7 @@ class _ChatScreenState extends State<ChatScreen> {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          Expanded(child: Text('data')),
+          Expanded(child: Text('empty chat')),
           Container(
             alignment: Alignment.center,
             height: MediaQuery.of(context).size.height / 15,
@@ -231,8 +213,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     onFieldSubmitted: (String text) {
                       send();
                     },
-                    // focusNode: _messageFN,
-                    // controller: _messageController,
+                    focusNode: _messageFN,
+                    controller: _messageController,
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.all(12),
@@ -259,7 +241,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     Icons.send_rounded,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: send,
+                  onPressed: sendFirst,
                 )
               ],
             ),
@@ -270,10 +252,25 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   send() {
-    // _messageFN.unfocus();
+    print("ive been clicked");
+    _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
-      // _chatController.sendMessage(_messageController.text.trim());
+      _chatController.sendMessage(message: _messageController.text.trim());
       _messageController.text = '';
+    }
+  }
+
+  sendFirst() async {
+    _messageFN.unfocus();
+
+    if (_messageController.text.isNotEmpty) {
+      var chatroom = _chatController.sendFirstMessage(
+          _messageController.text.trim(), selectedUser!.uid, false);
+      _messageController.text = '';
+
+      setState(() {
+        _chatController.initChatRoom(chatroom);
+      });
     }
   }
 }

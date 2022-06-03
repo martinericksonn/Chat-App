@@ -246,10 +246,11 @@ class _ChatCardState extends State<ChatCard> {
     return showMaterialModalBottomSheet(
       context: context,
       builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: BottomSheetModal(
-            chat: chat[index],
-          )),
+          controller: ModalScrollController.of(context), child: SizedBox()
+          // BottomSheetModal(
+          //   chat: chat[index],
+          // ),
+          ),
     );
   }
 }

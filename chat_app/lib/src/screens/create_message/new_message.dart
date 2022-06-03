@@ -5,6 +5,7 @@ import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -73,26 +74,31 @@ class NewMessage extends StatelessWidget {
             if (!snapshot.hasData) {
               return SizedBox();
             }
+
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ChatScreen(
-                                selectedUser: snapshot.data![index])),
-                      );
-                    },
-                    leading: CircleAvatar(
-                      child: Icon(Icons.person_rounded),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    ),
-                    title: Text(
-                      snapshot.data![index].username,
-                    ),
-                    subtitle: null,
-                  );
+                  return snapshot.data![index].uid !=
+                          FirebaseAuth.instance.currentUser?.uid
+                      ? ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                      selectedUser: snapshot.data![index])),
+                            );
+                          },
+                          leading: CircleAvatar(
+                            child: Icon(Icons.person_rounded),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                          title: Text(
+                            snapshot.data![index].username,
+                          ),
+                          subtitle: null,
+                        )
+                      : SizedBox();
                 });
           }),
     );

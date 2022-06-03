@@ -21,7 +21,7 @@ class GlobalChat extends StatefulWidget {
 
 class _GlobalChatState extends State<GlobalChat> {
   final AuthController _auth = locator<AuthController>();
-  final ChatController _chatController = ChatController("XMGXGoTYNnhOiDHOg5aa");
+  final ChatController _chatController = ChatController();
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
@@ -30,6 +30,7 @@ class _GlobalChatState extends State<GlobalChat> {
   ChatUser? user;
   @override
   void initState() {
+    _chatController.initChatRoom("XMGXGoTYNnhOiDHOg5aa");
     ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
       if (mounted) {
         setState(() {
@@ -115,9 +116,10 @@ class _GlobalChatState extends State<GlobalChat> {
                                 itemCount: _chatController.chats.length,
                                 itemBuilder: (context, index) {
                                   return ChatCard(
-                                      scrollController: _scrollController,
-                                      index: index,
-                                      chat: _chatController.chats);
+                                    scrollController: _scrollController,
+                                    index: index,
+                                    chat: _chatController.chats,
+                                  );
                                 }),
                             // for (ChatMessage chat in _chatController.chats)
                             //   ChatCard(
@@ -180,8 +182,8 @@ class _GlobalChatState extends State<GlobalChat> {
   send() {
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
-      _chatController.sendMessage(
-          message: _messageController.text.trim(), chatID: "asdasd");
+      // _chatController.sendMessage(
+      //     message: _messageController.text.trim(): "asdasd");
       _messageController.text = '';
     }
   }
