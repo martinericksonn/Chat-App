@@ -18,15 +18,22 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
   bool isUsernameEmpty = false;
+  bool isAgeEmpty = false;
   bool isRegisterSuccess = false;
   String prompts = '';
 
   final TextEditingController _emailCon = TextEditingController();
   final TextEditingController _passCon = TextEditingController();
   final TextEditingController _unCon = TextEditingController();
+  final TextEditingController _ageCon = TextEditingController();
+
+  final genderList = ["Prefer not to say", "Male", "Female", "Others"];
+  String dropdownValue = 'Prefer not to say';
+
 
   AuthController get _auth => widget.auth;
   @override
@@ -79,6 +86,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 usernameTextField(context),
                 emailTextField(context),
                 passwordTextField(context),
+                ageTextField(context),
+                genderDropDownButton(context),
               ],
             ),
             promptMessage(),
@@ -211,6 +220,93 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+    Container genderDropDownButton(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: isAgeEmpty
+                  ? Colors.red
+                  : Theme.of(context).colorScheme.primary, // set border
+              width: isAgeEmpty ? 2.0 : 1.0,
+            ), // set
+            // color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(20)),
+        child: DropdownButtonFormField(
+
+          value: dropdownValue, 
+          icon: Icon(Icons.arrow_drop_down),
+           decoration: InputDecoration(
+                labelText: "Gender",
+                border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+                ),
+           items: genderList.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              validator: (value) {
+                 // setState(() {
+            //   isAgeEmpty = (value == null || value.isEmpty) ? true : false;
+            // });
+                return null;
+              },
+            ),
+
+        );
+  }
+
+   Container ageTextField(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: isAgeEmpty
+                  ? Colors.red
+                  : Theme.of(context).colorScheme.primary, // set border
+              width: isAgeEmpty ? 2.0 : 1.0,
+            ), // set
+            // color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(20)),
+        child: TextFormField(
+          controller: _ageCon,
+          validator: (value) { 
+            // setState(() {
+            //   isAgeEmpty = (value == null || value.isEmpty) ? true : false;
+            // });
+            return null;
+          },
+          keyboardType: TextInputType.number,
+          style: TextStyle(fontWeight: FontWeight.bold),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            hintStyle: TextStyle(
+                color: isPasswordEmpty
+                    ? Colors.red
+                    : Theme.of(context).colorScheme.primary),
+            hintText: "Age",
+            contentPadding:
+                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+          ),
+        ));
   }
 
   Container passwordTextField(BuildContext context) {
