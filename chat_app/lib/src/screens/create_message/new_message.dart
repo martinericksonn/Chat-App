@@ -2,6 +2,7 @@
 
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
+import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -85,11 +86,7 @@ class NewMessage extends StatelessWidget {
                                       selectedUser: snapshot.data![index])),
                             );
                           },
-                          leading: CircleAvatar(
-                            child: Icon(Icons.person_rounded),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
+                          leading: AvatarImage(uid: snapshot.data![index].uid),
                           title: Text(
                             snapshot.data![index].username,
                           ),

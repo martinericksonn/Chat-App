@@ -132,15 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                                 },
-                                leading: SizedBox(
-                                  // color: Colors.red,
-                                  height: 50,
-                                  width: 50,
-                                  child: CircleAvatar(
-                                    child: Icon(Icons.message_rounded),
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
+                                leading: AvatarImage(
+                                  uid: user.uid,
                                 ),
                                 title: Text(
                                   user.username,

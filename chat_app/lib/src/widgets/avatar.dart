@@ -13,32 +13,17 @@ class AvatarImage extends StatelessWidget {
         stream: ChatUser.fromUidStream(uid: uid),
         builder: (context, AsyncSnapshot<ChatUser?> snap) {
           if (snap.error != null || !snap.hasData) {
-            return CircleAvatar(
-              radius: radius,
-              backgroundColor: Colors.grey,
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-                size: radius * .95,
-              ),
-            );
+            print('1');
+            return tempProfile(context);
           } else {
+            print('2');
             if (snap.data!.image.isEmpty) {
-              return CircleAvatar(
-                radius: radius,
-                backgroundColor: Colors.grey,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: radius * .95,
-                ),
-              );
+              return tempProfile(context);
             } else if (snap.connectionState == ConnectionState.waiting) {
-              return CircleAvatar(
-                  radius: radius,
-                  backgroundColor: Colors.grey,
-                  child: const CircularProgressIndicator());
+              print('3');
+              return tempProfile(context);
             } else {
+              print('4');
               return CircleAvatar(
                 radius: radius,
                 backgroundImage: NetworkImage(snap.data!.image),
@@ -46,5 +31,12 @@ class AvatarImage extends StatelessWidget {
             }
           }
         });
+  }
+
+  CircleAvatar tempProfile(BuildContext context) {
+    return CircleAvatar(
+      child: Icon(Icons.person_rounded),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+    );
   }
 }
