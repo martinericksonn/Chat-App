@@ -16,7 +16,7 @@ class Themes {
       ),
       colorScheme: const ColorScheme.light().copyWith(
         primary: primaryLight,
-        secondary: Colors.black54,
+        secondary: Colors.black26,
         tertiary: tertiaryLight,
       ),
       dividerTheme: const DividerThemeData(

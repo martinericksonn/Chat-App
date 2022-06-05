@@ -39,8 +39,4 @@ class AvatarImage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.primary,
     );
   }
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes

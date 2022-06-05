@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:chat_app/src/models/chat_message_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
-import 'package:chat_app/src/widgets/chat_card.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ChatController with ChangeNotifier {
+class MessageListController with ChangeNotifier {
   late StreamSubscription _chatSub;
   final StreamController<String?> _controller = StreamController();
   Stream<String?> get stream => _controller.stream;
@@ -15,7 +15,7 @@ class ChatController with ChangeNotifier {
   List<ChatMessage> chats = [];
 
   String? chatroom;
-  ChatController() {
+  MessageListController() {
     if (chatroom != null) {
       return;
     }
@@ -88,11 +88,11 @@ class ChatController with ChangeNotifier {
   }
 
   chatUpdateHandler(List<ChatMessage> update) {
-    for (ChatMessage message in update) {
-      if (message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
-        message.updateSeen(FirebaseAuth.instance.currentUser!.uid, chatroom!);
-      }
-    }
+    // for (ChatMessage message in update) {
+    //   if (message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
+    //     message.updateSeen(FirebaseAuth.instance.currentUser!.uid);
+    //   }
+    // }
     chats = update;
     notifyListeners();
   }

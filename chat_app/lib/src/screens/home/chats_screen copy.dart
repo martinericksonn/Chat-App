@@ -3,6 +3,7 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/chat_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,7 +73,20 @@ class _ChatScreenState extends State<ChatScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         elevation: 0,
-        title: Text(selectedUser?.username ?? ""),
+        title: Row(
+          children: [
+            AvatarImage(uid: selectedUser!.uid),
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              selectedUser?.username ?? "",
+              style: TextStyle(
+                  fontSize: 21,
+                  color: Theme.of(context).textTheme.bodyLarge!.color),
+            ),
+          ],
+        ),
       ),
       body: StreamBuilder(
         stream: _chatController.stream,

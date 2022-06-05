@@ -59,11 +59,16 @@ class ChatMessage {
     return !seenBy.contains(uid);
   }
 
-  // Future updateSeen(String userID) {
-  //   return FirebaseFirestore.instance.collection("chats").doc(uid).update({
-  //     'seenBy': FieldValue.arrayUnion([userID])
-  //   });
-  // }
+  Future updateSeen(String userID, String chatroom) {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chatroom)
+        .collection('messages')
+        .doc(uid)
+        .update({
+      'seenBy': FieldValue.arrayUnion([userID])
+    });
+  }
 
   static Stream<List<ChatMessage>> currentChats(String chatroom) =>
       FirebaseFirestore.instance
@@ -74,13 +79,21 @@ class ChatMessage {
           .snapshots()
           .map(ChatMessage.fromQuerySnap);
 
-  // Future updateMessage(String newMessage) {
-  //   return FirebaseFirestore.instance.collection("chats").doc(uid) //edite  d
-  //       .update({'message': newMessage, 'isEdited': true});
-  // }
+  Future updateMessage(String newMessage, String chatroom) {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chatroom)
+        .collection('messages')
+        .doc(uid) //edite  d
+        .update({'message': newMessage, 'isEdited': true});
+  }
 
-  // Future deleteMessage() {
-  //   return FirebaseFirestore.instance.collection("chats").doc(uid) //edite  d
-  //       .update({'message': 'message deleted', 'isDeleted': true});
-  // }
+  Future deleteMessage(String chatroom) {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chatroom)
+        .collection('messages')
+        .doc(uid) //edite  d
+        .update({'message': 'message deleted', 'isDeleted': true});
+  }
 }

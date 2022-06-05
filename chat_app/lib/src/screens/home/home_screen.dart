@@ -9,15 +9,11 @@ import 'package:chat_app/src/screens/home/chats_screen.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../models/chat_user_model.dart';
-
 import '../../service_locators.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -84,21 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Future fetchChatrooms() {
-  //   return FirebaseFirestore.instance
-  //       .collection("users")
-  //       .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
-  //       .get()
-  //       .then((value) {
-  //     List<String> users = [""];
-  //     print('ive been called');
-  //     for (var data in value.docs) {
-  //       users.add(data['username']);
-  //     }
-  //     return users;
-  //   });
-  // }
-
   SizedBox body(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -132,19 +113,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                                 },
+                                // subtitle: Text('data'),
                                 leading: AvatarImage(
                                   uid: user.uid,
                                 ),
                                 title: Text(
                                   user.username,
-                                  // style: Theme.of(context).textTheme.bodyLarge,
                                 ),
-                                // subtitle: Container(
-                                //   child: Text(
-                                //     "subtitlsssssssssssssse",
-                                //     overflow: TextOverflow.ellipsis,
-                                //   ),
-                                // ),
                                 trailing: Text(DateFormat("hh:mm aaa")
                                     .format(DateTime.now())),
                               ),
@@ -155,67 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
-
-          // Expanded(
-          //   child:
-          // ListView.builder(
-          //     shrinkWrap: true,
-          //     itemCount: user?.chatRooms.length,
-          //     itemBuilder: (context, index) {
-          //       return ListTile(
-          //         onTap: () => {
-          //           Navigator.of(context).push(
-          //             MaterialPageRoute(
-          //               builder: (context) => NewMessage(),
-          //             ),
-          //           )
-          //         },
-          //         leading: SizedBox(
-          //           // color: Colors.red,
-          //           height: 50,
-          //           width: 50,
-          //           child: CircleAvatar(
-          //             child: Icon(Icons.message_rounded),
-          //             backgroundColor: Theme.of(context).colorScheme.primary,
-          //           ),
-          //         ),
-          //         title: Text(
-          //           "Tabi-Tabi",
-          //           // style: Theme.of(context).textTheme.bodyLarge,
-          //         ),
-          //         subtitle: Container(
-          //           child: Text(
-          //             "subtitlsssssssssssssse",
-          //             overflow: TextOverflow.ellipsis,
-          //           ),
-          //         ),
-          //         trailing:
-          //             Text(DateFormat("hh:mm aaa").format(DateTime.now())),
-          //       );
-          //     }),
-          // ),
-          // chatTile(context),
-          // Divider(),
-          // chatTile(context),
-          // chatTile(context),
-          // chatTile(context),
-          // chatTile(context),
-          // chatTile(context),
-          // Divider(),
-          // chatTile(context),
-          // chatTile(context),
-          // chatTile(context),
-          // chatTile(context),
-          // chatTile(context),
-          // IconButton(
-          //     onPressed: () {
-          //       Navigator.of(context).push(
-          //         MaterialPageRoute(
-          //           builder: (context) => GlobalChat(),
-          //         ),
-          //       );
-          //     },
-          //     icon: Icon(Icons.abc)),
           IconButton(
             onPressed: () {
               _auth.logout();
@@ -248,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       title: Text(
         "Tabi-Tabi",
-        // style: Theme.of(context).textTheme.bodyLarge,
       ),
       subtitle: Container(
         child: Text(
@@ -296,17 +209,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
-      title: Text(
-        user?.username ?? '...',
-        style: Theme.of(context).textTheme.titleLarge,
+      title: Row(
+        children: [
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: InkWell(
+              onTap: () {
+                ImageService.updateProfileImage();
+              },
+              child: SizedBox(
+                  child:
+                      AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid)),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Text(
+            user?.username ?? '...',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ],
       ),
       actions: [
-        InkWell(
-          onTap: () {
-            ImageService.updateProfileImage();
-          },
-          child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
-        ),
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
