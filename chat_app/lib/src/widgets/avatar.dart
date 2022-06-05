@@ -33,6 +33,11 @@ class AvatarImage extends StatelessWidget {
                   size: radius * .95,
                 ),
               );
+            } else if (snap.connectionState == ConnectionState.waiting) {
+              return CircleAvatar(
+                  radius: radius,
+                  backgroundColor: Colors.grey,
+                  child: const CircularProgressIndicator());
             } else {
               return CircleAvatar(
                 radius: radius,

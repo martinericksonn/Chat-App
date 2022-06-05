@@ -155,4 +155,24 @@ class ChatController with ChangeNotifier {
                 message: message)
             .json);
   }
+
+  Future fetchChatrooms() {
+    return ChatUser.fromUid(uid: FirebaseAuth.instance.currentUser!.uid)
+        .then((value) {
+      return value;
+    }).then((dynamic user) {
+      return FirebaseFirestore.instance
+          .collection("users")
+          .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
+          .get()
+          .then((value) {
+        List<dynamic> users = [];
+        print('ive been called');
+        for (var data in value.docs) {
+          users.add(ChatUser.fromDocumentSnap(data));
+        }
+        return users;
+      });
+    });
+  }
 }

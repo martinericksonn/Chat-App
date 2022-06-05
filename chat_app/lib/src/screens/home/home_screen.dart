@@ -4,10 +4,12 @@ import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
+import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/chats_screen.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
@@ -40,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() {
           user = value;
-          //  _chatController.getChatRooms(user!.chatrooms);
         });
       }
     });
@@ -52,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _messageFN.dispose();
     _messageController.dispose();
-    // _chatController.dispose();
     super.dispose();
   }
 
@@ -84,6 +84,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Future fetchChatrooms() {
+  //   return FirebaseFirestore.instance
+  //       .collection("users")
+  //       .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
+  //       .get()
+  //       .then((value) {
+  //     List<String> users = [""];
+  //     print('ive been called');
+  //     for (var data in value.docs) {
+  //       users.add(data['username']);
+  //     }
+  //     return users;
+  //   });
+  // }
+
   SizedBox body(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -91,36 +106,63 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Searchbar(),
-          for (var data in user?.chatrooms ?? [])
-            ListTile(
-              onTap: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => GlobalChat(),
-                  ),
-                )
-              },
-              leading: SizedBox(
-                // color: Colors.red,
-                height: 50,
-                width: 50,
-                child: CircleAvatar(
-                  child: Icon(Icons.message_rounded),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              title: Text(
-                data,
-                // style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              subtitle: Container(
-                child: Text(
-                  "subtitlsssssssssssssse",
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              trailing: Text(DateFormat("hh:mm aaa").format(DateTime.now())),
-            ),
+          FutureBuilder<dynamic>(
+            future: _chatController.fetchChatrooms(), // async work
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Text('Loading....');
+                default:
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Column(
+                      children: [
+                        for (ChatUser user in snapshot.data)
+                          if (user.uid !=
+                              FirebaseAuth.instance.currentUser!.uid)
+                            Container(
+                              margin: EdgeInsets.all(5),
+                              child: ListTile(
+                                onTap: () => {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChatScreen(selectedUser: user),
+                                    ),
+                                  )
+                                },
+                                leading: SizedBox(
+                                  // color: Colors.red,
+                                  height: 50,
+                                  width: 50,
+                                  child: CircleAvatar(
+                                    child: Icon(Icons.message_rounded),
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                title: Text(
+                                  user.username,
+                                  // style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                // subtitle: Container(
+                                //   child: Text(
+                                //     "subtitlsssssssssssssse",
+                                //     overflow: TextOverflow.ellipsis,
+                                //   ),
+                                // ),
+                                trailing: Text(DateFormat("hh:mm aaa")
+                                    .format(DateTime.now())),
+                              ),
+                            ),
+                      ],
+                    );
+                  }
+              }
+            },
+          ),
+
           // Expanded(
           //   child:
           // ListView.builder(
