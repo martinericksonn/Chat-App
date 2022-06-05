@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:chat_app/src/controllers/auth_controller.dart';
-import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
@@ -74,7 +72,6 @@ class NewMessage extends StatelessWidget {
             if (!snapshot.hasData) {
               return SizedBox();
             }
-
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {

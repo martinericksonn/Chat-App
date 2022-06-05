@@ -31,12 +31,12 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = ChatController();
   ChatUser? get selectedUser => widget.selectedUser;
   String get chatroom => widget.chatroom;
+  ChatUser? user;
 
   @override
   void initState() {
-    if (chatroom == "") {
-      _chatController.stream;
-    }
+    _chatController
+        .initChatRoom(_chatController.generateRoomId(selectedUser!.uid));
     super.initState();
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +13,10 @@ class AvatarImage extends StatelessWidget {
         stream: ChatUser.fromUidStream(uid: uid),
         builder: (context, AsyncSnapshot<ChatUser?> snap) {
           if (snap.error != null || !snap.hasData) {
-            return  CircleAvatar(
+            return CircleAvatar(
               radius: radius,
               backgroundColor: Colors.grey,
-              child:  Icon(
+              child: Icon(
                 Icons.person,
                 color: Colors.white,
                 size: radius * .95,
@@ -28,16 +27,16 @@ class AvatarImage extends StatelessWidget {
               return CircleAvatar(
                 radius: radius,
                 backgroundColor: Colors.grey,
-                child:  Icon(
+                child: Icon(
                   Icons.person,
-                  color: Colors.white, size: radius * .95,
+                  color: Colors.white,
+                  size: radius * .95,
                 ),
               );
             } else {
               return CircleAvatar(
                 radius: radius,
-                backgroundColor: Colors.grey,
-                child: Image.network(snap.data!.image),
+                backgroundImage: NetworkImage(snap.data!.image),
               );
             }
           }

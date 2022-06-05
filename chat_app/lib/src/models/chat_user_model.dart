@@ -3,9 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatUser {
   final String uid, username, email, image;
   Timestamp created, updated;
+  List<String> chatrooms;
 
   ChatUser(this.uid, this.username, this.email, this.image, this.created,
-      this.updated);
+      this.updated, this.chatrooms);
 
   static ChatUser fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
@@ -16,6 +17,9 @@ class ChatUser {
       json['image'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
+      json['chatrooms'] != null
+          ? List<String>.from(json['chatrooms'])
+          : <String>[],
     );
   }
 

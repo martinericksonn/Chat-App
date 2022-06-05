@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chat_app/src/models/chat_message_model.dart';
+import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/widgets/chat_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,13 +11,12 @@ class ChatController with ChangeNotifier {
   late StreamSubscription _chatSub;
   final StreamController<String?> _controller = StreamController();
   Stream<String?> get stream => _controller.stream;
+  ChatUser? user;
   List<ChatMessage> chats = [];
 
   String? chatroom;
-
   ChatController() {
     if (chatroom != null) {
-      _subscibe();
       return;
     }
     _controller.add("empty");
@@ -28,8 +28,20 @@ class ChatController with ChangeNotifier {
   }
 
   initChatRoom(String room) {
-    chatroom = room;
-    _subscibe();
+    print("inisidee.init1");
+    ChatUser.fromUid(uid: FirebaseAuth.instance.currentUser!.uid).then((value) {
+      print("inisidee.init2");
+      user = value;
+      if (user != null && user!.chatrooms.contains(room)) {
+        _subscibe();
+      } else {
+        _controller.add("empty");
+      }
+      chatroom = room;
+      print(user?.chatrooms);
+      print(user?.chatrooms.contains(room));
+    });
+    print("inisidee.init3");
   }
 
   generateRoomId(recipient) {
@@ -58,6 +70,25 @@ class ChatController with ChangeNotifier {
     }
   }
 
+  getChatRooms(List<String> userChatRooms) {
+    try {
+      var data = [];
+      print(userChatRooms);
+      FirebaseFirestore.instance
+          .collection('chats')
+          .where("chatroom", whereIn: userChatRooms)
+          .get()
+          .then((value) => {
+                print(
+                    'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+                for (var item in value.docs) {data.add(item.data())}
+              });
+      return data;
+    } catch (error) {
+      print(error);
+    }
+  }
+
   chatUpdateHandler(List<ChatMessage> update) {
     // for (ChatMessage message in update) {
     //   if (message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
@@ -71,19 +102,16 @@ class ChatController with ChangeNotifier {
   sendFirstMessage(String message, String recipient, bool isGroup) {
     String chatroom = generateRoomId(recipient);
 
-    print("Forst MESSAGE");
-    FirebaseFirestore.instance
-        .collection(
-          'chats',
-        )
-        .doc(chatroom)
-        .set({
+    print(
+        "11111111111111111111111111111111111111111111111111111111111111111111111111111");
+    FirebaseFirestore.instance.collection('chats').doc(chatroom).set({
       'chatroom': chatroom,
       'isGroup': isGroup,
       'members': FieldValue.arrayUnion(
           [recipient, FirebaseAuth.instance.currentUser!.uid])
     }).then(
       (snap) => {
+        print("222222222222222222222222222222222222222222222222222222222"),
         FirebaseFirestore.instance
             .collection('chats')
             .doc(chatroom)
@@ -91,18 +119,28 @@ class ChatController with ChangeNotifier {
             .add(ChatMessage(
                     sentBy: FirebaseAuth.instance.currentUser!.uid,
                     message: message)
-                .json),
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .update({
-          'chatrooms': FieldValue.arrayUnion([chatroom])
-        }),
-        FirebaseFirestore.instance.collection('users').doc(recipient).update({
-          'chatrooms': FieldValue.arrayUnion([chatroom])
-        }),
+                .json)
+            .then((value) => {
+                  print("333333333333333333333333333333333333333333"),
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .update({
+                    'chatrooms': FieldValue.arrayUnion([chatroom])
+                  }).then((value) => {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(recipient)
+                                .update({
+                              'chatrooms': FieldValue.arrayUnion([chatroom])
+                            }),
+                            print("44444444444444444444444444444444444444"),
+                            _subscibe(),
+                          }),
+                }),
       },
     );
+    print('5555555555555555555555555555555555555555555');
     return chatroom;
   }
 

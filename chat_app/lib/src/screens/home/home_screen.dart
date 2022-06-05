@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AuthController _auth = locator<AuthController>();
-  // final ChatController _chatController = ChatController();
+  final ChatController _chatController = ChatController();
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() {
           user = value;
+          //  _chatController.getChatRooms(user!.chatrooms);
         });
       }
     });
@@ -85,44 +86,111 @@ class _HomeScreenState extends State<HomeScreen> {
 
   SizedBox body(BuildContext context) {
     return SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Searchbar(),
-              chatTile(context),
-              Divider(),
-              chatTile(context),
-              chatTile(context),
-              chatTile(context),
-              chatTile(context),
-              chatTile(context),
-              Divider(),
-              chatTile(context),
-              chatTile(context),
-              chatTile(context),
-              chatTile(context),
-              chatTile(context),
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => GlobalChat(),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.abc)),
-              IconButton(
-                onPressed: () {
-                  _auth.logout();
-                },
-                icon: const Icon(Icons.logout_rounded),
-                color: Theme.of(context).colorScheme.primary,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Searchbar(),
+          for (var data in user?.chatrooms ?? [])
+            ListTile(
+              onTap: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => GlobalChat(),
+                  ),
+                )
+              },
+              leading: SizedBox(
+                // color: Colors.red,
+                height: 50,
+                width: 50,
+                child: CircleAvatar(
+                  child: Icon(Icons.message_rounded),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
               ),
-            ],
+              title: Text(
+                data,
+                // style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              subtitle: Container(
+                child: Text(
+                  "subtitlsssssssssssssse",
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              trailing: Text(DateFormat("hh:mm aaa").format(DateTime.now())),
+            ),
+          // Expanded(
+          //   child:
+          // ListView.builder(
+          //     shrinkWrap: true,
+          //     itemCount: user?.chatRooms.length,
+          //     itemBuilder: (context, index) {
+          //       return ListTile(
+          //         onTap: () => {
+          //           Navigator.of(context).push(
+          //             MaterialPageRoute(
+          //               builder: (context) => NewMessage(),
+          //             ),
+          //           )
+          //         },
+          //         leading: SizedBox(
+          //           // color: Colors.red,
+          //           height: 50,
+          //           width: 50,
+          //           child: CircleAvatar(
+          //             child: Icon(Icons.message_rounded),
+          //             backgroundColor: Theme.of(context).colorScheme.primary,
+          //           ),
+          //         ),
+          //         title: Text(
+          //           "Tabi-Tabi",
+          //           // style: Theme.of(context).textTheme.bodyLarge,
+          //         ),
+          //         subtitle: Container(
+          //           child: Text(
+          //             "subtitlsssssssssssssse",
+          //             overflow: TextOverflow.ellipsis,
+          //           ),
+          //         ),
+          //         trailing:
+          //             Text(DateFormat("hh:mm aaa").format(DateTime.now())),
+          //       );
+          //     }),
+          // ),
+          // chatTile(context),
+          // Divider(),
+          // chatTile(context),
+          // chatTile(context),
+          // chatTile(context),
+          // chatTile(context),
+          // chatTile(context),
+          // Divider(),
+          // chatTile(context),
+          // chatTile(context),
+          // chatTile(context),
+          // chatTile(context),
+          // chatTile(context),
+          // IconButton(
+          //     onPressed: () {
+          //       Navigator.of(context).push(
+          //         MaterialPageRoute(
+          //           builder: (context) => GlobalChat(),
+          //         ),
+          //       );
+          //     },
+          //     icon: Icon(Icons.abc)),
+          IconButton(
+            onPressed: () {
+              _auth.logout();
+            },
+            icon: const Icon(Icons.logout_rounded),
+            color: Theme.of(context).colorScheme.primary,
           ),
-        ));
+        ],
+      ),
+    );
   }
 
   ListTile chatTile(BuildContext context) {
