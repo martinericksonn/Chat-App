@@ -23,6 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isPasswordEmpty = false;
   bool isUsernameEmpty = false;
   bool isAgeEmpty = false;
+  bool isGenderEmpty = false;
   bool isRegisterSuccess = false;
   String prompts = '';
 
@@ -260,7 +261,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               validator: (value) {
                  // setState(() {
-            //   isAgeEmpty = (value == null || value.isEmpty) ? true : false;
+            //   isGenderEmpty = (value == null || value.isEmpty) ? true : false;
             // });
                 return null;
               },

@@ -35,7 +35,7 @@ class AvatarImage extends StatelessWidget {
 
   CircleAvatar tempProfile(BuildContext context) {
     return CircleAvatar(
-      child: Icon(Icons.person_rounded),
+      child: const Icon(Icons.person_rounded),
       backgroundColor: Theme.of(context).colorScheme.primary,
     );
   }
