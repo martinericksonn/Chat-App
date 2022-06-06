@@ -99,6 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else {
                     return Column(
                       children: [
+                        // SizedBox(
+                        //   height: 500,
+                        //   child:
+                        //       ListView.builder(itemBuilder: (context, index) {
+                        //     return SizedBox();
+                        //   }),
+                        // ),
                         for (ChatUser user in snapshot.data)
                           if (user.uid !=
                               FirebaseAuth.instance.currentUser!.uid)

@@ -119,6 +119,7 @@ class _GlobalChatState extends State<GlobalChat> {
                                     scrollController: _scrollController,
                                     index: index,
                                     chat: _chatController.chats,
+                                    chatroom: 'XMGXGoTYNnhOiDHOg5aa',
                                   );
                                 }),
                             // for (ChatMessage chat in _chatController.chats)

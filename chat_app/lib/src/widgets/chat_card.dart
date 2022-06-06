@@ -15,13 +15,13 @@ class ChatCard extends StatefulWidget {
     Key? key,
     required this.index,
     required this.scrollController,
-    // required this.chat,
+    required this.chatroom,
     required this.chat,
   }) : super(key: key);
   final ScrollController scrollController;
   final int index;
   final List<ChatMessage> chat;
-  // final ChatController chat;
+  final String chatroom;
 
   @override
   State<ChatCard> createState() => _ChatCardState();
@@ -29,20 +29,11 @@ class ChatCard extends StatefulWidget {
 
 class _ChatCardState extends State<ChatCard> {
   var isVisible = false;
+
   List<ChatMessage> get chat => widget.chat;
-  int get index => widget.index;
   ScrollController get scrollController => widget.scrollController;
-
-  // scrollBottom(int offset) async {
-  //   await Future.delayed(const Duration(milliseconds: 100));
-
-  //   if (scrollController.hasClients) {
-  //     scrollController.animateTo((scrollController.position.pixels) + offset,
-  //         // scrollController.position.maxScrollExtent,
-  //         curve: Curves.easeOut,
-  //         duration: const Duration(milliseconds: 100));
-  //   }
-  // }
+  int get index => widget.index;
+  String get chatroom => widget.chatroom;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +75,7 @@ class _ChatCardState extends State<ChatCard> {
               chat[index].isDeleted
                   ? null
                   : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
-                      ? bottomModal(context)
+                      ? bottomModal(context, chatroom)
                       : null;
             },
             child: Column(
@@ -268,15 +259,16 @@ class _ChatCardState extends State<ChatCard> {
     );
   }
 
-  Future<dynamic> bottomModal(BuildContext context) {
+  Future<dynamic> bottomModal(BuildContext context, chatroom) {
     return showMaterialModalBottomSheet(
       context: context,
       builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context), child: SizedBox()
-          // BottomSheetModal(
-          //   chat: chat[index],
-          // ),
-          ),
+        controller: ModalScrollController.of(context),
+        child: BottomSheetModal(
+          chat: chat[index],
+          chatroom: chatroom,
+        ),
+      ),
     );
   }
 }

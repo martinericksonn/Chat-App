@@ -91,6 +91,8 @@ class ChatMessage {
   }
 
   Future deleteMessage(String chatroom) {
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    print(chatroom);
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)

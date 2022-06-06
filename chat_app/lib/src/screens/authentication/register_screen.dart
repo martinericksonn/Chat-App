@@ -18,7 +18,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
   bool isUsernameEmpty = false;
@@ -35,32 +35,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final genderList = ["Prefer not to say", "Male", "Female", "Others"];
   String dropdownValue = 'Prefer not to say';
 
-
   AuthController get _auth => widget.auth;
+
+  // scroll controller
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        // appBar: appBar(context),
-        // ignore: prefer_const_literals_to_create_immutables
         body: SingleChildScrollView(
-          reverse: true,
+          reverse: false,
           child: Center(
             child: Form(
               onChanged: () => setState(() {
                 prompts = "";
               }),
               key: _formKey,
-              child: Column(
-                children: [
-                  upperBody(context),
-                  lowerBody(context),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                  )
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    upperBody(context),
+                    lowerBody(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -74,7 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 28.0),
       child: SizedBox(
         // color: Colors.pink,
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * .8,
         // color: Colors.pink,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,7 +90,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               children: [
                 title(),
-
                 usernameTextField(context),
                 emailTextField(context),
                 passwordTextField(context),
@@ -223,55 +229,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-    Container genderDropDownButton(BuildContext context) {
+  Container genderDropDownButton(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(13),
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: isAgeEmpty
-                  ? Colors.red
-                  : Theme.of(context).colorScheme.primary, // set border
-              width: isAgeEmpty ? 2.0 : 1.0,
-            ), // set
-            // color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(20)),
-        child: DropdownButtonFormField(     
-          value: dropdownValue, 
-          icon: Icon(Icons.arrow_drop_down),
-           decoration: InputDecoration(
-                labelStyle: TextStyle(
-                color:  Theme.of(context).colorScheme.primary),
-                labelText: "Gender",
-                border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-                ),
-           items: genderList.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
-              },
-              validator: (value) {
-                 // setState(() {
-            //   isGenderEmpty = (value == null || value.isEmpty) ? true : false;
-            // });
-                return null;
-              },
-            ),
-
-        );
+      margin: EdgeInsets.all(5),
+      padding: EdgeInsets.all(13),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: isAgeEmpty
+                ? Colors.red
+                : Theme.of(context).colorScheme.primary, // set border
+            width: isAgeEmpty ? 2.0 : 1.0,
+          ), // set
+          // color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(20)),
+      child: DropdownButtonFormField(
+        value: dropdownValue,
+        icon: Icon(Icons.arrow_drop_down),
+        decoration: InputDecoration(
+          labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+          labelText: "Gender",
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+        ),
+        items: genderList.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+          });
+        },
+        validator: (value) {
+          // setState(() {
+          //   isGenderEmpty = (value == null || value.isEmpty) ? true : false;
+          // });
+          return null;
+        },
+      ),
+    );
   }
 
-   Container ageTextField(BuildContext context) {
+  Container ageTextField(BuildContext context) {
     return Container(
         margin: EdgeInsets.all(5),
         padding: EdgeInsets.all(5),
@@ -286,7 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderRadius: BorderRadius.circular(20)),
         child: TextFormField(
           controller: _ageCon,
-          validator: (value) { 
+          validator: (value) {
             // setState(() {
             //   isAgeEmpty = (value == null || value.isEmpty) ? true : false;
             // });
@@ -441,7 +445,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset("assets/images/tabi_lightmode.png", width: 45, height: 45),
+            Image.asset("assets/images/tabi_lightmode.png",
+                width: 45, height: 45),
             Text(
               " Tabi-Tabi",
               style: TextStyle(
@@ -454,7 +459,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       Container(
         alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height * 0.33,
+        height: MediaQuery.of(context).size.height * 0.40,
         padding: EdgeInsets.only(top: 18.0),
         child: Image(
           image: AssetImage("assets/images/register.png"),
