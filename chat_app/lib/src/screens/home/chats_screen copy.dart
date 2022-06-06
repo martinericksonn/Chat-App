@@ -95,9 +95,17 @@ class _ChatScreenState extends State<ChatScreen> {
             if (snapshot.data == "null") {
               return loadingScreen("1");
             } else if (snapshot.data == "success") {
-              return hasMessage(context);
+              return body(
+                context,
+                message,
+                send,
+              );
             } else if (snapshot.data == 'empty') {
-              return noMessageYet(context);
+              return body(
+                context,
+                firstMessage,
+                firstSend,
+              );
             }
           } else if (snapshot.hasError) {
             return loadingScreen(snapshot.error.toString());
@@ -123,7 +131,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ]));
   }
 
-  SizedBox hasMessage(BuildContext context) {
+  SizedBox body(BuildContext context, Function message, Function send) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -131,149 +139,160 @@ class _ChatScreenState extends State<ChatScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
-            Expanded(
-              child: AnimatedBuilder(
-                  animation: _chatController,
-                  builder: (context, Widget? w) {
-                    return SingleChildScrollView(
-                      physics: ScrollPhysics(),
-                      controller: _scrollController,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: _chatController.chats.length,
-                                itemBuilder: (context, index) {
-                                  return ChatCard(
-                                      scrollController: _scrollController,
-                                      index: index,
-                                      chat: _chatController.chats);
-                                }),
-
-                            // for (ChatMessage chat in _chatController.chats)
-                            //   ChatCard(
-                            //       chat: chat, chatController: _chatController)
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height / 15,
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      onFieldSubmitted: (String text) {
-                        send();
-                      },
-                      focusNode: _messageFN,
-                      controller: _messageController,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.all(12),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.send_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onPressed: send,
-                  )
-                ],
-              ),
-            )
+            message(),
+            textField(context, send),
           ],
         ),
       ),
     );
   }
 
-  Container noMessageYet(BuildContext context) {
+  Container textField(BuildContext context, Function send) {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
+      height: MediaQuery.of(context).size.height / 15,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Row(
         children: [
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/no_message.png", width: 300),
-                Text(
-                    'Start your conversation with ${selectedUser?.username ?? ""}'),
-                SizedBox(
-                  height: 60,
-                )
-              ],
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height / 15,
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    onFieldSubmitted: (String text) {
-                      send();
-                    },
-                    focusNode: _messageFN,
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(12),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.send_rounded,
+            child: TextFormField(
+              // onFieldSubmitted: (String text) {
+              //   send();
+              // },
+              focusNode: _messageFN,
+              controller: _messageController,
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: EdgeInsets.all(12),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide(
+                    width: 1,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: sendFirst,
-                )
-              ],
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+              ),
             ),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.send_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () => send(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Expanded message() {
+    return Expanded(
+      child: AnimatedBuilder(
+          animation: _chatController,
+          builder: (context, Widget? w) {
+            return SingleChildScrollView(
+              physics: ScrollPhysics(),
+              controller: _scrollController,
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: _chatController.chats.length,
+                        itemBuilder: (context, index) {
+                          return ChatCard(
+                              scrollController: _scrollController,
+                              index: index,
+                              chat: _chatController.chats);
+                        }),
+
+                    // for (ChatMessage chat in _chatController.chats)
+                    //   ChatCard(
+                    //       chat: chat, chatController: _chatController)
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
+
+  // Container noMessage(BuildContext context,Function sendFirst) {
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height,
+  //     width: MediaQuery.of(context).size.width,
+  //     child: Column(
+  //       children: [
+  //         firstMessage(),
+  //         Container(
+  //           alignment: Alignment.center,
+  //           height: MediaQuery.of(context).size.height / 15,
+  //           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  //           child: Row(
+  //             children: [
+  //               Expanded(
+  //                 child: TextFormField(
+  //                   // onFieldSubmitted: (String text) {
+  //                   //   send();
+  //                   // },
+  //                   focusNode: _messageFN,
+  //                   controller: _messageController,
+  //                   decoration: InputDecoration(
+  //                     isDense: true,
+  //                     contentPadding: EdgeInsets.all(12),
+  //                     focusedBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(20)),
+  //                       borderSide: BorderSide(
+  //                         width: 1,
+  //                         color: Theme.of(context).colorScheme.primary,
+  //                       ),
+  //                     ),
+  //                     border: OutlineInputBorder(
+  //                       borderSide: BorderSide(
+  //                         color: Theme.of(context).colorScheme.primary,
+  //                       ),
+  //                       borderRadius: BorderRadius.all(
+  //                         Radius.circular(20),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               IconButton(
+  //                 icon: Icon(
+  //                   Icons.send_rounded,
+  //                   color: Theme.of(context).colorScheme.primary,
+  //                 ),
+  //                 onPressed: () => sendFirst,
+  //               )
+  //             ],
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Expanded firstMessage() {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset("assets/images/no_message.png", width: 300),
+          Text('Start your conversation with ${selectedUser?.username ?? ""}'),
+          SizedBox(
+            height: 60,
           )
         ],
       ),
@@ -288,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  sendFirst() async {
+  firstSend() async {
     _messageFN.unfocus();
 
     if (_messageController.text.isNotEmpty) {
