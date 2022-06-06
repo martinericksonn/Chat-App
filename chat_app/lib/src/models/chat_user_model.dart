@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatUser {
-  final String uid, username, email, image;
+  final String uid, username, email, image, age, gender;
   Timestamp created, updated;
   List<String> chatrooms;
 
-  ChatUser(this.uid, this.username, this.email, this.image, this.created,
+  ChatUser(this.uid, this.username, this.email, this.age, this.gender, this.image, this.created,
       this.updated, this.chatrooms);
 
   static ChatUser fromDocumentSnap(DocumentSnapshot snap) {
@@ -14,6 +14,8 @@ class ChatUser {
       snap.id,
       json['username'] ?? '',
       json['email'] ?? '',
+      json['age'] ?? '',
+      json['gender'] ?? '',
       json['image'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
@@ -56,6 +58,8 @@ class ChatUser {
         'uid': uid,
         'username': username,
         'email': email,
+        'age': age,
+        'gender': gender,
         'image': image,
         'created': created,
         'updated': updated
