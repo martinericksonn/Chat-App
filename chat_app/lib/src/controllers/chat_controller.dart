@@ -28,9 +28,7 @@ class ChatController with ChangeNotifier {
   }
 
   initChatRoom(String room) {
-    print("inisidee.init1");
     ChatUser.fromUid(uid: FirebaseAuth.instance.currentUser!.uid).then((value) {
-      print("inisidee.init2");
       user = value;
       if (user != null && user!.chatrooms.contains(room)) {
         _subscibe();
@@ -38,16 +36,16 @@ class ChatController with ChangeNotifier {
         _controller.add("empty");
       }
       chatroom = room;
-      print(user?.chatrooms);
-      print(user?.chatrooms.contains(room));
     });
-    print("inisidee.init3");
   }
 
   generateRoomId(recipient) {
     String currentUser = FirebaseAuth.instance.currentUser!.uid;
 
-    if (currentUser.codeUnits[0] > recipient.codeUnits[0]) {
+    if (currentUser.codeUnits[0] >= recipient.codeUnits[0]) {
+      if (currentUser.codeUnits[1] == recipient.codeUnits[1]) {
+        return chatroom = recipient + currentUser;
+      }
       return chatroom = currentUser + recipient;
     }
     return chatroom = recipient + currentUser;

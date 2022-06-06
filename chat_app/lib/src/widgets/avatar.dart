@@ -13,17 +13,17 @@ class AvatarImage extends StatelessWidget {
         stream: ChatUser.fromUidStream(uid: uid),
         builder: (context, AsyncSnapshot<ChatUser?> snap) {
           if (snap.error != null || !snap.hasData) {
-            print('1');
+            // print('1');
             return tempProfile(context);
           } else {
-            print('2');
+            // print('2');
             if (snap.data!.image.isEmpty) {
               return tempProfile(context);
             } else if (snap.connectionState == ConnectionState.waiting) {
-              print('3');
+              // print('3');
               return tempProfile(context);
             } else {
-              print('4');
+              // print('4');
               return CircleAvatar(
                 radius: radius,
                 backgroundImage: NetworkImage(snap.data!.image),

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatMessage {
   final String uid, sentBy, message;
   final Timestamp ts;
-  String? previousChatID;
+  // String? previousChatID;
   List<String> seenBy;
   bool isDeleted;
   bool isEdited;
@@ -51,15 +51,17 @@ class ChatMessage {
     }
   }
 
-  String get previousMessage {
-    return previousChatID!;
-  }
+  // String get previousMessages {
+  //   return previousChatID!;
+  // }
 
   bool hasNotSeenMessage(String uid) {
+    print(uid);
     return !seenBy.contains(uid);
   }
 
   Future updateSeen(String userID, String chatroom) {
+    print("update " + uid + " " + chatroom);
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)

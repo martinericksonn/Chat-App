@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,197 +50,222 @@ class _ChatCardState extends State<ChatCard> {
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Column(
         children: [
-          Visibility(
-              visible: index == 0,
-              child: SizedBox(
-                height: 10,
-              )),
-          Visibility(
-            visible: isVisible,
-            child: Container(
-              // color: Colors.red,
-              padding: EdgeInsets.only(bottom: 5, top: 15),
-              alignment: Alignment.center,
-              width: double.infinity,
-              // color: Colors.green,
-              child: Text(
-                DateFormat("MMM d, y hh:mm aaa")
-                    .format(chat[index].ts.toDate()),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+          spacer(index: index),
+          messageDate(context),
+          messageBubble(context),
+          messageSeen(context),
+        ],
+      ),
+    );
+    // );
+  }
+
+  Row messageBubble(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment:
+          chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
+      children: [
+        // Text('asd'),
+        editedLeft(context),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: GestureDetector(
+            onTap: () {
+              // int num = 60;
+              setState(() {
+                // scrollBottom(isVisible ? -num : num);
+                isVisible = !isVisible;
+              });
+            },
+            onLongPress: () {
+              chat[index].isDeleted
+                  ? null
+                  : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                      ? bottomModal(context)
+                      : null;
+            },
+            child: Column(
+              crossAxisAlignment:
+                  chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+              children: [
+                if ((chat[index].sentBy !=
+                        FirebaseAuth.instance.currentUser?.uid) &&
+                    (index == 0 ||
+                        chat[index - 1].sentBy != chat[index].sentBy))
+                  FutureBuilder<ChatUser>(
+                      future: ChatUser.fromUid(uid: chat[index].sentBy),
+                      builder: (context, AsyncSnapshot<ChatUser> snap) {
+                        if (!snap.hasData) {
+                          return CircularProgressIndicator();
+                        }
+
+                        return Row(
+                          children: [
+                            SizedBox(
+                                width: 30,
+                                child: AvatarImage(uid: snap.data?.uid ?? "")),
+                            Container(
+                                padding:
+                                    EdgeInsets.only(left: 5, top: 5, bottom: 3),
+                                child: Text(
+                                  '${snap.data?.username}',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                )),
+                          ],
+                        );
+                      }),
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 320),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: chat[index].isDeleted
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: chat[index].isDeleted
+                        ? Colors.transparent
+                        : chat[index].sentBy ==
+                                FirebaseAuth.instance.currentUser?.uid
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.secondary,
+                  ),
+                  // color: Colors.black,
+                  child: Text(
+                    chat[index].message,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: chat[index].isDeleted
+                            ? Theme.of(context).textTheme.titleMedium?.color
+                            : Theme.of(context).colorScheme.onPrimary),
+                  ),
+                ),
+              ],
             ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+        ),
+        editedRight(context),
+      ],
+    );
+  }
+
+  Visibility messageSeen(BuildContext context) {
+    return Visibility(
+      visible: isVisible,
+      child: Container(
+        // color: Colors.pink,
+        padding: EdgeInsets.only(bottom: 2, top: 2),
+        alignment: Alignment.center,
+        width: double.infinity,
+        // color: Colors.green,
+
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5.0, right: 10, left: 10),
+          child: Row(
             mainAxisAlignment:
                 chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
                     ? MainAxisAlignment.end
                     : MainAxisAlignment.start,
             children: [
-              // Text('asd'),
-              Visibility(
-                visible: chat[index].isEdited
-                    ? chat[index].isDeleted
-                        ? false
-                        : chat[index].sentBy ==
-                            FirebaseAuth.instance.currentUser?.uid
-                    : false,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text(
-                    '(edited)',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
+              Text(
+                chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: GestureDetector(
-                  onTap: () {
-                    // int num = 60;
-                    setState(() {
-                      // scrollBottom(isVisible ? -num : num);
-                      isVisible = !isVisible;
-                    });
-                  },
-                  onLongPress: () {
-                    chat[index].isDeleted
-                        ? null
-                        : chat[index].sentBy ==
-                                FirebaseAuth.instance.currentUser?.uid
-                            ? bottomModal(context)
-                            : null;
-                  },
-                  child: Column(
-                    crossAxisAlignment: chat[index].sentBy ==
-                            FirebaseAuth.instance.currentUser?.uid
-                        ? CrossAxisAlignment.end
-                        : CrossAxisAlignment.start,
-                    children: [
-                      if ((chat[index].sentBy !=
-                              FirebaseAuth.instance.currentUser?.uid) &&
-                          (index == 0 ||
-                              chat[index - 1].sentBy != chat[index].sentBy))
-                        FutureBuilder<ChatUser>(
-                            future: ChatUser.fromUid(uid: chat[index].sentBy),
-                            builder: (context, AsyncSnapshot<ChatUser> snap) {
-                              return Container(
-                                  padding: EdgeInsets.only(
-                                      left: 10, top: 5, bottom: 3),
-                                  child: Text(
-                                    '${snap.data?.username}',
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
-                                  ));
-                            }),
-                      Container(
-                        constraints: const BoxConstraints(maxWidth: 320),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: chat[index].isDeleted
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Colors.transparent),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: chat[index].isDeleted
-                              ? Colors.transparent
-                              : chat[index].sentBy ==
-                                      FirebaseAuth.instance.currentUser?.uid
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.secondary,
-                        ),
-                        // color: Colors.black,
-                        child: Text(
-                          chat[index].message,
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: chat[index].isDeleted
-                                  ? Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.color
-                                  : Theme.of(context).colorScheme.onPrimary),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: chat[index].isEdited
-                    ? chat[index].isDeleted
-                        ? false
-                        : chat[index].sentBy ==
-                                FirebaseAuth.instance.currentUser?.uid
-                            ? false
-                            : true
-                    : false,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text(
-                    '(edited)',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-              ),
+
+              for (String uid in chat[index].seenBy)
+                FutureBuilder(
+                    future: ChatUser.fromUid(uid: uid),
+                    builder: (context, AsyncSnapshot snap) {
+                      if (snap.hasData && chat[index].seenBy.length > 1) {
+                        return Container(
+                            padding: EdgeInsets.symmetric(horizontal: 2),
+                            width: 22,
+                            child: AvatarImage(uid: snap.data?.uid));
+                        // if (chat[index].seenBy.last == uid) {
+                        //   // return Text(
+                        //   //   'and ${snap.data?.username}',
+                        //   //   style: Theme.of(context).textTheme.bodySmall,
+                        //   // );
+                        // } else {
+                        //   // return Text(
+                        //   //   '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
+                        //   //   style: Theme.of(context).textTheme.bodySmall,
+                        //   // );
+                        //   return SizedBox(
+                        //       width: 20,
+                        //       child: AvatarImage(uid: snap.data?.uid));
+                        // }
+                      }
+                      return Text('');
+                    }),
+              // Text(
+              //   DateFormat("MMM d, y hh:mm aaa")
+              //       .format(chat[index].ts.toDate()),
+              //   style: Theme.of(context).textTheme.bodySmall,
+              // ),
             ],
           ),
-          Visibility(
-            visible: isVisible,
-            child: Container(
-              // color: Colors.pink,
-              padding: EdgeInsets.only(bottom: 2, top: 2),
-              alignment: Alignment.center,
-              width: double.infinity,
-              // color: Colors.green,
-
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 5.0, right: 10, left: 10),
-                child: Row(
-                  mainAxisAlignment: chat[index].sentBy ==
-                          FirebaseAuth.instance.currentUser?.uid
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-
-                    for (String uid in chat[index].seenBy)
-                      FutureBuilder(
-                          future: ChatUser.fromUid(uid: uid),
-                          builder: (context, AsyncSnapshot snap) {
-                            if (snap.hasData && chat[index].seenBy.length > 1) {
-                              if (chat[index].seenBy.last == uid) {
-                                return Text(
-                                  'and ${snap.data?.username}',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                );
-                              } else {
-                                return Text(
-                                  '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                );
-                              }
-                            }
-                            return Text('');
-                          }),
-                    // Text(
-                    //   DateFormat("MMM d, y hh:mm aaa")
-                    //       .format(chat[index].ts.toDate()),
-                    //   style: Theme.of(context).textTheme.bodySmall,
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
-    // );
+  }
+
+  Visibility editedRight(BuildContext context) {
+    return Visibility(
+      visible: chat[index].isEdited
+          ? chat[index].isDeleted
+              ? false
+              : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                  ? false
+                  : true
+          : false,
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: Text(
+          '(edited)',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
+    );
+  }
+
+  Visibility editedLeft(BuildContext context) {
+    return Visibility(
+      visible: chat[index].isEdited
+          ? chat[index].isDeleted
+              ? false
+              : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+          : false,
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: Text(
+          '(edited)',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
+    );
+  }
+
+  Visibility messageDate(BuildContext context) {
+    return Visibility(
+      visible: isVisible,
+      child: Container(
+        // color: Colors.red,
+        padding: EdgeInsets.only(bottom: 5, top: 15),
+        alignment: Alignment.center,
+        width: double.infinity,
+        // color: Colors.green,
+        child: Text(
+          DateFormat("MMM d, y hh:mm aaa").format(chat[index].ts.toDate()),
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
+    );
   }
 
   Future<dynamic> bottomModal(BuildContext context) {
@@ -252,5 +278,23 @@ class _ChatCardState extends State<ChatCard> {
           // ),
           ),
     );
+  }
+}
+
+class spacer extends StatelessWidget {
+  const spacer({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+        visible: index == 0,
+        child: SizedBox(
+          height: 10,
+        ));
   }
 }

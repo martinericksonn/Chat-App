@@ -127,84 +127,87 @@ class _ChatScreenState extends State<ChatScreen> {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Expanded(
-            child: AnimatedBuilder(
-                animation: _chatController,
-                builder: (context, Widget? w) {
-                  return SingleChildScrollView(
-                    physics: ScrollPhysics(),
-                    controller: _scrollController,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: _chatController.chats.length,
-                              itemBuilder: (context, index) {
-                                return ChatCard(
-                                    scrollController: _scrollController,
-                                    index: index,
-                                    chat: _chatController.chats);
-                              }),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: AnimatedBuilder(
+                  animation: _chatController,
+                  builder: (context, Widget? w) {
+                    return SingleChildScrollView(
+                      physics: ScrollPhysics(),
+                      controller: _scrollController,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: _chatController.chats.length,
+                                itemBuilder: (context, index) {
+                                  return ChatCard(
+                                      scrollController: _scrollController,
+                                      index: index,
+                                      chat: _chatController.chats);
+                                }),
 
-                          // for (ChatMessage chat in _chatController.chats)
-                          //   ChatCard(
-                          //       chat: chat, chatController: _chatController)
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height / 15,
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    onFieldSubmitted: (String text) {
-                      send();
-                    },
-                    focusNode: _messageFN,
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(12),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
+                            // for (ChatMessage chat in _chatController.chats)
+                            //   ChatCard(
+                            //       chat: chat, chatController: _chatController)
+                          ],
                         ),
                       ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.send_rounded,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: send,
-                )
-              ],
+                    );
+                  }),
             ),
-          )
-        ],
+            Container(
+              height: MediaQuery.of(context).size.height / 15,
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      onFieldSubmitted: (String text) {
+                        send();
+                      },
+                      focusNode: _messageFN,
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.all(12),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.send_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: send,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -215,7 +218,19 @@ class _ChatScreenState extends State<ChatScreen> {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          Expanded(child: Text('empty chat')),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/no_message.png", width: 300),
+                Text(
+                    'Start your conversation with ${selectedUser?.username ?? ""}'),
+                SizedBox(
+                  height: 60,
+                )
+              ],
+            ),
+          ),
           Container(
             alignment: Alignment.center,
             height: MediaQuery.of(context).size.height / 15,
@@ -266,7 +281,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   send() {
-    print("ive been clicked");
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
       _chatController.sendMessage(message: _messageController.text.trim());

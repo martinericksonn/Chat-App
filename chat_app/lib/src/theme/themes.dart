@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Themes {
+  // Color primaryDark = const Color(0xff6C63FF);
+  // Color primaryLight = const Color(0xffD3D0FF);
   Color primaryLight = const Color(0xff6C63FF);
   Color primaryDark = const Color(0xffD3D0FF);
   Color tertiaryDark = const Color(0xff363636);
@@ -16,7 +18,7 @@ class Themes {
       ),
       colorScheme: const ColorScheme.light().copyWith(
         primary: primaryLight,
-        secondary: Colors.black26,
+        secondary: Colors.black38,
         tertiary: tertiaryLight,
       ),
       dividerTheme: const DividerThemeData(
@@ -54,7 +56,7 @@ class Themes {
       scaffoldBackgroundColor: Colors.black,
       colorScheme: ColorScheme.dark(
         primary: primaryDark,
-        secondary: Colors.white54,
+        secondary: Colors.white70,
         onBackground: Colors.white,
         tertiary: tertiaryDark,
       ),
