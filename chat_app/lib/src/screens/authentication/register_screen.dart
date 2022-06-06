@@ -23,7 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isPasswordEmpty = false;
   bool isUsernameEmpty = false;
   bool isAgeEmpty = false;
-  bool isGenderEmpty = false;
   bool isRegisterSuccess = false;
   String prompts = '';
 
@@ -151,7 +150,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await _auth.register(
           username: _unCon.text.trim(),
           email: _emailCon.text.trim(),
-          password: _passCon.text.trim());
+          password: _passCon.text.trim(),
+          age: _ageCon.text.trim(),
+          gender: dropdownValue,
+          
+          );
     } catch (error) {
       setState(() {
         prompts = error.toString();
@@ -226,13 +229,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Container genderDropDownButton(BuildContext context) {
     return Container(
         margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(13),
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
-              color: isAgeEmpty
-                  ? Colors.red
-                  : Theme.of(context).colorScheme.primary, // set border
-              width: isAgeEmpty ? 2.0 : 1.0,
+              color: Theme.of(context).colorScheme.primary, // set border
+              width: 1.0,
             ), // set
             // color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20)),
@@ -301,7 +302,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: isPasswordEmpty
+                color: isAgeEmpty
                     ? Colors.red
                     : Theme.of(context).colorScheme.primary),
             hintText: "Age",
@@ -480,6 +481,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool isFieldEmpty() {
-    return !(isEmailEmpty || isPasswordEmpty || isUsernameEmpty);
+    return !(isEmailEmpty || isPasswordEmpty || isUsernameEmpty || isAgeEmpty);
   }
 }

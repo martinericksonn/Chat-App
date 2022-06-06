@@ -84,7 +84,9 @@ class AuthController with ChangeNotifier {
   Future register(
       {required String email,
       required String password,
-      required String username}) async {
+      required String username,
+      required String age,
+      required String gender}) async {
     try {
       working = true;
       notifyListeners();
@@ -92,7 +94,7 @@ class AuthController with ChangeNotifier {
           email: email, password: password);
       if (createdUser.user != null) {
         ChatUser userModel = ChatUser(createdUser.user!.uid, username, email,
-            '', Timestamp.now(), Timestamp.now(), []);
+            age, gender, '', Timestamp.now(), Timestamp.now(), []);
 
         return FirebaseFirestore.instance
             .collection('users')
