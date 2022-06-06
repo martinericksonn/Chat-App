@@ -74,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 28.0),
       child: SizedBox(
         // color: Colors.pink,
-        height: MediaQuery.of(context).size.height * 0.55,
+        height: MediaQuery.of(context).size.height * 0.6,
         // color: Colors.pink,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               children: [
                 title(),
-                // SizedBox(height: 15),
+
                 usernameTextField(context),
                 emailTextField(context),
                 passwordTextField(context),
@@ -117,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget loginButton(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.05,
+      height: MediaQuery.of(context).size.height * 0.03,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -226,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Container genderDropDownButton(BuildContext context) {
     return Container(
         margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(13),
         decoration: BoxDecoration(
             border: Border.all(
               color: isAgeEmpty
@@ -236,11 +236,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ), // set
             // color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20)),
-        child: DropdownButtonFormField(
-
+        child: DropdownButtonFormField(     
           value: dropdownValue, 
           icon: Icon(Icons.arrow_drop_down),
            decoration: InputDecoration(
+                labelStyle: TextStyle(
+                color:  Theme.of(context).colorScheme.primary),
                 labelText: "Gender",
                 border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -440,7 +441,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset("assets/images/tabi-tabi.png", width: 45, height: 45),
+            Image.asset("assets/images/tabi_lightmode.png", width: 45, height: 45),
             Text(
               " Tabi-Tabi",
               style: TextStyle(
@@ -453,7 +454,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       Container(
         alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height * 0.40,
+        height: MediaQuery.of(context).size.height * 0.33,
         padding: EdgeInsets.only(top: 18.0),
         child: Image(
           image: AssetImage("assets/images/register.png"),

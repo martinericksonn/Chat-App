@@ -25,9 +25,9 @@ dependencies:
   flutter_native_splash: ^2.2.3
 
 flutter_native_splash:
-  image: assets/images/chat_light.png
+  image: assets/images/tabi_lightmode.png
   color: "#f9f9f9"
-  image_dark: assets/images/chat_dark.png
+  image_dark: assets/images/tabi_darkmode.png
   color_dark: "#000000"
 
 dev_dependencies:
