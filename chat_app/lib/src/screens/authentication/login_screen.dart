@@ -322,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset("assets/images/tabi-tabi.png", width: 45, height: 45),
+            Image.asset("assets/images/tabi_lightmode.png", width: 45, height: 45),
             Text(
               " Tabi-Tabi",
               style: TextStyle(
