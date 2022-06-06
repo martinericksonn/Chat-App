@@ -6,7 +6,7 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/chats_screen.dart';
-import 'package:chat_app/src/services/image_service.dart';
+import 'package:chat_app/src/screens/home/profile_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -130,13 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
-          IconButton(
-            onPressed: () {
-              _auth.logout();
-            },
-            icon: const Icon(Icons.logout_rounded),
-            color: Theme.of(context).colorScheme.primary,
-          ),
+         
         ],
       ),
     );
@@ -216,7 +210,11 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 40,
             child: InkWell(
               onTap: () {
-                ImageService.updateProfileImage();
+                Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProfileScreen(),
+              ),
+            );
               },
               child: SizedBox(
                   child:
@@ -233,6 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       actions: [
+         
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
@@ -243,7 +242,16 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           icon: const Icon(Icons.edit_rounded),
           color: Theme.of(context).colorScheme.primary,
-        )
+        ),
+
+        IconButton(
+            onPressed: () {
+              _auth.logout();
+            },
+            icon: const Icon(Icons.logout_rounded),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+
       ],
     );
   }
