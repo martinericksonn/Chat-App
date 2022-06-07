@@ -1,3 +1,6 @@
+import 'package:chat_app/src/controllers/auth_controller.dart';
+import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/service_locators.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +15,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final AuthController _auth = locator<AuthController>();
+  ChatUser? user;
+
+  @override
+  void initState() {
+    ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
+      if (mounted) {
+        setState(() {
+          user = value;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -30,17 +49,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: appBar(),
       body: SafeArea(
-        child: Center(
-          child: SizedBox(
-            width: 200,
-            height: 200,
-            child: InkWell(
-              onTap: () {
-                ImageService.updateProfileImage();
-              },
-              child: SizedBox(
-                  child:
-                      AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid)),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  profilePic(context),
+                  userName(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -48,9 +66,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Padding userName(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Text(
+        user?.username ?? '...',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+    );
+  }
+
+  Stack profilePic(BuildContext context) {
+    return Stack(
+      children: [
+        SizedBox(
+          width: 200,
+          height: 200,
+          child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+        ),
+        Positioned(
+          right: 10,
+          bottom: 0,
+          child: InkWell(
+            onTap: () {
+              ImageService.updateProfileImage();
+            },
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(
+                Icons.camera_alt,
+                size: 25,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   AppBar appBar() {
     return AppBar(
       elevation: 0,
+      centerTitle: true,
       title: Text(
         "Profile",
         style: Theme.of(context).textTheme.titleLarge,
