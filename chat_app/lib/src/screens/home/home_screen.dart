@@ -72,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: body(context),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: () => {},
-        label: Text("Find Nearby",
-            style: Theme.of(context).textTheme.headlineMedium),
+        onPressed: () => {_auth.logout()},
+        label:
+            Text("Log out", style: Theme.of(context).textTheme.headlineMedium),
       ),
     );
   }
@@ -83,28 +83,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Searchbar(),
-          messageList(),
-          IconButton(
-            onPressed: () {
-              _auth.logout();
-            },
-            icon: const Icon(Icons.logout_rounded),
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Searchbar(),
+            messageList(),
+            // IconButton(
+            //   onPressed: () {
+            //     _auth.logout();
+            //   },
+            //   icon: const Icon(Icons.logout_rounded),
+            //   color: Theme.of(context).colorScheme.primary,
+            // ),
+          ],
+        ),
       ),
     );
   }
 
 //AsyncSnapshot<dynamic> snapshot
-  Column messageList() {
+  Widget messageList() {
     return Column(
       children: [
         SizedBox(
-          height: 600,
+          // height: MediaQuery.of(context).size.height / 1.5,
           child: RefreshIndicator(
             onRefresh: () async {
               setState(() {});
@@ -131,8 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  ListView bodyWithMessage() {
+  Widget bodyWithMessage() {
     return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: _chatListController.chats.length,
         itemBuilder: (context, index) {
           var chatListUser = _chatListController.extractUID(
@@ -145,7 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: ChatUser.fromUid(uid: chatListUser),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return CircularProgressIndicator();
+                    return SizedBox(
+                      child: CircleAvatar(child: CircularProgressIndicator()),
+                    );
                   }
 
                   return Container(
