@@ -1,17 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:chat_app/src/controllers/auth_controller.dart';
-import 'package:chat_app/src/controllers/chat_controller.dart';
-import 'package:chat_app/src/controllers/message_list_controller.dart';
 import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
-import 'package:chat_app/src/screens/home/chats_screen.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -30,23 +26,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AuthController _auth = locator<AuthController>();
-  // final ChatController _chatController = ChatController();
   final ChatListController _chatListController = ChatListController();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
-  // late final MessageListController _messageLC;
+
   ChatUser? user;
   @override
   void initState() {
+    print('before ChatUser ');
     ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
+      print('in ChatUser ');
       if (mounted) {
         setState(() {
           user = value;
         });
-        // _messageLC = MessageListController(user!);
       }
     });
-
+    print('out ChatUser ');
     super.initState();
   }
 
@@ -133,8 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             return CircularProgressIndicator();
                           }
                           return Container(
-                            // color: Colors.red,
-                            // margin: EdgeInsets.all(5),
                             child: messageListTile(context,
                                 _chatListController.chats[index], snapshot),
                           );

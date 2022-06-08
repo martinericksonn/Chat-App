@@ -135,15 +135,16 @@ class ChatController with ChangeNotifier {
         FirebaseFirestore.instance
             .collection('users')
             .doc(recipient)
-            .collection('MessageSnapshot')
+            .collection('messageSnapshot')
             .doc(chatroom)
             .set(newMessage),
         FirebaseFirestore.instance
             .collection('users')
             .doc(thisUser)
-            .collection('MessageSnapshot')
+            .collection('messageSnapshot')
             .doc(chatroom)
-            .set(newMessage)
+            .set(newMessage),
+        _subscibe(),
       },
     );
 
