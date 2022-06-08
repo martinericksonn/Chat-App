@@ -101,12 +101,12 @@ class AuthController with ChangeNotifier {
             .doc(userModel.uid)
             .set(userModel.json)
             .then((value) => {
-                  FirebaseFirestore.instance
-                      .collection('chats')
-                      .doc("XMGXGoTYNnhOiDHOg5aa")
-                      .update({
-                    "memebers": FieldValue.arrayUnion([userModel.uid])
-                  })
+                  // FirebaseFirestore.instance
+                  //     .collection('chats')
+                  //     .doc("XMGXGoTYNnhOiDHOg5aa")
+                  //     .update({
+                  //   "memebers": FieldValue.arrayUnion([userModel.uid])
+                  // })
                 });
       }
     } on FirebaseAuthException catch (e) {

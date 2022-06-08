@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'chat_user_model.dart';
-
 class ChatList {
   final String uid, sentBy, message;
   final Timestamp ts;
@@ -54,15 +52,6 @@ class ChatList {
     }
   }
 
-  // String get previousMessages {
-  //   return previousChatID!;
-  // }
-
-  bool hasNotSeenMessage(String uid) {
-    print(uid);
-    return !seenBy.contains(uid);
-  }
-
   static Stream<List<ChatList>> currentChats() => FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -70,9 +59,4 @@ class ChatList {
       .orderBy('ts')
       .snapshots()
       .map(ChatList.fromQuerySnap);
-
-  static convertToDate(Timestamp timesamp) {
-    timesamp.toDate();
-    // DateTime.fromMillisecondsSinceEpoch(timesamp );
-  }
 }

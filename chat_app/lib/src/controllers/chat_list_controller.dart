@@ -8,10 +8,7 @@ import '../models/chat_list_model.dart';
 
 class ChatListController with ChangeNotifier {
   late StreamSubscription _chatSub;
-  final StreamController<String?> _controller = StreamController();
-  Stream<String?> get stream => _controller.stream;
-  ChatUser? user;
-  late String recipient;
+
   List<ChatList> chats = [];
 
   String? chatroom;
@@ -27,9 +24,20 @@ class ChatListController with ChangeNotifier {
   }
 
   chatUpdateHandler(List<ChatList> update) {
-    print("chatUpdateHandler");
-    chats = update;
-    notifyListeners();
+    try {
+      if (update == []) {
+        print("null");
+      } else {
+        print(update);
+        print("update");
+      }
+
+      print("chatUpdateHandler");
+      chats = update;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 
   extractUID(String chatroom, String userID) {

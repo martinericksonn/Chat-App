@@ -33,16 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
   ChatUser? user;
   @override
   void initState() {
-    print('before ChatUser ');
     ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
-      print('in ChatUser ');
       if (mounted) {
         setState(() {
           user = value;
         });
       }
     });
-    print('out ChatUser ');
+
     super.initState();
   }
 
@@ -111,37 +109,53 @@ class _HomeScreenState extends State<HomeScreen> {
             onRefresh: () async {
               setState(() {});
             },
-            child: ListView.builder(
-                itemCount: _chatListController.chats.length,
-                itemBuilder: (context, index) {
-                  var chatListUser = _chatListController.extractUID(
-                      _chatListController.chats[index].uid,
-                      FirebaseAuth.instance.currentUser!.uid);
-
-                  print(chatListUser);
-
-                  if (_chatListController.chats[index].uid !=
-                      FirebaseAuth.instance.currentUser!.uid) {
-                    return FutureBuilder<ChatUser>(
-                        future: ChatUser.fromUid(uid: chatListUser),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
-                          }
-                          return Container(
-                            child: messageListTile(context,
-                                _chatListController.chats[index], snapshot),
-                          );
-                        });
-                  }
-                  return SizedBox();
-                }),
+            child: _chatListController.chats.isEmpty
+                ? bodyNoMessage()
+                : bodyWithMessage(),
           ),
         ),
 
         // ),
       ],
     );
+  }
+
+  Widget bodyNoMessage() {
+    return Center(
+      child: Column(children: [
+        Image.asset("assets/images/home_empty.png", width: 300),
+        Text("Create your first message on Tabi or"),
+        SizedBox(height: 2),
+        Text("invite your friends and enjoy Tabi-Tabi together"),
+      ]),
+    );
+  }
+
+  ListView bodyWithMessage() {
+    return ListView.builder(
+        itemCount: _chatListController.chats.length,
+        itemBuilder: (context, index) {
+          var chatListUser = _chatListController.extractUID(
+              _chatListController.chats[index].uid,
+              FirebaseAuth.instance.currentUser!.uid);
+
+          if (_chatListController.chats[index].uid !=
+              FirebaseAuth.instance.currentUser!.uid) {
+            return FutureBuilder<ChatUser>(
+                future: ChatUser.fromUid(uid: chatListUser),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
+
+                  return Container(
+                    child: messageListTile(
+                        context, _chatListController.chats[index], snapshot),
+                  );
+                });
+          }
+          return SizedBox(child: Text('asdasd'));
+        });
   }
 
   ListTile messageListTile(BuildContext context, ChatList chatList,
