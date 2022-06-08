@@ -8,7 +8,7 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/chats_screen.dart';
-import 'package:chat_app/src/screens/home/profile_screen.dart';
+import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -92,57 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Searchbar(),
-          FutureBuilder<dynamic>(
-            future: _chatController.fetchChatrooms(), // async work
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Text('Loading....');
-                default:
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Column(
-                      children: [
-                        // SizedBox(
-                        //   height: 500,
-                        //   child:
-                        //       ListView.builder(itemBuilder: (context, index) {
-                        //     return SizedBox();
-                        //   }),
-                        // ),
-                        for (ChatUser user in snapshot.data)
-                          if (user.uid !=
-                              FirebaseAuth.instance.currentUser!.uid)
-                            Container(
-                              margin: EdgeInsets.all(5),
-                              child: ListTile(
-                                onTap: () => {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChatScreen(selectedUser: user),
-                                    ),
-                                  )
-                                },
-                                // subtitle: Text('data'),
-                                leading: AvatarImage(
-                                  uid: user.uid,
-                                ),
-                                title: Text(
-                                  user.username,
-                                ),
-                                trailing: Text(DateFormat("hh:mm aaa")
-                                    .format(DateTime.now())),
-                              ),
-                            ),
-                      ],
-                    );
-                  }
-              }
+          messageList(),
+          IconButton(
+            onPressed: () {
+              _auth.logout();
             },
+            icon: const Icon(Icons.logout_rounded),
+            color: Theme.of(context).colorScheme.primary,
           ),
-         
         ],
       ),
     );
@@ -196,62 +153,46 @@ class _HomeScreenState extends State<HomeScreen> {
   ListTile messageListTile(BuildContext context, ChatList chatList,
       AsyncSnapshot<ChatUser> chatUser) {
     return ListTile(
-      onTap: () => {
-        print("on tap"),
-        print(chatList.uid),
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) =>
-                ChatScreen(selectedUserUID: chatUser.data!.uid),
+        onTap: () => {
+              print("on tap"),
+              print(chatList.uid),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ChatScreen(selectedUserUID: chatUser.data!.uid),
+                ),
+              )
+            },
+        subtitle: Text(
+            chatList.sentBy == user!.uid
+                ? "You: " + chatList.message
+                : chatList.message,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontWeight: chatList.seenBy.contains(user!.uid)
+                  ? FontWeight.normal
+                  : FontWeight.bold,
+            )),
+        leading: AvatarImage(
+          uid: chatUser.data!.uid,
+        ),
+        title: Text(
+          chatUser.data!.username,
+          style: TextStyle(
+            fontWeight: chatList.seenBy.contains(user!.uid)
+                ? FontWeight.normal
+                : FontWeight.bold,
+            // color: Theme.of(context).colorScheme.tertiary,
           ),
-        )
-      },
-      subtitle: Text(chatList.message),
-      leading: AvatarImage(
-        uid: chatUser.data!.uid,
-      ),
-      title: Text(
-        chatUser.data!.username,
-        style: TextStyle(
-          fontWeight: chatList.seenBy.contains(user!.uid)
-              ? FontWeight.normal
-              : FontWeight.bold,
-          // color: Theme.of(context).colorScheme.tertiary,
         ),
-      ),
-      trailing: Text(DateFormat("hh:mm aaa").format(chatList.ts.toDate())),
-    );
-  }
-
-  ListTile chatTile(BuildContext context) {
-    return ListTile(
-      onTap: () => {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => GlobalChat(),
+        trailing: Text(
+          DateFormat("hh:mm aaa").format(chatList.ts.toDate()),
+          style: TextStyle(
+            fontWeight: chatList.seenBy.contains(user!.uid)
+                ? FontWeight.normal
+                : FontWeight.bold,
           ),
-        )
-      },
-      leading: SizedBox(
-        // color: Colors.red,
-        height: 50,
-        width: 50,
-        child: CircleAvatar(
-          child: Icon(Icons.message_rounded),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-      ),
-      title: Text(
-        "Tabi-Tabi",
-      ),
-      subtitle: Container(
-        child: Text(
-          "subtitlsssssssssssssse",
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      trailing: Text(DateFormat("hh:mm aaa").format(DateTime.now())),
-    );
+        ));
   }
 
   Padding searchBar(BuildContext context) {
@@ -289,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar appBar() {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      automaticallyImplyLeading: false,
       elevation: 0,
       title: Row(
         children: [
@@ -298,11 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 40,
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ProfileScreen(),
-              ),
-            );
+                ImageService.updateProfileImage();
               },
               child: SizedBox(
                   child:
@@ -319,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       actions: [
-         
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
@@ -330,16 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           icon: const Icon(Icons.edit_rounded),
           color: Theme.of(context).colorScheme.primary,
-        ),
-
-        IconButton(
-            onPressed: () {
-              _auth.logout();
-            },
-            icon: const Icon(Icons.logout_rounded),
-            color: Theme.of(context).colorScheme.primary,
-          ),
-
+        )
       ],
     );
   }
