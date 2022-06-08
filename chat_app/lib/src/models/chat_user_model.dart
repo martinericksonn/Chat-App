@@ -26,15 +26,12 @@ class ChatUser {
   }
 
   static Future<ChatUser> fromUid({required String uid}) async {
-    print("fromUid");
-    print(uid);
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     return ChatUser.fromDocumentSnap(snap);
   }
 
   static Future<List<ChatUser>> getUsers() async {
-    print("SOME ONE CALLED ME");
     List<ChatUser> users = [];
     await FirebaseFirestore.instance
         .collection('users')

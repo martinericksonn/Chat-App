@@ -5,6 +5,7 @@ import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
+import 'package:chat_app/src/screens/home/search.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
@@ -207,38 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 : FontWeight.bold,
           ),
         ));
-  }
-
-  Padding searchBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Container(
-        height: 42,
-        width: MediaQuery.of(context).size.width / 1.1,
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiary,
-            borderRadius: BorderRadius.circular(50)),
-        child: TextButton(
-          onPressed: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(Icons.search_rounded),
-                SizedBox(
-                  width: 5,
-                ),
-                Text('Search'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   AppBar appBar() {

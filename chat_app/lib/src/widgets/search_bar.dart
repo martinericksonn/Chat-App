@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:chat_app/src/screens/home/search.dart';
 import 'package:flutter/material.dart';
 
 class Searchbar extends StatelessWidget {
@@ -20,7 +21,13 @@ class Searchbar extends StatelessWidget {
             color: Theme.of(context).colorScheme.tertiary,
             borderRadius: BorderRadius.circular(50)),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SearchScreen(),
+              ),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Row(
