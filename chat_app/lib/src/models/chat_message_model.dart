@@ -60,8 +60,9 @@ class ChatMessage {
     return !seenBy.contains(uid);
   }
 
-  Future updateSeen(String userID, String chatroom) {
-    print("update " + uid + " " + chatroom);
+  Future updateSeen(String userID, String chatroom, String recipient) {
+    print("updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee " + recipient);
+
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)
@@ -69,7 +70,24 @@ class ChatMessage {
         .doc(uid)
         .update({
       'seenBy': FieldValue.arrayUnion([userID])
-    });
+    }).then((value) => {
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userID)
+                  .collection('messageSnapshot')
+                  .doc(chatroom)
+                  .update({
+                'seenBy': FieldValue.arrayUnion([userID])
+              }),
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(recipient)
+                  .collection('messageSnapshot')
+                  .doc(chatroom)
+                  .update({
+                'seenBy': FieldValue.arrayUnion([userID])
+              }),
+            });
   }
 
   static Stream<List<ChatMessage>> currentChats(String chatroom) =>

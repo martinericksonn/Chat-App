@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:chat_app/src/models/chat_message_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
@@ -11,6 +12,7 @@ class ChatController with ChangeNotifier {
   final StreamController<String?> _controller = StreamController();
   Stream<String?> get stream => _controller.stream;
   ChatUser? user;
+  late String recipient;
   List<ChatMessage> chats = [];
 
   String? chatroom;
@@ -26,8 +28,9 @@ class ChatController with ChangeNotifier {
     _controller.add("success");
   }
 
-  initChatRoom(String room) {
+  initChatRoom(String room, String currentRecipient) {
     ChatUser.fromUid(uid: FirebaseAuth.instance.currentUser!.uid).then((value) {
+      recipient = currentRecipient;
       user = value;
       if (user != null && user!.chatrooms.contains(room)) {
         _subscibe();
@@ -87,7 +90,8 @@ class ChatController with ChangeNotifier {
   chatUpdateHandler(List<ChatMessage> update) {
     for (ChatMessage message in update) {
       if (message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
-        message.updateSeen(FirebaseAuth.instance.currentUser!.uid, chatroom!);
+        message.updateSeen(
+            FirebaseAuth.instance.currentUser!.uid, chatroom!, recipient);
       }
     }
     chats = update;
@@ -95,23 +99,23 @@ class ChatController with ChangeNotifier {
   }
 
   sendFirstMessage(String message, String recipient, bool isGroup) {
+    var newMessage = ChatMessage(
+            sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
+        .json;
+    var thisUser = FirebaseAuth.instance.currentUser!.uid;
     String chatroom = generateRoomId(recipient);
 
     FirebaseFirestore.instance.collection('chats').doc(chatroom).set({
       'chatroom': chatroom,
       'isGroup': isGroup,
-      'members': FieldValue.arrayUnion(
-          [recipient, FirebaseAuth.instance.currentUser!.uid])
+      'members': FieldValue.arrayUnion([recipient, thisUser])
     }).then(
       (snap) => {
         FirebaseFirestore.instance
             .collection('chats')
             .doc(chatroom)
             .collection('messages')
-            .add(ChatMessage(
-                    sentBy: FirebaseAuth.instance.currentUser!.uid,
-                    message: message)
-                .json)
+            .add(newMessage)
             .then((value) => {
                   FirebaseFirestore.instance
                       .collection('users')
@@ -128,13 +132,50 @@ class ChatController with ChangeNotifier {
                             _subscibe(),
                           }),
                 }),
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(recipient)
+            .collection('MessageSnapshot')
+            .doc(chatroom)
+            .set(newMessage),
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(thisUser)
+            .collection('MessageSnapshot')
+            .doc(chatroom)
+            .set(newMessage)
       },
     );
 
     return chatroom;
   }
 
-  Future sendMessage({required String message}) async {
+  Future sendMessage(
+      {required String message, required String recipient}) async {
+    var newMessage = ChatMessage(
+            sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
+        .json;
+    var thisUser = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(recipient)
+        .collection('messageSnapshot')
+        .doc(chatroom)
+        .set(ChatMessage(
+                sentBy: FirebaseAuth.instance.currentUser!.uid,
+                message: message)
+            .json);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(thisUser)
+        .collection('messageSnapshot')
+        .doc(chatroom)
+        .set(ChatMessage(
+                sentBy: FirebaseAuth.instance.currentUser!.uid,
+                message: message)
+            .json);
+
     return await FirebaseFirestore.instance
         .collection('chats')
         .doc(chatroom)
@@ -155,7 +196,7 @@ class ChatController with ChangeNotifier {
           .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
           .get()
           .then((value) {
-        List<dynamic> users = [];
+        List<ChatUser> users = [];
 
         for (var data in value.docs) {
           users.add(ChatUser.fromDocumentSnap(data));

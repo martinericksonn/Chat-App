@@ -2,6 +2,8 @@
 
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
+import 'package:chat_app/src/controllers/message_list_controller.dart';
+import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
@@ -9,10 +11,12 @@ import 'package:chat_app/src/screens/home/chats_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../controllers/chat_list_controller.dart';
 import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
 
@@ -26,11 +30,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AuthController _auth = locator<AuthController>();
-  final ChatController _chatController = ChatController();
-
+  // final ChatController _chatController = ChatController();
+  final ChatListController _chatListController = ChatListController();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
-
+  // late final MessageListController _messageLC;
   ChatUser? user;
   @override
   void initState() {
@@ -39,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           user = value;
         });
+        // _messageLC = MessageListController(user!);
       }
     });
 
@@ -140,6 +145,81 @@ class _HomeScreenState extends State<HomeScreen> {
          
         ],
       ),
+    );
+  }
+
+//AsyncSnapshot<dynamic> snapshot
+  Column messageList() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 600,
+          child: RefreshIndicator(
+            onRefresh: () async {
+              setState(() {});
+            },
+            child: ListView.builder(
+                itemCount: _chatListController.chats.length,
+                itemBuilder: (context, index) {
+                  var chatListUser = _chatListController.extractUID(
+                      _chatListController.chats[index].uid,
+                      FirebaseAuth.instance.currentUser!.uid);
+
+                  print(chatListUser);
+
+                  if (_chatListController.chats[index].uid !=
+                      FirebaseAuth.instance.currentUser!.uid) {
+                    return FutureBuilder<ChatUser>(
+                        future: ChatUser.fromUid(uid: chatListUser),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+                          return Container(
+                            // color: Colors.red,
+                            // margin: EdgeInsets.all(5),
+                            child: messageListTile(context,
+                                _chatListController.chats[index], snapshot),
+                          );
+                        });
+                  }
+                  return SizedBox();
+                }),
+          ),
+        ),
+
+        // ),
+      ],
+    );
+  }
+
+  ListTile messageListTile(BuildContext context, ChatList chatList,
+      AsyncSnapshot<ChatUser> chatUser) {
+    return ListTile(
+      onTap: () => {
+        print("on tap"),
+        print(chatList.uid),
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) =>
+                ChatScreen(selectedUserUID: chatUser.data!.uid),
+          ),
+        )
+      },
+      subtitle: Text(chatList.message),
+      leading: AvatarImage(
+        uid: chatUser.data!.uid,
+      ),
+      title: Text(
+        chatUser.data!.username,
+        style: TextStyle(
+          fontWeight: chatList.seenBy.contains(user!.uid)
+              ? FontWeight.normal
+              : FontWeight.bold,
+          // color: Theme.of(context).colorScheme.tertiary,
+        ),
+      ),
+      trailing: Text(DateFormat("hh:mm aaa").format(chatList.ts.toDate())),
     );
   }
 

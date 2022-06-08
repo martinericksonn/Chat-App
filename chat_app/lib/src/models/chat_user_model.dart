@@ -5,8 +5,8 @@ class ChatUser {
   Timestamp created, updated;
   List<String> chatrooms;
 
-  ChatUser(this.uid, this.username, this.email, this.age, this.gender, this.image, this.created,
-      this.updated, this.chatrooms);
+  ChatUser(this.uid, this.username, this.email, this.age, this.gender,
+      this.image, this.created, this.updated, this.chatrooms);
 
   static ChatUser fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;

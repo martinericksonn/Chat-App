@@ -11,33 +11,39 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../models/chat_list_model.dart';
 import '../../models/chat_user_model.dart';
 
-import '../../service_locators.dart';
+// import '../../service_locators.dart';
 
 class ChatScreen extends StatefulWidget {
-  final ChatUser selectedUser;
   final String chatroom;
-  ChatScreen({Key? key, required this.selectedUser, this.chatroom = ""});
+  final String selectedUserUID;
+  const ChatScreen(
+      {Key? key, required this.selectedUserUID, this.chatroom = ""});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final AuthController _auth = locator<AuthController>();
+  // final AuthController _auth = locator<AuthController>();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final ChatController _chatController = ChatController();
-  ChatUser? get selectedUser => widget.selectedUser;
+  String get selectedUserUID => widget.selectedUserUID;
+
   String get chatroom => widget.chatroom;
   ChatUser? user;
 
   @override
   void initState() {
-    _chatController
-        .initChatRoom(_chatController.generateRoomId(selectedUser!.uid));
+    print('ChatScreen IN');
+    print(selectedUserUID);
+    _chatController.initChatRoom(
+        _chatController.generateRoomId(selectedUserUID), selectedUserUID);
+    print('ChatScreen END');
     super.initState();
   }
 
@@ -69,51 +75,71 @@ class _ChatScreenState extends State<ChatScreen> {
       statusBarColor: Theme.of(context).primaryColor,
       //color set to transperent or set your own color
     ));
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          children: [
-            AvatarImage(uid: selectedUser!.uid),
-            SizedBox(
-              width: 15,
-            ),
-            Text(
-              selectedUser?.username ?? "",
-              style: TextStyle(
-                  fontSize: 21,
-                  color: Theme.of(context).textTheme.bodyLarge!.color),
-            ),
-          ],
-        ),
-      ),
-      body: StreamBuilder(
-        stream: _chatController.stream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data == "null") {
-              return loadingScreen("1");
-            } else if (snapshot.data == "success") {
-              return body(
-                context,
-                message,
-                send,
-              );
-            } else if (snapshot.data == 'empty') {
-              return body(
-                context,
-                firstMessage,
-                firstSend,
-              );
-            }
-          } else if (snapshot.hasError) {
-            return loadingScreen(snapshot.error.toString());
+    return FutureBuilder<ChatUser>(
+        future: ChatUser.fromUid(uid: selectedUserUID),
+        builder: (BuildContext context, AsyncSnapshot<ChatUser> selectedUser) {
+          if (!selectedUser.hasData) {
+            return Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    height: 50.0,
+                    width: 50.0,
+                  ),
+                ],
+              ),
+            );
           }
-          return loadingScreen("3");
-        },
-      ),
-    );
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              elevation: 0,
+              title: Row(
+                children: [
+                  AvatarImage(uid: selectedUser.data!.uid),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    selectedUser.data!.username,
+                    style: TextStyle(
+                        fontSize: 21,
+                        color: Theme.of(context).textTheme.bodyLarge!.color),
+                  ),
+                ],
+              ),
+            ),
+            body: StreamBuilder(
+              stream: _chatController.stream,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data == "null") {
+                    return loadingScreen("1");
+                  } else if (snapshot.data == "success") {
+                    return body(
+                      context,
+                      message,
+                      send,
+                    );
+                  } else if (snapshot.data == 'empty') {
+                    return body(
+                      context,
+                      firstMessage,
+                      firstSend,
+                    );
+                  }
+                } else if (snapshot.hasError) {
+                  return loadingScreen(snapshot.error.toString());
+                }
+                return loadingScreen("3");
+              },
+            ),
+          );
+        });
   }
 
   Center loadingScreen(String num) {
@@ -233,7 +259,7 @@ class _ChatScreenState extends State<ChatScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset("assets/images/no_message.png", width: 300),
-          Text('Start your conversation with ${selectedUser?.username ?? ""}'),
+          Text('Start your legendary conversation'),
           SizedBox(
             height: 60,
           )
@@ -245,7 +271,8 @@ class _ChatScreenState extends State<ChatScreen> {
   send() {
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
-      _chatController.sendMessage(message: _messageController.text.trim());
+      _chatController.sendMessage(
+          message: _messageController.text.trim(), recipient: selectedUserUID);
       _messageController.text = '';
     }
   }
@@ -255,11 +282,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (_messageController.text.isNotEmpty) {
       var chatroom = _chatController.sendFirstMessage(
-          _messageController.text.trim(), selectedUser!.uid, false);
+          _messageController.text.trim(), selectedUserUID, false);
       _messageController.text = '';
 
       setState(() {
-        _chatController.initChatRoom(chatroom);
+        _chatController.initChatRoom(chatroom, selectedUserUID);
       });
     }
   }

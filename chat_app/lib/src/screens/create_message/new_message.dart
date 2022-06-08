@@ -83,7 +83,8 @@ class NewMessage extends StatelessWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => ChatScreen(
-                                      selectedUser: snapshot.data![index])),
+                                      selectedUserUID:
+                                          snapshot.data![index].uid)),
                             );
                           },
                           leading: AvatarImage(uid: snapshot.data![index].uid),

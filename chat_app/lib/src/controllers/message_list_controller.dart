@@ -8,144 +8,58 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MessageListController with ChangeNotifier {
-  late StreamSubscription _chatSub;
+  late StreamSubscription _messagesSub;
   final StreamController<String?> _controller = StreamController();
   Stream<String?> get stream => _controller.stream;
-  ChatUser? user;
-  List<ChatMessage> chats = [];
-
+  ChatUser user;
+  List<ChatMessage> messages = [];
+  List<ChatUser> users = [];
+  List<String> chatrooms = [];
   String? chatroom;
-  MessageListController() {
-    if (chatroom != null) {
-      return;
-    }
-    _controller.add("empty");
-  }
-
-  _subscibe() {
-    _chatSub = ChatMessage.currentChats(chatroom!).listen(chatUpdateHandler);
-    _controller.add("success");
-  }
-
-  initChatRoom(String room) {
-    print("inisidee.init1");
-    ChatUser.fromUid(uid: FirebaseAuth.instance.currentUser!.uid).then((value) {
-      print("inisidee.init2");
-      user = value;
-      if (user != null && user!.chatrooms.contains(room)) {
-        _subscibe();
-      } else {
-        _controller.add("empty");
-      }
-      chatroom = room;
-      print(user?.chatrooms);
-      print(user?.chatrooms.contains(room));
-    });
-    print("inisidee.init3");
-  }
-
-  generateRoomId(recipient) {
-    String currentUser = FirebaseAuth.instance.currentUser!.uid;
-
-    if (currentUser.codeUnits[0] > recipient.codeUnits[0]) {
-      return chatroom = currentUser + recipient;
-    }
-    return chatroom = recipient + currentUser;
-  }
-
-  @override
-  void dispose() {
-    _chatSub.cancel();
-    super.dispose();
-  }
-
-  Future<dynamic> getCurrentChats() async {
+  MessageListController(this.user) {
+    fetchChatrooms();
     try {
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-    } on FirebaseAuthException catch (error) {
-      print(error);
+      // var somedata = activeChats();
+      // shit();
+    } catch (e) {
+      print('errrrrrrrrrrrrrrrrrror');
+      print(e);
     }
   }
+  // shit() {
+  //   print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+  //   var data =
+  //       FirebaseFirestore.instance.collection('chats').snapshots().map((event) {
+  //     "null $event";
+  //     print(event.docs.length);
+  //     print(chatrooms);
+  //     for (var data in event.docs) {
+  //       // if (user.chatrooms.contains(data.id)) {
+  //       //   print('oh yeaaaaaaaaaaaaaaaaaah');
+  //       //   print(data.data());
+  //       // }
+  //       // print(data.data());
+  //       var m = data.data()['message'] ?? '';
+  //       print(m);
+  //     }
+  //   });
+  //   print(data.isEmpty);
 
-  getChatRooms(List<String> userChatRooms) {
+  // }
+
+  static Stream<void> activeChats() => FirebaseFirestore.instance
+      .collection('chats')
+      .snapshots()
+      .map(fromQuerySnap);
+
+  static fromQuerySnap(QuerySnapshot snap) {
     try {
-      var data = [];
-
-      FirebaseFirestore.instance
-          .collection('chats')
-          .where("chatroom", whereIn: userChatRooms)
-          .get()
-          .then((value) => {
-                for (var item in value.docs) {data.add(item.data())}
-              });
-      return data;
-    } catch (error) {
-      print(error);
+      print(snap.docs);
+      // return snap.docs.map(ChatMessage.fromDocumentSnap).toList();
+    } catch (e) {
+      print(e);
+      return [];
     }
-  }
-
-  chatUpdateHandler(List<ChatMessage> update) {
-    // for (ChatMessage message in update) {
-    //   if (message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
-    //     message.updateSeen(FirebaseAuth.instance.currentUser!.uid);
-    //   }
-    // }
-    chats = update;
-    notifyListeners();
-  }
-
-  sendFirstMessage(String message, String recipient, bool isGroup) {
-    String chatroom = generateRoomId(recipient);
-
-    FirebaseFirestore.instance.collection('chats').doc(chatroom).set({
-      'chatroom': chatroom,
-      'isGroup': isGroup,
-      'members': FieldValue.arrayUnion(
-          [recipient, FirebaseAuth.instance.currentUser!.uid])
-    }).then(
-      (snap) => {
-        FirebaseFirestore.instance
-            .collection('chats')
-            .doc(chatroom)
-            .collection('messages')
-            .add(ChatMessage(
-                    sentBy: FirebaseAuth.instance.currentUser!.uid,
-                    message: message)
-                .json)
-            .then((value) => {
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .update({
-                    'chatrooms': FieldValue.arrayUnion([chatroom])
-                  }).then((value) => {
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(recipient)
-                                .update({
-                              'chatrooms': FieldValue.arrayUnion([chatroom])
-                            }),
-                            _subscibe(),
-                          }),
-                }),
-      },
-    );
-
-    return chatroom;
-  }
-
-  Future sendMessage({required String message}) async {
-    return await FirebaseFirestore.instance
-        .collection('chats')
-        .doc(chatroom)
-        .collection('messages')
-        .add(ChatMessage(
-                sentBy: FirebaseAuth.instance.currentUser!.uid,
-                message: message)
-            .json);
   }
 
   Future fetchChatrooms() {
@@ -158,13 +72,30 @@ class MessageListController with ChangeNotifier {
           .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
           .get()
           .then((value) {
-        List<dynamic> users = [];
-
+        List<ChatUser> currentUserMsgList = [];
         for (var data in value.docs) {
-          users.add(ChatUser.fromDocumentSnap(data));
+          currentUserMsgList.add(ChatUser.fromDocumentSnap(data));
         }
-        return users;
+        users = currentUserMsgList;
+        return currentUserMsgList;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _messagesSub.cancel();
+    super.dispose();
+  }
+
+  chatUpdateHandler(List<ChatMessage> update) {
+    messages = update;
+    notifyListeners();
+  }
+
+  Future sendMessage({required String message}) {
+    return FirebaseFirestore.instance.collection('chats').add(ChatMessage(
+            sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
+        .json);
   }
 }

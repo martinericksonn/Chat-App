@@ -30,7 +30,7 @@ class _GlobalChatState extends State<GlobalChat> {
   ChatUser? user;
   @override
   void initState() {
-    _chatController.initChatRoom("XMGXGoTYNnhOiDHOg5aa");
+    // _chatController.initChatRoom("XMGXGoTYNnhOiDHOg5aa");
     ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
       if (mounted) {
         setState(() {
