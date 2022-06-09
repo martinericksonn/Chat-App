@@ -234,7 +234,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Container genderDropDownButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(5),
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
           border: Border.all(
             color: Theme.of(context).colorScheme.primary, // set border
@@ -291,9 +291,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: TextFormField(
           controller: _ageCon,
           validator: (value) {
-            // setState(() {
-            //   isAgeEmpty = (value == null || value.isEmpty) ? true : false;
-            // });
+            setState(() {
+              isAgeEmpty = (value == null || value.isEmpty) ? true : false;
+             
+            });
             return null;
           },
           keyboardType: TextInputType.number,

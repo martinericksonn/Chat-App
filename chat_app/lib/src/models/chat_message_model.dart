@@ -101,7 +101,7 @@ class ChatMessage {
         .collection("chats")
         .doc(chatroom)
         .collection('messages')
-        .doc(uid) //edite  d
+        .doc(uid) //edited
         .update({'message': newMessage, 'isEdited': true});
   }
 
@@ -110,7 +110,7 @@ class ChatMessage {
         .collection("chats")
         .doc(chatroom)
         .collection('messages')
-        .doc(uid) //edite  d
+        .doc(uid) //edited
         .update({'message': 'message deleted', 'isDeleted': true});
   }
 }
