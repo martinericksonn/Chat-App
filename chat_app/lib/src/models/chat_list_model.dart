@@ -44,7 +44,6 @@ class ChatList {
 
   static List<ChatList> fromQuerySnap(QuerySnapshot snap) {
     try {
-      print(snap.docs);
       return snap.docs.map(ChatList.fromDocumentSnap).toList();
     } catch (e) {
       print(e);

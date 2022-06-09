@@ -54,19 +54,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarIconBrightness:
-          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-              ? Brightness.dark
-              : Brightness.light,
-      statusBarIconBrightness:
-          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-              ? Brightness.dark
-              : Brightness.light,
-      systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-      statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-      //color set to transperent or set your own color
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   systemNavigationBarIconBrightness:
+    //       Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
+    //           ? Brightness.dark
+    //           : Brightness.light,
+    //   statusBarIconBrightness:
+    //       Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
+    //           ? Brightness.dark
+    //           : Brightness.light,
+    //   systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+    //   statusBarColor: Theme.of(context).scaffoldBackgroundColor,
+    //   //color set to transperent or set your own color
+    // ));
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: appBar(),
@@ -74,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => {_auth.logout()},
-        label:
-            Text("Log out", style: Theme.of(context).textTheme.headlineMedium),
+        label: Text("Find Nearby",
+            style: Theme.of(context).textTheme.headlineMedium),
       ),
     );
   }
@@ -84,19 +84,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Searchbar(),
-            messageList(),
-            // IconButton(
-            //   onPressed: () {
-            //     _auth.logout();
-            //   },
-            //   icon: const Icon(Icons.logout_rounded),
-            //   color: Theme.of(context).colorScheme.primary,
-            // ),
-          ],
+      child: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Searchbar(),
+              messageList(),
+              // IconButton(
+              //   onPressed: () {
+              //     _auth.logout();
+              //   },
+              //   icon: const Icon(Icons.logout_rounded),
+              //   color: Theme.of(context).colorScheme.primary,
+              // ),
+            ],
+          ),
         ),
       ),
     );
@@ -137,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget bodyWithMessage() {
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
+        reverse: true,
         shrinkWrap: true,
         itemCount: _chatListController.chats.length,
         itemBuilder: (context, index) {
@@ -179,6 +185,8 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             },
         subtitle: Text(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             chatList.sentBy == user!.uid
                 ? "You: " + chatList.message
                 : chatList.message,
@@ -200,13 +208,29 @@ class _HomeScreenState extends State<HomeScreen> {
             // color: Theme.of(context).colorScheme.tertiary,
           ),
         ),
-        trailing: Text(
-          DateFormat("hh:mm aaa").format(chatList.ts.toDate()),
-          style: TextStyle(
-            fontWeight: chatList.seenBy.contains(user!.uid)
-                ? FontWeight.normal
-                : FontWeight.bold,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Text("data"),
+            Text(
+              DateFormat("hh:mm aaa").format(chatList.ts.toDate()),
+              style: TextStyle(
+                fontWeight: chatList.seenBy.contains(user!.uid)
+                    ? FontWeight.normal
+                    : FontWeight.bold,
+              ),
+            ),
+            chatList.seenBy.contains(user!.uid)
+                ? SizedBox()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Icon(
+                      Icons.fiber_manual_record_rounded,
+                      size: 15,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+          ],
         ));
   }
 

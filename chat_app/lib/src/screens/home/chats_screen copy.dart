@@ -70,11 +70,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Theme.of(context).bottomAppBarColor,
-      statusBarColor: Theme.of(context).primaryColor,
-      //color set to transperent or set your own color
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Theme.of(context).bottomAppBarColor,
+    //   statusBarColor: Theme.of(context).primaryColor,
+    //   //color set to transperent or set your own color
+    // ));
     return FutureBuilder<ChatUser>(
         future: ChatUser.fromUid(uid: selectedUserUID),
         builder: (BuildContext context, AsyncSnapshot<ChatUser> selectedUser) {
@@ -255,15 +255,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Expanded firstMessage() {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset("assets/images/no_message.png", width: 300),
-          Text('Start your legendary conversation'),
-          SizedBox(
-            height: 60,
-          )
-        ],
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/no_message.png", width: 300),
+              Text('Start your legendary conversation'),
+              SizedBox(
+                height: 60,
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

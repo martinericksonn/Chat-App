@@ -56,13 +56,10 @@ class ChatMessage {
   // }
 
   bool hasNotSeenMessage(String uid) {
-    print(uid);
     return !seenBy.contains(uid);
   }
 
   Future updateSeen(String userID, String chatroom, String recipient) {
-    print("updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee " + recipient);
-
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)
@@ -109,8 +106,6 @@ class ChatMessage {
   }
 
   Future deleteMessage(String chatroom) {
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    print(chatroom);
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)

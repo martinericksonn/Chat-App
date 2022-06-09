@@ -111,7 +111,8 @@ class _ChatCardState extends State<ChatCard> {
                         );
                       }),
                 Container(
-                  constraints: const BoxConstraints(maxWidth: 320),
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width / 1.3),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -128,6 +129,7 @@ class _ChatCardState extends State<ChatCard> {
                   ),
                   // color: Colors.black,
                   child: Text(
+                    overflow: TextOverflow.visible,
                     chat[index].message,
                     style: TextStyle(
                         fontSize: 16,
