@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/service_locators.dart';
@@ -59,6 +61,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ageCard(),
               genderCard(),
               dateJoinedCard(),
+              ListTile(
+                title: Text(
+                  "Settings",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.dark_mode_rounded),
+                ),
+                title: Text(
+                  "Theme",
+                  style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500,
+                    // color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.block_outlined),
+                ),
+                title: Text(
+                  "Block User",
+                  style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500,
+                    // color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.login_rounded),
+                ),
+                title: Text(
+                  "Logout",
+                  style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500,
+                    // color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
               //mo error ang date joined
               // Text(
               //   DateFormat("MM:dd:yyyy").format(user!.created.toDate()),
