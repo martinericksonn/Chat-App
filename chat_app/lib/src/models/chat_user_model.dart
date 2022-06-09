@@ -63,4 +63,5 @@ class ChatUser {
         'created': created,
         'updated': updated
       };
+
 }

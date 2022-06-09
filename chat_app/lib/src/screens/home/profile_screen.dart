@@ -6,6 +6,7 @@ import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -51,14 +52,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Column(
-                children: [
-                  profilePic(context),
-                  userName(context),
-                ],
-              ),
+            child: Column(
+              children: [
+                profilePic(context),
+                userName(context),
+                Text(
+                  user?.email ?? '...',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Text(
+                  user?.age ?? '...',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Text(
+                  user?.gender ?? '...',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                 Text(
+                  ',,,',//  DateFormat("MM:dd:yyyy").format(user.created.toDate()),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+               
+              ],
             ),
           ),
         ),
@@ -76,32 +91,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Stack profilePic(BuildContext context) {
-    return Stack(
-      children: [
-        SizedBox(
-          width: 200,
-          height: 200,
-          child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
-        ),
-        Positioned(
-          right: 10,
-          bottom: 0,
-          child: InkWell(
-            onTap: () {
-              ImageService.updateProfileImage();
-            },
-            child: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: const Icon(
-                Icons.camera_alt,
-                size: 25,
-                color: Colors.white,
+  Padding profilePic(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Stack(
+        children: [
+          SizedBox(
+            width: 200,
+            height: 200,
+            child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 0,
+            child: InkWell(
+              onTap: () {
+                ImageService.updateProfileImage();
+              },
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: const Icon(
+                  Icons.camera_alt,
+                  size: 25,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -123,3 +141,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
