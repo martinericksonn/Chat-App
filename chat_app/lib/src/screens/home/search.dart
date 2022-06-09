@@ -16,8 +16,9 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
   var getUsers;
-  bool searchOn = false;
+
   @override
   Widget build(BuildContext context) {
     getUsers ??= ChatUser.getUsers();
@@ -79,33 +80,34 @@ class _SearchScreenState extends State<SearchScreen> {
                   for (var element in snapshot.data!) {
                     if (element.searchUsername(_textEditingController.text)) {
                       searchResult.add(element);
-                      print(element.username);
                     }
                   }
 
-                  return ListView.builder(
-                      itemCount: searchResult.length,
-                      itemBuilder: (context, index) {
-                        return searchResult[index].uid !=
-                                FirebaseAuth.instance.currentUser?.uid
-                            ? ListTile(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => ChatScreen(
-                                            selectedUserUID:
-                                                searchResult[index].uid)),
-                                  );
-                                },
-                                leading:
-                                    AvatarImage(uid: snapshot.data![index].uid),
-                                title: Text(
-                                  searchResult[index].username,
-                                ),
-                                subtitle: null,
-                              )
-                            : SizedBox();
-                      });
+                  return searchResult.isEmpty
+                      ? const Center(child: Text("No result found"))
+                      : ListView.builder(
+                          itemCount: searchResult.length,
+                          itemBuilder: (context, index) {
+                            return searchResult[index].uid !=
+                                    FirebaseAuth.instance.currentUser?.uid
+                                ? ListTile(
+                                    onTap: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) => ChatScreen(
+                                                selectedUserUID:
+                                                    searchResult[index].uid)),
+                                      );
+                                    },
+                                    leading: AvatarImage(
+                                        uid: snapshot.data![index].uid),
+                                    title: Text(
+                                      searchResult[index].username,
+                                    ),
+                                    subtitle: null,
+                                  )
+                                : SizedBox();
+                          });
                   ;
                 }
                 return ListView.builder(
