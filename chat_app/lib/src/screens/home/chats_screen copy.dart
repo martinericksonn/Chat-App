@@ -256,17 +256,15 @@ class _ChatScreenState extends State<ChatScreen> {
   Expanded firstMessage() {
     return Expanded(
       child: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/images/no_message.png", width: 300),
-              Text('Start your legendary conversation'),
-              SizedBox(
-                height: 60,
-              )
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset("assets/images/no_message.png", width: 300),
+            Text('Start your legendary conversation'),
+            SizedBox(
+              height: 60,
+            )
+          ],
         ),
       ),
     );

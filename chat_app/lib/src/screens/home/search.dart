@@ -1,4 +1,9 @@
+import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../widgets/avatar.dart';
+import 'chats_screen copy.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({
@@ -11,9 +16,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-
+  var getUsers;
+  bool searchOn = false;
   @override
   Widget build(BuildContext context) {
+    getUsers ??= ChatUser.getUsers();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).cardTheme.color,
@@ -35,6 +42,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 autofocus: true,
                 onSubmitted: (_textEditingController) {},
                 controller: _textEditingController,
+                onChanged: (text) {
+                  setState(() {});
+                  // if (text) print(text);
+                },
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -51,7 +62,77 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
             )),
-        body: const SizedBox(),
+        body: SizedBox(
+          child: FutureBuilder<List<ChatUser>>(
+              future: getUsers,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<List<ChatUser>> snapshot,
+              ) {
+                if (!snapshot.hasData) {
+                  return const SizedBox();
+                }
+
+                List<ChatUser> searchResult = [];
+                if (_textEditingController.text.isNotEmpty) {
+                  // snapshot.data!.toList().indexOf(_textEditingController.text)
+                  for (var element in snapshot.data!) {
+                    if (element.searchUsername(_textEditingController.text)) {
+                      searchResult.add(element);
+                      print(element.username);
+                    }
+                  }
+
+                  return ListView.builder(
+                      itemCount: searchResult.length,
+                      itemBuilder: (context, index) {
+                        return searchResult[index].uid !=
+                                FirebaseAuth.instance.currentUser?.uid
+                            ? ListTile(
+                                onTap: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
+                                            selectedUserUID:
+                                                searchResult[index].uid)),
+                                  );
+                                },
+                                leading:
+                                    AvatarImage(uid: snapshot.data![index].uid),
+                                title: Text(
+                                  searchResult[index].username,
+                                ),
+                                subtitle: null,
+                              )
+                            : SizedBox();
+                      });
+                  ;
+                }
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return snapshot.data![index].uid !=
+                              FirebaseAuth.instance.currentUser?.uid
+                          ? ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                          selectedUserUID:
+                                              snapshot.data![index].uid)),
+                                );
+                              },
+                              leading:
+                                  AvatarImage(uid: snapshot.data![index].uid),
+                              title: Text(
+                                snapshot.data![index].username,
+                              ),
+                              subtitle: null,
+                            )
+                          : SizedBox();
+                    });
+              }),
+        ),
       ),
     );
   }

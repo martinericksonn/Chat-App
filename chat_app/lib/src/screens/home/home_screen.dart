@@ -246,11 +246,11 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 40,
             child: InkWell(
               onTap: () {
-                 Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ProfileScreen(),
-              ),
-            );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(),
+                  ),
+                );
               },
               child: SizedBox(
                   child:

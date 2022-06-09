@@ -45,6 +45,10 @@ class ChatUser {
     return users;
   }
 
+  searchUsername(String user) {
+    return username.toLowerCase().contains(user.toLowerCase());
+  }
+
   static Stream<ChatUser> fromUidStream({required String uid}) {
     return FirebaseFirestore.instance
         .collection('users')
@@ -63,5 +67,4 @@ class ChatUser {
         'created': created,
         'updated': updated
       };
-
 }
