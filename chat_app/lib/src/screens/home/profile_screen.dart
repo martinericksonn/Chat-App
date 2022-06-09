@@ -3,10 +3,10 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/service_locators.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
+import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -51,33 +51,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: appBar(),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                profilePic(context),
-                userName(context),
-                Text(
-                  user?.email ?? '...',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Text(
-                  user?.age ?? '...',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Text(
-                  user?.gender ?? '...',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Text(
-                  ',,,', //  DateFormat("MM:dd:yyyy").format(user.created.toDate()),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              profilePic(context),
+              userName(context),
+              emailCard(),
+              ageCard(),
+              genderCard(),
+              dateJoinedCard(),
+              //mo error ang date joined
+              // Text(
+              //   DateFormat("MM:dd:yyyy").format(user!.created.toDate()),
+              //   style: Theme.of(context).textTheme.titleLarge,
+              // ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  ProfileCard dateJoinedCard() {
+    return const ProfileCard(
+        icon: Icons.date_range, text: 'Date Joined', text2: '...');
+  }
+
+  ProfileCard emailCard() {
+    return ProfileCard(
+        icon: Icons.email, text: 'Email', text2: user?.email ?? '...');
+  }
+
+  ProfileCard ageCard() {
+    return ProfileCard(
+        icon: Icons.numbers, text: 'Age', text2: user?.age ?? '...');
+  }
+
+  ProfileCard genderCard() {
+    return ProfileCard(
+        icon: Icons.arrow_drop_down,
+        text: 'Gender',
+        text2: user?.gender ?? '...');
   }
 
   Padding userName(BuildContext context) {
@@ -101,17 +114,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
           ),
           Positioned(
-            right: 10,
+            right: 15,
             bottom: 0,
             child: InkWell(
               onTap: () {
                 ImageService.updateProfileImage();
               },
               child: CircleAvatar(
+                radius: 25,
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 child: const Icon(
                   Icons.camera_alt,
-                  size: 25,
+                  size: 30,
                   color: Colors.white,
                 ),
               ),

@@ -27,9 +27,7 @@ class AvatarImage extends StatelessWidget {
               return CircleAvatar(
                 radius: radius,
                 backgroundImage: NetworkImage(snap.data!.image),
-                
               );
-              
             }
           }
         });
