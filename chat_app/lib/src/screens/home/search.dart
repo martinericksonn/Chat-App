@@ -100,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       );
                                     },
                                     leading: AvatarImage(
-                                        uid: snapshot.data![index].uid),
+                                        uid: searchResult[index].uid),
                                     title: Text(
                                       searchResult[index].username,
                                     ),

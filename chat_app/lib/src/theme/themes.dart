@@ -17,6 +17,7 @@ class Themes {
                 primaryLight), // set backbutton color here which will reflect in all screens.
       ),
       colorScheme: const ColorScheme.light().copyWith(
+        inversePrimary: primaryDark,
         primary: primaryLight,
         secondary: Colors.black38,
         tertiary: tertiaryLight,
@@ -55,6 +56,7 @@ class Themes {
       ),
       scaffoldBackgroundColor: Colors.black,
       colorScheme: ColorScheme.dark(
+        inversePrimary: primaryLight,
         primary: primaryDark,
         secondary: Colors.white70,
         onBackground: Colors.white,

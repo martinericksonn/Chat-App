@@ -4,7 +4,7 @@ import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
-import 'package:chat_app/src/widgets/chat_card.dart';
+import 'package:chat_app/src/widgets/chat_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -175,15 +175,28 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Container textField(BuildContext context, Function send) {
     return Container(
-      height: MediaQuery.of(context).size.height / 15,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      // height: MediaQuery.of(context).size.height / 15,
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          IconButton(
+            icon: Icon(
+              Icons.add_circle,
+              color: Theme.of(context).colorScheme.primary,
+              size: 35,
+            ),
+            onPressed: () => {},
+          ),
           Expanded(
             child: TextFormField(
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              style: TextStyle(fontWeight: FontWeight.normal),
               focusNode: _messageFN,
               controller: _messageController,
               decoration: InputDecoration(
+                // prefixIcon: Icon(Icons.image_rounded),
                 isDense: true,
                 contentPadding: EdgeInsets.all(12),
                 focusedBorder: OutlineInputBorder(
@@ -206,6 +219,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           IconButton(
             icon: Icon(
+              size: 35,
               Icons.send_rounded,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -260,7 +274,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/no_message.png", width: 300),
-            Text('Start your legendary conversation'),
+            Text('some message here'),
             SizedBox(
               height: 60,
             )

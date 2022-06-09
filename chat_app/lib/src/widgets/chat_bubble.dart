@@ -114,19 +114,7 @@ class _ChatCardState extends State<ChatCard> {
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width / 1.3),
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: chat[index].isDeleted
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: chat[index].isDeleted
-                        ? Colors.transparent
-                        : chat[index].sentBy ==
-                                FirebaseAuth.instance.currentUser?.uid
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.secondary,
-                  ),
+                  decoration: backgroundColor(context),
                   // color: Colors.black,
                   child: Text(
                     overflow: TextOverflow.visible,
@@ -135,7 +123,10 @@ class _ChatCardState extends State<ChatCard> {
                         fontSize: 16,
                         color: chat[index].isDeleted
                             ? Theme.of(context).textTheme.titleMedium?.color
-                            : Theme.of(context).colorScheme.onPrimary),
+                            : chat[index].sentBy ==
+                                    FirebaseAuth.instance.currentUser?.uid
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
               ],
@@ -144,6 +135,21 @@ class _ChatCardState extends State<ChatCard> {
         ),
         editedRight(context),
       ],
+    );
+  }
+
+  BoxDecoration backgroundColor(BuildContext context) {
+    return BoxDecoration(
+      border: Border.all(
+          color: chat[index].isDeleted
+              ? Theme.of(context).colorScheme.primary
+              : Colors.transparent),
+      borderRadius: BorderRadius.all(Radius.circular(20)),
+      color: chat[index].isDeleted
+          ? Colors.transparent
+          : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.tertiary,
     );
   }
 
