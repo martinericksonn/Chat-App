@@ -16,6 +16,7 @@ class MessageListController with ChangeNotifier {
   List<ChatUser> users = [];
   List<String> chatrooms = [];
   String? chatroom;
+
   MessageListController(this.user) {
     fetchChatrooms();
     try {
@@ -26,26 +27,6 @@ class MessageListController with ChangeNotifier {
       print(e);
     }
   }
-  // shit() {
-  //   print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
-  //   var data =
-  //       FirebaseFirestore.instance.collection('chats').snapshots().map((event) {
-  //     "null $event";
-  //     print(event.docs.length);
-  //     print(chatrooms);
-  //     for (var data in event.docs) {
-  //       // if (user.chatrooms.contains(data.id)) {
-  //       //   print('oh yeaaaaaaaaaaaaaaaaaah');
-  //       //   print(data.data());
-  //       // }
-  //       // print(data.data());
-  //       var m = data.data()['message'] ?? '';
-  //       print(m);
-  //     }
-  //   });
-  //   print(data.isEmpty);
-
-  // }
 
   static Stream<void> activeChats() => FirebaseFirestore.instance
       .collection('chats')

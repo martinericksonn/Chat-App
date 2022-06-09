@@ -4,61 +4,33 @@ import 'package:flutter/material.dart';
 import '../models/chat_list_model.dart';
 
 class ChatListController with ChangeNotifier {
-  late StreamSubscription _chatSub;
+  late StreamSubscription chatSub;
+  final StreamController<String?> _controller = StreamController();
+  Stream<String?> get stream => _controller.stream;
 
   List<ChatList> chats = [];
 
   String? chatroom;
   ChatListController() {
     print("ChatListController");
-    _chatSub = ChatList.currentChats().listen(chatUpdateHandler);
+    chatSub = ChatList.currentChats().listen(chatUpdateHandler);
   }
 
   @override
   void dispose() {
-    _chatSub.cancel();
+    chatSub.cancel();
     super.dispose();
   }
 
   chatUpdateHandler(List<ChatList> update) {
-    try {
-      if (update == []) {
-        print("null");
-      } else {
-        print(update);
-        print("update");
-      }
-
-      print("chatUpdateHandler");
-      chats = update;
-      notifyListeners();
-    } catch (e) {
-      print(e);
-    }
+    print(
+        "chatUpdateHandlerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+    chats = update;
+    notifyListeners();
+    _controller.add("");
   }
 
   extractUID(String chatroom, String userID) {
     return chatroom.replaceAll(userID, '');
   }
-
-  selectedUser() {}
-  // Future fetchChatrooms() {
-  //   return ChatUser.fromUid(uid: FirebaseAuth.instance.currentUser!.uid)
-  //       .then((value) {
-  //     return value;
-  //   }).then((dynamic user) {
-  //     return FirebaseFirestore.instance
-  //         .collection("users")
-  //         .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
-  //         .get()
-  //         .then((value) {
-  //       List<ChatUser> users = [];
-
-  //       for (var data in value.docs) {
-  //         users.add(ChatUser.fromDocumentSnap(data));
-  //       }
-  //       return users;
-  //     });
-  //   });
-  // }
 }

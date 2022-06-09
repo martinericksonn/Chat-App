@@ -44,6 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatController.initChatRoom(
         _chatController.generateRoomId(selectedUserUID), selectedUserUID);
     print('ChatScreen END');
+    _chatController.addListener(scrollToBottom);
     super.initState();
   }
 
