@@ -29,10 +29,10 @@ class ProfileCard extends StatelessWidget {
       ),
       color: Theme.of(context).colorScheme.primary,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 15.0,
-          vertical: 5.0,
-        ),
+        // contentPadding: const EdgeInsets.symmetric(
+        //   horizontal: 15.0,
+        //   vertical: 5.0,
+        // ),
         leading: Container(
           padding: const EdgeInsets.only(right: 12.0),
           decoration: BoxDecoration(
