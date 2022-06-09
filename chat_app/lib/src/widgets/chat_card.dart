@@ -41,7 +41,7 @@ class _ChatCardState extends State<ChatCard> {
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Column(
         children: [
-          spacer(index: index),
+          Spacer(index: index),
           messageDate(context),
           messageBubble(context),
           messageSeen(context),
@@ -275,8 +275,8 @@ class _ChatCardState extends State<ChatCard> {
   }
 }
 
-class spacer extends StatelessWidget {
-  const spacer({
+class Spacer extends StatelessWidget {
+  const Spacer({
     Key? key,
     required this.index,
   }) : super(key: key);
