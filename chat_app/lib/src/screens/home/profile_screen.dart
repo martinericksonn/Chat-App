@@ -99,16 +99,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )
                   ],
                 ),
-                // Text(
-                //   "Theme",
-                //   style: TextStyle(
-                //     fontSize: 16, fontWeight: FontWeight.w500,
-                //     // color: Theme.of(context).colorScheme.onPrimary,
-                //   ),
-                // ),
               ),
               ListTile(
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.block_outlined),
                 ),
@@ -122,6 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ListTile(
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.login_rounded),
                 ),

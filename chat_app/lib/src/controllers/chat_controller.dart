@@ -87,11 +87,20 @@ class ChatController with ChangeNotifier {
 
   chatUpdateHandler(List<ChatMessage> update) {
     for (ChatMessage message in update) {
+      print("1");
+      print(message.sentBy != FirebaseAuth.instance.currentUser!.uid);
+      print("2");
+      print(chatroom == generateRoomId(recipient));
+      print("3");
+      print(message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid));
       if (message.sentBy == FirebaseAuth.instance.currentUser!.uid &&
           chatroom == generateRoomId(recipient) &&
           message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
+        print('seeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen');
         message.updateSeen(
             FirebaseAuth.instance.currentUser!.uid, chatroom!, recipient);
+      } else {
+        print('zzzzzzzzzzzzzzzzzzzzzzzzzz');
       }
     }
 
