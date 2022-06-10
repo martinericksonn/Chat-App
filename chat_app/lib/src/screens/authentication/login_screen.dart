@@ -50,19 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarIconBrightness:
-          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-              ? Brightness.dark
-              : Brightness.light,
-      statusBarIconBrightness:
-          Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-              ? Brightness.dark
-              : Brightness.light,
-      systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-      statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-      //color set to transperent or set your own color
-    ));
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false, // this is new
@@ -322,7 +309,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset("assets/images/tabi_lightmode.png", width: 45, height: 45),
+            Image.asset("assets/images/tabi_lightmode.png",
+                width: 45, height: 45),
             Text(
               " Tabi-Tabi",
               style: TextStyle(

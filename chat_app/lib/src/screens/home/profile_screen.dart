@@ -74,6 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ListTile(
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.dark_mode_rounded),
                 ),
