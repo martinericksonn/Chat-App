@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _messageFN.dispose();
     _messageController.dispose();
+    _chatListController.dispose();
     super.dispose();
   }
 
