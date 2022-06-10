@@ -17,16 +17,18 @@ import 'package:intl/intl.dart';
 import '../../controllers/chat_list_controller.dart';
 import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
+import '../../settings/settings_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
-  const HomeScreen({Key? key}) : super(key: key);
-
+  HomeScreen({Key? key, required this.settingsController}) : super(key: key);
+  SettingsController settingsController;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  SettingsController get settingsController => widget.settingsController;
   final AuthController _auth = locator<AuthController>();
   final ChatListController _chatListController = ChatListController();
   final TextEditingController _messageController = TextEditingController();
@@ -94,13 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Searchbar(),
               messageList(),
-              // IconButton(
-              //   onPressed: () {
-              //     _auth.logout();
-              //   },
-              //   icon: const Icon(Icons.logout_rounded),
-              //   color: Theme.of(context).colorScheme.primary,
-              // ),
             ],
           ),
         ),
@@ -130,13 +125,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget bodyNoMessage() {
-    return Center(
-      child: Column(children: [
-        Image.asset("assets/images/home_empty.png", width: 300),
-        Text("Create your first message on Tabi or"),
-        SizedBox(height: 2),
-        Text("invite your friends and enjoy Tabi-Tabi together"),
-      ]),
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: Center(
+        child: Column(children: [
+          Image.asset("assets/images/home_empty.png", width: 300),
+          Text("Create your first message on Tabi or"),
+          SizedBox(height: 2),
+          Text("invite your friends and enjoy Tabi-Tabi together"),
+        ]),
+      ),
     );
   }
 
@@ -253,7 +253,9 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(),
+                    builder: (context) => ProfileScreen(
+                      settingsController: settingsController,
+                    ),
                   ),
                 );
               },

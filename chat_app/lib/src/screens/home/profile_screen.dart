@@ -4,6 +4,7 @@ import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/service_locators.dart';
 import 'package:chat_app/src/services/image_service.dart';
+import 'package:chat_app/src/settings/settings_controller.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,13 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-
+  ProfileScreen({Key? key, required this.settingsController}) : super(key: key);
+  SettingsController settingsController;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  SettingsController get settingsController => widget.settingsController;
   final AuthController _auth = locator<AuthController>();
   ChatUser? user;
 
@@ -75,13 +77,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.dark_mode_rounded),
                 ),
-                title: Text(
-                  "Theme",
-                  style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w500,
-                    // color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+                title: DropdownButton<ThemeMode>(
+                  underline: SizedBox(),
+                  // Read the selected themeMode from the controller
+                  value: settingsController.themeMode,
+                  // Call the updateThemeMode method any time the user selects a theme.
+                  onChanged: settingsController.updateThemeMode,
+                  items: const [
+                    DropdownMenuItem(
+                      value: ThemeMode.system,
+                      child: Text('System Theme'),
+                    ),
+                    DropdownMenuItem(
+                      value: ThemeMode.light,
+                      child: Text('Light Theme'),
+                    ),
+                    DropdownMenuItem(
+                      value: ThemeMode.dark,
+                      child: Text('Dark Theme'),
+                    )
+                  ],
                 ),
+                // Text(
+                //   "Theme",
+                //   style: TextStyle(
+                //     fontSize: 16, fontWeight: FontWeight.w500,
+                //     // color: Theme.of(context).colorScheme.onPrimary,
+                //   ),
+                // ),
               ),
               ListTile(
                 leading: CircleAvatar(

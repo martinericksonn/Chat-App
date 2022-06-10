@@ -1,14 +1,19 @@
 part of 'navigation_service.dart';
 
-PageRoute getRoute(RouteSettings settings) {
+material.PageRoute getRoute(RouteSettings settings) {
+  NavigationService nav = locator<NavigationService>();
   switch (settings.name) {
-    case Wrapper.route:
-      return FadeRoute(page: Wrapper(), settings: settings);
+    // case Wrapper.route:
+    //   return FadeRoute(page: Wrapper(), settings: settings);
     case LoginScreen.route:
       return FadeRoute(page: const LoginScreen(), settings: settings);
     case HomeScreen.route:
-      return FadeRoute(page: const HomeScreen(), settings: settings);
+      return FadeRoute(
+          page: HomeScreen(settingsController: nav.settingsController),
+          settings: settings);
     default:
-      return MaterialPageRoute(builder: (context) => const LoginScreen());
+      return MaterialPageRoute(
+          builder: (context) =>
+              HomeScreen(settingsController: nav.settingsController));
   }
 }

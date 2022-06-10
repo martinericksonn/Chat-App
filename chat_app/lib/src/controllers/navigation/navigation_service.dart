@@ -5,11 +5,19 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 
+import '../../service_locators.dart';
+import '../../settings/settings_controller.dart';
+import '../../settings/settings_service.dart';
+
 part 'navigation_animations.dart';
 part 'navigation_routing.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  // ignore: non_constant_identifier_names
+  NavigationService({required this.settingsController});
+  SettingsController settingsController;
+
   List<String> routeStack = [LoginScreen.route];
   String get currentRoute {
     String result = '';
@@ -144,11 +152,31 @@ class NavigationService {
     logCurrentRoute();
   }
 
-  static PageRoute Function(RouteSettings settings) get generateRoute =>
-      getRoute;
+  SettingsController get sc => settingsController;
+
+  // static PageRoute Function(RouteSettings settings) get generateRoute =>
+  //     getRoute;
 
   log(String message, {String? origin}) {
     developer.log(message,
         name: 'NavigationService${origin != null ? '/' + origin : ''}');
+  }
+
+  material.PageRoute getRoute(RouteSettings settings) {
+    // NavigationService nav = locator<NavigationService>();
+    switch (settings.name) {
+      // case Wrapper.route:
+      //   return FadeRoute(page: Wrapper(), settings: settings);
+      case LoginScreen.route:
+        return FadeRoute(page: const LoginScreen(), settings: settings);
+      case HomeScreen.route:
+        return FadeRoute(
+            page: HomeScreen(settingsController: settingsController),
+            settings: settings);
+      default:
+        return MaterialPageRoute(
+            builder: (context) =>
+                HomeScreen(settingsController: settingsController));
+    }
   }
 }
