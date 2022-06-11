@@ -6,7 +6,7 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/profile_screen.dart';
-import 'package:chat_app/src/screens/home/search_scree.dart';
+import 'package:chat_app/src/screens/home/search_screen.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
@@ -55,24 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _messageFN.dispose();
     _messageController.dispose();
+    _chatListController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   systemNavigationBarIconBrightness:
-    //       Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-    //           ? Brightness.dark
-    //           : Brightness.light,
-    //   statusBarIconBrightness:
-    //       Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-    //           ? Brightness.dark
-    //           : Brightness.light,
-    //   systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-    //   statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-    //   //color set to transperent or set your own color
-    // ));
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: appBar(),

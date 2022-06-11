@@ -83,4 +83,11 @@ class ChatUser {
         'created': created,
         'updated': updated
       };
+
+  // Future updateUsername(String newUsername) {
+  //   return FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(uid)
+  //       .update({'username': newUsername});
+  // }
 }

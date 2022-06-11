@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key, required this.settingsController}) : super(key: key);
   SettingsController settingsController;
@@ -21,6 +22,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   SettingsController get settingsController => widget.settingsController;
   final AuthController _auth = locator<AuthController>();
+  final TextEditingController _unCon = TextEditingController();
   ChatUser? user;
 
   @override
@@ -74,6 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ListTile(
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.dark_mode_rounded),
                 ),
@@ -98,16 +101,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )
                   ],
                 ),
-                // Text(
-                //   "Theme",
-                //   style: TextStyle(
-                //     fontSize: 16, fontWeight: FontWeight.w500,
-                //     // color: Theme.of(context).colorScheme.onPrimary,
-                //   ),
-                // ),
               ),
               ListTile(
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.block_outlined),
                 ),
@@ -120,7 +117,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               ListTile(
+                onTap: () => {_auth.logout()},
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.login_rounded),
                 ),
@@ -156,14 +155,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   ProfileCard ageCard() {
     return ProfileCard(
-        icon: Icons.numbers, text: 'Age', text2: user?.age ?? '...');
+        icon: Icons.calendar_month, text: 'Age', text2: user?.age ?? '...');
   }
 
   ProfileCard genderCard() {
     return ProfileCard(
-        icon: Icons.arrow_drop_down,
-        text: 'Gender',
-        text2: user?.gender ?? '...');
+        icon: Icons.animation, text: 'Gender', text2: user?.gender ?? '...');
   }
 
   Padding userName(BuildContext context) {
@@ -196,10 +193,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: CircleAvatar(
                 radius: 25,
                 backgroundColor: Theme.of(context).colorScheme.primary,
-                child: const Icon(
+                child: Icon(
                   Icons.camera_alt,
                   size: 30,
-                  color: Colors.white,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
               ),
             ),
@@ -219,7 +216,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+         
+          },
           icon: const Icon(Icons.edit),
           color: Theme.of(context).colorScheme.primary,
         ),

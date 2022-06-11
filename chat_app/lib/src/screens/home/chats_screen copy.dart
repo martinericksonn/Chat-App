@@ -70,6 +70,14 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void dispose() {
+    _messageFN.dispose();
+    _messageController.dispose();
+    _chatController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   systemNavigationBarColor: Theme.of(context).bottomAppBarColor,

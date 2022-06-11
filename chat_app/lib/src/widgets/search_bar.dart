@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:chat_app/src/screens/home/search_scree.dart';
+import 'package:chat_app/src/screens/home/search_screen.dart';
 import 'package:flutter/material.dart';
 
 class Searchbar extends StatelessWidget {
