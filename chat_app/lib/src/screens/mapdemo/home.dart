@@ -1,3 +1,4 @@
+import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'geocoding_screen.dart';
@@ -23,10 +24,11 @@ class _HomeScreenGeoState extends State<HomeScreenGeo> {
         thickness: 16,
         child: PageView(
           controller: controller,
-          children: const [
+          children: [
+            NearbyScreen(),
             GeolocationScreen(),
             GeocodingScreen(),
-            GeoFlutterFireScreen()
+            GeoFlutterFireScreen(),
           ],
         ),
       ),

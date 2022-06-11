@@ -4,11 +4,15 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../../controllers/geolocation_controller.dart';
 import '../../models/chat_user_model.dart';
 
 class NearbyScreen extends StatefulWidget {
@@ -20,6 +24,14 @@ class NearbyScreen extends StatefulWidget {
 
 class _NearbyScreenState extends State<NearbyScreen> {
   bool isSwitched = false;
+  Position? lastKnownPosition, currentPosition;
+  final GeolocationController geoCon = GeolocationController();
+
+  @override
+  dispose() {
+    geoCon.dispose();
+    super.dispose();
+  }
 
   // late Future<List<ChatUser>> gettingUsers;
   @override
@@ -57,10 +69,26 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   padding: const EdgeInsets.only(top: 5.0),
                   child: Switch(
                     value: isSwitched,
-                    onChanged: (value) {
+                    onChanged: (value) async {
+                      if (value) {
+                        print(isSwitched);
+                        geoCon.enableGeolocationStream();
+                        currentPosition = await geoCon.getCurrentPosition();
+                        print("lat");
+                        print(currentPosition?.latitude);
+                        print("long");
+                        print(currentPosition?.longitude);
+                      } else {
+                        print(isSwitched);
+                        geoCon.disableGeolocationStream();
+                        currentPosition = await geoCon.getCurrentPosition();
+                        print("lat");
+                        print(currentPosition?.latitude);
+                        print("long");
+                        print(currentPosition?.longitude);
+                      }
                       setState(() {
                         isSwitched = value;
-                        print(isSwitched);
                       });
                     },
                     // activeTrackColor: Theme.of(context).colorScheme.primary,
@@ -77,7 +105,116 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   ),
                 ),
               ),
-              showUserList(),
+              // showUserList(),
+              // AnimatedBuilder(
+              //   animation: geoCon,
+              //   builder: (context, snapshot) {
+              //     print("rebuild");
+              //     print(currentPosition?.latitude);
+              //     return Column(
+              //       children: [
+              //         Text(geoCon.currentPosition?.latitude.toString() ??
+              //             "null"),
+              //         Text(geoCon.currentPosition?.longitude.toString() ??
+              //             "null"),
+              //       ],
+              //     );
+              //   },
+              // ),
+              AnimatedBuilder(
+                animation: geoCon,
+                builder: (context, Widget? child) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Text(
+                      //   geoCon.currentPosition != null
+                      //       ? geoCon.currentPosition.toString()
+                      //       : 'aww gi off, batia',
+                      //   textAlign: TextAlign.center,
+                      // ),
+                      if (geoCon.currentPosition != null)
+                        // FutureBuilder(
+                        //   future: placemarkFromCoordinates(
+                        //       geoCon.currentPosition!.latitude,
+                        //       geoCon.currentPosition!.longitude),
+                        //   builder:
+                        //       (context, AsyncSnapshot<List<Placemark>> snap) {
+                        //     if (snap.hasData) {
+                        //       return Text('${snap.data!.first}');
+                        //     }
+                        //     return Container();
+                        //   },
+                        // ),
+                        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                          stream: FirebaseFirestore.instance
+                              .collection('locations')
+                              .snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snap) {
+                            if (snap.hasData) {
+                              if (geoCon.center == null) {
+                                return CircularProgressIndicator();
+                              }
+                              // for (DocumentSnapshot doc in snap.data!.docs) {
+                              //   FutureBuilder(
+                              //       future: ChatUser.fromUid(uid: doc.id),
+                              //       builder: (context, snapshot) {
+                              //         if (!snapshot.hasData) {
+                              //           return CircularProgressIndicator();
+                              //         }
+
+                              //         return ListTile(
+                              //           leading: AvatarImage(uid: doc.id),
+                              //           title: Text(
+                              //             snapshot.data!.toString(),
+                              //           ),
+                              //           subtitle: null,
+                              //         );
+                              //       });
+                              // }
+
+                              return SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    for (var doc in snap.data!.docs)
+                                      if (doc['isEnable'])
+                                        FutureBuilder(
+                                            future:
+                                                ChatUser.fromUid(uid: doc.id),
+                                            builder: (context,
+                                                AsyncSnapshot<ChatUser>
+                                                    snapshot) {
+                                              // print( snapshot.data.);
+                                              if (!snapshot.hasData) {
+                                                return CircularProgressIndicator();
+                                              }
+
+                                              return ListTile(
+                                                leading:
+                                                    AvatarImage(uid: doc.id),
+                                                title: Text(
+                                                  snapshot.data!.username,
+                                                ),
+                                                trailing: Text(
+                                                    geoCon.parseLocation(doc)),
+                                              );
+                                            })
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                    ],
+                  );
+                },
+              )
             ],
           ),
         ),
@@ -130,6 +267,16 @@ class _NearbyScreenState extends State<NearbyScreen> {
     );
   }
 
+  // String parseLocation(DocumentSnapshot doc) {
+  //   Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
+  //   GeoPoint point = json['position']['geopoint'];
+  //   return '${json['name']}: [${point.latitude},${point.longitude}] - ${Geolocator.distanceBetween(
+  //     center.latitude,
+  //     center.longitude,
+  //     point.latitude,
+  //     point.longitude,
+  //   ).toStringAsFixed(2)}m';
+  // }
   ListTile newGroupChat(BuildContext context) {
     return ListTile(
       onTap: () {

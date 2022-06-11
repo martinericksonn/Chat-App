@@ -4,10 +4,12 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 import '../../models/chat_user_model.dart';
 
@@ -60,6 +62,7 @@ class NewMessage extends StatelessWidget {
   }
 
   // ignore: prefer_typing_uninitialized_variables
+  Geoflutterfire geo = Geoflutterfire();
   var getUsers;
   Expanded showUserList() {
     getUsers ??= ChatUser.getUsers();
@@ -76,6 +79,16 @@ class NewMessage extends StatelessWidget {
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
+                  // GeoFirePoint myLocation =
+                  //     geo.point(latitude: 0, longitude: 0);
+                  // FirebaseFirestore.instance
+                  //     .collection('locations')
+                  //     .doc(snapshot.data![index].uid)
+                  //     .set({
+                  //   'userUID': snapshot.data![index].uid,
+                  //   'isEnable': false,
+                  //   'position': myLocation.data
+                  // });
                   return snapshot.data![index].uid !=
                           FirebaseAuth.instance.currentUser?.uid
                       ? ListTile(
