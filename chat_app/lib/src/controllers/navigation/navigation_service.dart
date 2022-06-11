@@ -1,6 +1,7 @@
 import 'package:chat_app/src/screens/authentication/login_screen.dart';
 import 'package:chat_app/src/screens/home/home_screen.dart';
 import 'package:chat_app/wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
@@ -164,17 +165,25 @@ class NavigationService {
 
   material.PageRoute getRoute(RouteSettings settings) {
     // NavigationService nav = locator<NavigationService>();
-    switch (settings.name) {
-      // case Wrapper.route:
-      //   return FadeRoute(page: Wrapper(), settings: settings);
-      case LoginScreen.route:
-        return FadeRoute(page: const LoginScreen(), settings: settings);
-      case HomeScreen.route:
-        return FadeRoute(
-            page: HomeScreen(settingsController: settingsController),
-            settings: settings);
-      default:
-        return FadeRoute(page: const LoginScreen(), settings: settings);
+    if (FirebaseAuth.instance.currentUser != null) {
+      return FadeRoute(
+          page: HomeScreen(settingsController: settingsController),
+          settings: settings);
+    } else {
+      return FadeRoute(page: const LoginScreen(), settings: settings);
     }
+    // print(settings.name);
+    // switch (settings.name) {
+    //   // case Wrapper.route:
+    //   //   return FadeRoute(page: Wrapper(), settings: settings);
+    //   case LoginScreen.route:
+    //     return FadeRoute(page: const LoginScreen(), settings: settings);
+    //   case HomeScreen.route:
+    //     return FadeRoute(
+    //         page: HomeScreen(settingsController: settingsController),
+    //         settings: settings);
+    //   default:
+    //     return FadeRoute(page: const LoginScreen(), settings: settings);
+    // }
   }
 }

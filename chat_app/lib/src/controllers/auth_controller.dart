@@ -23,7 +23,7 @@ class AuthController with ChangeNotifier {
     authStream = _auth.authStateChanges().listen(handleAuthUserChanges);
   }
 
-  ///makes sure to dispose of the stream when not in use
+  ///makes sure to dispose of the streaTheme.of(context).colorScheme.primarym when not in use
   @override
   dispose() {
     authStream.cancel();

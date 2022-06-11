@@ -5,6 +5,7 @@ import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
+import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen.dart';
 import 'package:chat_app/src/screens/home/search_screen.dart';
 import 'package:chat_app/src/services/image_service.dart';
@@ -67,7 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
       body: body(context),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: () => {_auth.logout()},
+        onPressed: () => {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NearbyScreen(),
+            ),
+          )
+        },
         label: Text("Find Nearby",
             style: Theme.of(context).textTheme.headlineMedium),
       ),
