@@ -8,6 +8,7 @@ import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen.dart';
 import 'package:chat_app/src/screens/home/search_screen.dart';
+import 'package:chat_app/src/screens/mapdemo/home.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => NearbyScreen(),
+              builder: (context) => HomeScreenGeo(),
             ),
           )
         },

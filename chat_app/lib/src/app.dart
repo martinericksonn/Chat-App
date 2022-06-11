@@ -3,8 +3,10 @@ import 'package:chat_app/src/settings/settings_controller.dart';
 import 'package:chat_app/src/theme/themes.dart';
 import 'package:chat_app/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'controllers/navigation/navigation_service.dart';
+import 'localization/app_localizations.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -22,7 +24,18 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
             restorationScopeId: 'app',
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', ''), // English, no country code
+            ],
             debugShowCheckedModeBanner: false,
+            onGenerateTitle: (BuildContext context) =>
+                AppLocalizations.of(context)!.appTitle,
             theme: themes.light(),
             darkTheme: themes.dark(),
             themeMode: settingsController.themeMode,
