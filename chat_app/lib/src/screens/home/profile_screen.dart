@@ -81,6 +81,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Icon(Icons.dark_mode_rounded),
                 ),
                 title: DropdownButton<ThemeMode>(
+                  elevation: 1,
+
                   underline: SizedBox(),
                   // Read the selected themeMode from the controller
                   value: settingsController.themeMode,
@@ -89,15 +91,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   items: const [
                     DropdownMenuItem(
                       value: ThemeMode.system,
-                      child: Text('System Theme'),
+                      child: Text(
+                        'System Theme',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                     DropdownMenuItem(
                       value: ThemeMode.light,
-                      child: Text('Light Theme'),
+                      child: Text(
+                        'Light Theme',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                     DropdownMenuItem(
                       value: ThemeMode.dark,
-                      child: Text('Dark Theme'),
+                      child: Text(
+                        'Dark Theme',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -145,22 +165,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   ProfileCard dateJoinedCard() {
     return const ProfileCard(
-        icon: Icons.date_range, text: 'Date Joined', text2: '...');
+        icon: Icons.date_range, title: 'Date Joined', subtitle: '...');
   }
 
   ProfileCard emailCard() {
     return ProfileCard(
-        icon: Icons.email, text: 'Email', text2: user?.email ?? '...');
+        icon: Icons.email, title: 'Email', subtitle: user?.email ?? '...');
   }
 
   ProfileCard ageCard() {
     return ProfileCard(
-        icon: Icons.calendar_month, text: 'Age', text2: user?.age ?? '...');
+        icon: Icons.calendar_month, title: 'Age', subtitle: user?.age ?? '...');
   }
 
   ProfileCard genderCard() {
     return ProfileCard(
-        icon: Icons.animation, text: 'Gender', text2: user?.gender ?? '...');
+        icon: Icons.animation,
+        title: 'Gender',
+        subtitle: user?.gender ?? '...');
   }
 
   Padding userName(BuildContext context) {
@@ -216,9 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: () {
-         
-          },
+          onPressed: () {},
           icon: const Icon(Icons.edit),
           color: Theme.of(context).colorScheme.primary,
         ),

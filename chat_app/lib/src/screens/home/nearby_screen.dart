@@ -49,12 +49,12 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   ),
                 ),
                 subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 5.0),
                   child: Text(
-                      "Find nearby allows you to find people near you,Lorem ipsum dolor sit amet"),
+                      "With on device location, geocoding and geolocator, find nearby allows you to find people near you"),
                 ),
                 trailing: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 5.0),
                   child: Switch(
                     value: isSwitched,
                     onChanged: (value) {

@@ -21,6 +21,8 @@ class Themes {
   ThemeData light() {
     // FlutterStatusbarcolor.setNavigationBarColor(Colors.white, animate: true);
     return ThemeData(
+      canvasColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.dark,
@@ -78,6 +80,7 @@ class Themes {
       //   statusBarColor: Colors.black,
       //   //color set to transperent or set your own color
       // ));
+      canvasColor: Colors.black,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.light,

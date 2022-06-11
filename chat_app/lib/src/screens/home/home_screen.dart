@@ -67,6 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: appBar(),
       body: body(context),
       floatingActionButton: FloatingActionButton.extended(
+        // icon: Icon(
+        //   Icons.near_me_rounded,
+        //   color: Theme.of(context).scaffoldBackgroundColor,
+        // ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => {
           Navigator.of(context).push(
