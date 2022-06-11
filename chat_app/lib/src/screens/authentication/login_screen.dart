@@ -43,6 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void handleLogin() {
+    print("_auth.currentUser != null");
+    print(_auth.currentUser != null);
     if (_auth.currentUser != null) {
       locator<NavigationService>().pushReplacementNamed(HomeScreen.route);
     }
@@ -322,7 +324,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset("assets/images/tabi_lightmode.png", width: 45, height: 45),
+            Image.asset("assets/images/tabi_lightmode.png",
+                width: 45, height: 45),
             Text(
               " Tabi-Tabi",
               style: TextStyle(

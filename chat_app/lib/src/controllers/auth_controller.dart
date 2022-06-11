@@ -40,6 +40,7 @@ class AuthController with ChangeNotifier {
 
     ///if a user exists, redirect to home immediately
     if (event != null) {
+      print("logged");
       print('logged in user');
       print(event.email);
       nav.pushReplacementNamed(HomeScreen.route);
@@ -57,7 +58,6 @@ class AuthController with ChangeNotifier {
       UserCredential? result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      ///there is no 'working=false' here as the handleAuthUserChanges does that for us
       return result;
     } on FirebaseAuthException catch (e) {
       print('gggggggggggggggggggggggggggggggggggg ${e.message}');
@@ -128,6 +128,4 @@ class AuthController with ChangeNotifier {
     notifyListeners();
     return;
   }
-
- 
 }

@@ -15,9 +15,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../controllers/chat_list_controller.dart';
+import '../../controllers/navigation/navigation_service.dart';
 import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
 import '../../settings/settings_controller.dart';
+import '../authentication/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
@@ -35,9 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final FocusNode _messageFN = FocusNode();
 
   ChatUser? user;
+
   @override
   void initState() {
-    ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
+    ChatUser.fromUid(uid: _auth.currentUser?.uid ?? "").then((value) {
       if (mounted) {
         setState(() {
           user = value;
@@ -141,8 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget bodyWithMessage() {
-    return StreamBuilder<dynamic>(
-        stream: _chatListController.stream,
+    return AnimatedBuilder(
+        animation: _chatListController,
         builder: (context, snapshot) {
           return ListView.builder(
               physics: NeverScrollableScrollPhysics(),

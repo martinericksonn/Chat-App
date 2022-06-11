@@ -10,7 +10,7 @@ import '../../settings/settings_controller.dart';
 import '../../settings/settings_service.dart';
 
 part 'navigation_animations.dart';
-part 'navigation_routing.dart';
+// part 'navigation_routing.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -174,9 +174,7 @@ class NavigationService {
             page: HomeScreen(settingsController: settingsController),
             settings: settings);
       default:
-        return MaterialPageRoute(
-            builder: (context) =>
-                HomeScreen(settingsController: settingsController));
+        return FadeRoute(page: const LoginScreen(), settings: settings);
     }
   }
 }
