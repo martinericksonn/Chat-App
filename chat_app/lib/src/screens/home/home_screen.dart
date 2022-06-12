@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../controllers/chat_list_controller.dart';
+import '../../controllers/geolocation_controller.dart';
 import '../../controllers/navigation/navigation_service.dart';
 import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ChatListController _chatListController = ChatListController();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
-
+  final GeolocationController geoCon = GeolocationController();
   ChatUser? user;
 
   @override
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    geoCon.dispose();
     _messageFN.dispose();
     _messageController.dispose();
     _chatListController.dispose();
@@ -76,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => HomeScreenGeo(),
+              builder: (context) => NearbyScreen(
+                geoCon: geoCon,
+              ),
             ),
           )
         },

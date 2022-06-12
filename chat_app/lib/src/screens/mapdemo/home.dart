@@ -25,7 +25,7 @@ class _HomeScreenGeoState extends State<HomeScreenGeo> {
         child: PageView(
           controller: controller,
           children: [
-            NearbyScreen(),
+            // NearbyScreen(),
             GeolocationScreen(),
             GeocodingScreen(),
             GeoFlutterFireScreen(),

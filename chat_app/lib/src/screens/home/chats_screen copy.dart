@@ -1,20 +1,14 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
-import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/chat_bubble.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-
 import 'package:flutter/material.dart';
-
-import '../../models/chat_list_model.dart';
 import '../../models/chat_user_model.dart';
+import '../../services/image_service.dart';
 
-// import '../../service_locators.dart';
+// import '. ./../service_locators.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatroom;
@@ -133,12 +127,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       context,
                       message,
                       send,
+                      image,
                     );
                   } else if (snapshot.data == 'empty') {
                     return body(
                       context,
                       firstMessage,
                       firstSend,
+                      imageFirst,
                     );
                   }
                 } else if (snapshot.hasError) {
@@ -166,7 +162,8 @@ class _ChatScreenState extends State<ChatScreen> {
         ]));
   }
 
-  SizedBox body(BuildContext context, Function message, Function send) {
+  SizedBox body(
+      BuildContext context, Function message, Function send, Function image) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -175,14 +172,14 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           children: [
             message(),
-            textField(context, send),
+            textField(context, send, image),
           ],
         ),
       ),
     );
   }
 
-  Container textField(BuildContext context, Function send) {
+  Container textField(BuildContext context, Function send, Function image) {
     return Container(
       // height: MediaQuery.of(context).size.height / 15,
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -190,13 +187,12 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           IconButton(
-            icon: Icon(
-              Icons.add_circle,
-              color: Theme.of(context).colorScheme.primary,
-              size: 35,
-            ),
-            onPressed: () => {},
-          ),
+              icon: Icon(
+                Icons.add_circle,
+                color: Theme.of(context).colorScheme.primary,
+                size: 35,
+              ),
+              onPressed: () => image()),
           Expanded(
             child: TextFormField(
               maxLines: null,
@@ -293,6 +289,14 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  imageFirst() {
+    ImageService.sendFirstImage(_chatController, selectedUserUID);
+  }
+
+  image() {
+    ImageService.sendImage(_chatController, selectedUserUID);
+  }
+
   send() {
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
@@ -307,7 +311,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (_messageController.text.isNotEmpty) {
       var chatroom = _chatController.sendFirstMessage(
-          _messageController.text.trim(), selectedUserUID, false);
+        message: _messageController.text.trim(),
+        recipient: selectedUserUID,
+      );
       _messageController.text = '';
 
       setState(() {

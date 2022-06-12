@@ -7,6 +7,8 @@ class ChatMessage {
   List<String> seenBy;
   bool isDeleted;
   bool isEdited;
+  String image;
+  bool isImage;
 
   ChatMessage(
       {this.uid = '',
@@ -15,22 +17,25 @@ class ChatMessage {
       this.message = '',
       this.isDeleted = false,
       this.isEdited = false,
+      this.image = '',
+      this.isImage = false,
       ts})
       : ts = ts ?? Timestamp.now();
 
   static ChatMessage fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
     return ChatMessage(
-      uid: snap.id,
-      sentBy: json['sentBy'] ?? '',
-      seenBy: json['seenBy'] != null
-          ? List<String>.from(json['seenBy'])
-          : <String>[],
-      message: json['message'] ?? '',
-      isDeleted: json['isDeleted'] ?? false,
-      isEdited: json['isEdited'] ?? false,
-      ts: json['ts'] ?? Timestamp.now(),
-    );
+        uid: snap.id,
+        sentBy: json['sentBy'] ?? '',
+        seenBy: json['seenBy'] != null
+            ? List<String>.from(json['seenBy'])
+            : <String>[],
+        message: json['message'] ?? '',
+        isDeleted: json['isDeleted'] ?? false,
+        isEdited: json['isEdited'] ?? false,
+        ts: json['ts'] ?? Timestamp.now(),
+        isImage: json['isImage'] ?? false,
+        image: json['image'] ?? '');
   }
 
   Map<String, dynamic> get json => {
@@ -39,7 +44,9 @@ class ChatMessage {
         'seenBy': seenBy,
         'isDeleted': isDeleted,
         'isEdited': isEdited,
-        'ts': ts
+        'ts': ts,
+        'isImage': isImage,
+        'image': image
       };
 
   static List<ChatMessage> fromQuerySnap(QuerySnapshot snap) {

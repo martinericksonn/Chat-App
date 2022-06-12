@@ -7,6 +7,7 @@ import 'package:chat_app/src/screens/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 import '../service_locators.dart';
 
@@ -100,14 +101,18 @@ class AuthController with ChangeNotifier {
             .collection('users')
             .doc(userModel.uid)
             .set(userModel.json)
-            .then((value) => {
-                  // FirebaseFirestore.instance
-                  //     .collection('chats')
-                  //     .doc("XMGXGoTYNnhOiDHOg5aa")
-                  //     .update({
-                  //   "memebers": FieldValue.arrayUnion([userModel.uid])
-                  // })
-                });
+            .then((value) {
+          Geoflutterfire geo = Geoflutterfire();
+          GeoFirePoint myLocation = geo.point(latitude: 0, longitude: 0);
+          FirebaseFirestore.instance
+              .collection('locations')
+              .doc(userModel.uid)
+              .set({
+            'userUID': userModel.uid,
+            'isEnable': false,
+            'position': myLocation.data
+          });
+        });
       }
     } on FirebaseAuthException catch (e) {
       print("adsfadsf ${e.message}");

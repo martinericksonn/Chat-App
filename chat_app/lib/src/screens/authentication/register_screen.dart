@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../../controllers/auth_controller.dart';
+import '../../controllers/geolocation_controller.dart';
 
 class RegisterScreen extends StatefulWidget {
   final AuthController auth;
@@ -26,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isRegisterSuccess = false;
   String prompts = '';
 
+  final GeolocationController geoCon = GeolocationController();
   final TextEditingController _emailCon = TextEditingController();
   final TextEditingController _passCon = TextEditingController();
   final TextEditingController _unCon = TextEditingController();
@@ -40,6 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
+    geoCon.dispose();
     super.initState();
   }
 
@@ -293,7 +296,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           validator: (value) {
             setState(() {
               isAgeEmpty = (value == null || value.isEmpty) ? true : false;
-             
             });
             return null;
           },

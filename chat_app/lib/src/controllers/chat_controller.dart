@@ -98,16 +98,35 @@ class ChatController with ChangeNotifier {
     notifyListeners();
   }
 
-  sendFirstMessage(String message, String recipient, bool isGroup) {
+  sendFirstMessage(
+      {String message = '',
+      required String recipient,
+      bool isImage = false,
+      String image = ''}) {
     var newMessage = ChatMessage(
             sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
+        .json;
+    var newImage = ChatMessage(
+            sentBy: FirebaseAuth.instance.currentUser!.uid,
+            isImage: true,
+            image: image)
         .json;
     var thisUser = FirebaseAuth.instance.currentUser!.uid;
     String chatroom = generateRoomId(recipient);
 
+    if (!isImage) {
+      firstMessageText(chatroom, recipient, thisUser, newMessage);
+    } else {
+      firstMessageImage(chatroom, recipient, thisUser, newImage);
+    }
+
+    // return chatroom;
+  }
+
+  void firstMessageText(String chatroom, String recipient, String thisUser,
+      Map<String, dynamic> newMessage) {
     FirebaseFirestore.instance.collection('chats').doc(chatroom).set({
       'chatroom': chatroom,
-      'isGroup': isGroup,
       'members': FieldValue.arrayUnion([recipient, thisUser])
     }).then(
       (snap) => {
@@ -147,17 +166,69 @@ class ChatController with ChangeNotifier {
         _subscibe(),
       },
     );
+  }
 
-    return chatroom;
+  void firstMessageImage(String chatroom, String recipient, String thisUser,
+      Map<String, dynamic> newImage) {
+    FirebaseFirestore.instance.collection('chats').doc(chatroom).set({
+      'chatroom': chatroom,
+      'members': FieldValue.arrayUnion([recipient, thisUser])
+    }).then(
+      (snap) => {
+        FirebaseFirestore.instance
+            .collection('chats')
+            .doc(chatroom)
+            .collection('messages')
+            .add(newImage)
+            .then((value) => {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .update({
+                    'chatrooms': FieldValue.arrayUnion([chatroom])
+                  }).then((value) => {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(recipient)
+                                .update({
+                              'chatrooms': FieldValue.arrayUnion([chatroom])
+                            }),
+                            _subscibe(),
+                          }),
+                }),
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(recipient)
+            .collection('messageSnapshot')
+            .doc(chatroom)
+            .set(newImage),
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(thisUser)
+            .collection('messageSnapshot')
+            .doc(chatroom)
+            .set(newImage),
+        _subscibe(),
+      },
+    );
   }
 
   Future sendMessage(
-      {required String message, required String recipient}) async {
-    var newMessage = ChatMessage(
-            sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
-        .json;
+      {String message = '',
+      required String recipient,
+      bool isImage = false,
+      String image = ''}) async {
     var thisUser = FirebaseAuth.instance.currentUser!.uid;
 
+    if (!isImage) {
+      return await _sendMessageText(recipient, message, thisUser);
+    } else {
+      return await _sendMessageImage(recipient, image, thisUser);
+    }
+  }
+
+  Future<DocumentReference<Map<String, dynamic>>> _sendMessageImage(
+      String recipient, String image, String thisUser) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(recipient)
@@ -165,7 +236,8 @@ class ChatController with ChangeNotifier {
         .doc(chatroom)
         .set(ChatMessage(
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
-                message: message)
+                image: image,
+                isImage: true)
             .json);
     await FirebaseFirestore.instance
         .collection('users')
@@ -174,17 +246,49 @@ class ChatController with ChangeNotifier {
         .doc(chatroom)
         .set(ChatMessage(
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
-                message: message)
+                image: image,
+                isImage: true)
             .json);
-
     return await FirebaseFirestore.instance
         .collection('chats')
         .doc(chatroom)
         .collection('messages')
         .add(ChatMessage(
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
-                message: message)
+                image: image,
+                isImage: true)
             .json);
+  }
+
+  Future<DocumentReference<Map<String, dynamic>>> _sendMessageText(
+      String recipient, String message, String thisUser) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(recipient)
+        .collection('messageSnapshot')
+        .doc(chatroom)
+        .set(ChatMessage(
+          sentBy: FirebaseAuth.instance.currentUser!.uid,
+          message: message,
+        ).json);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(thisUser)
+        .collection('messageSnapshot')
+        .doc(chatroom)
+        .set(ChatMessage(
+          sentBy: FirebaseAuth.instance.currentUser!.uid,
+          message: message,
+        ).json);
+
+    return await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatroom)
+        .collection('messages')
+        .add(ChatMessage(
+          sentBy: FirebaseAuth.instance.currentUser!.uid,
+          message: message,
+        ).json);
   }
 
   Future fetchChatrooms() {

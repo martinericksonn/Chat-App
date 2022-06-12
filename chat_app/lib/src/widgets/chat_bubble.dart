@@ -175,7 +175,7 @@ class _ChatCardState extends State<ChatCard> {
                 chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-
+              
               for (String uid in chat[index].seenBy)
                 FutureBuilder(
                     future: ChatUser.fromUid(uid: uid),
@@ -185,20 +185,7 @@ class _ChatCardState extends State<ChatCard> {
                             padding: EdgeInsets.symmetric(horizontal: 2),
                             width: 22,
                             child: AvatarImage(uid: snap.data?.uid));
-                        // if (chat[index].seenBy.last == uid) {
-                        //   // return Text(
-                        //   //   'and ${snap.data?.username}',
-                        //   //   style: Theme.of(context).textTheme.bodySmall,
-                        //   // );
-                        // } else {
-                        //   // return Text(
-                        //   //   '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
-                        //   //   style: Theme.of(context).textTheme.bodySmall,
-                        //   // );
-                        //   return SizedBox(
-                        //       width: 20,
-                        //       child: AvatarImage(uid: snap.data?.uid));
-                        // }
+
                       }
                       return Text('');
                     }),

@@ -11,10 +11,21 @@ class UserSettingsController {
     });
   }
 
-  setPrivate() {
+  togglePrivate(bool isPrivate) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({'isPrivate': true});
+        .update({'isPrivate': !isPrivate});
   }
+
+  removeBlock(String uid) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      'blockedUser': FieldValue.arrayRemove([uid])
+    });
+  }
+
+
 }
