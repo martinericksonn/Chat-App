@@ -110,25 +110,35 @@ class _ChatCardState extends State<ChatCard> {
                           ],
                         );
                       }),
-                Container(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width / 1.3),
-                  padding: const EdgeInsets.all(12),
-                  decoration: backgroundColor(context),
-                  // color: Colors.black,
-                  child: Text(
-                    overflow: TextOverflow.visible,
-                    chat[index].message,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: chat[index].isDeleted
-                            ? Theme.of(context).textTheme.titleMedium?.color
-                            : chat[index].sentBy ==
-                                    FirebaseAuth.instance.currentUser?.uid
-                                ? Theme.of(context).scaffoldBackgroundColor
-                                : Theme.of(context).colorScheme.onBackground),
+                if (chat[index].isImage)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image(
+                      height: 200.0,
+                      width: 200.0,
+                      image: NetworkImage(chat[index].image),
+                    ),
+                  )
+                else
+                  Container(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width / 1.3),
+                    padding: const EdgeInsets.all(12),
+                    decoration: backgroundColor(context),
+                    // color: Colors.black,
+                    child: Text(
+                      overflow: TextOverflow.visible,
+                      chat[index].message,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: chat[index].isDeleted
+                              ? Theme.of(context).textTheme.titleMedium?.color
+                              : chat[index].sentBy ==
+                                      FirebaseAuth.instance.currentUser?.uid
+                                  ? Theme.of(context).scaffoldBackgroundColor
+                                  : Theme.of(context).colorScheme.onBackground),
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -175,7 +185,7 @@ class _ChatCardState extends State<ChatCard> {
                 chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              
+
               for (String uid in chat[index].seenBy)
                 FutureBuilder(
                     future: ChatUser.fromUid(uid: uid),
@@ -185,7 +195,6 @@ class _ChatCardState extends State<ChatCard> {
                             padding: EdgeInsets.symmetric(horizontal: 2),
                             width: 22,
                             child: AvatarImage(uid: snap.data?.uid));
-
                       }
                       return Text('');
                     }),
