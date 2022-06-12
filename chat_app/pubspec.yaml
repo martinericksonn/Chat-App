@@ -10,6 +10,8 @@ environment:
   sdk: ">=2.17.1 <3.0.0"
 
 dependencies:
+  photo_view: ^0.14.0
+  cached_network_image: ^3.2.1
   geoflutterfire: ^3.0.3
   geocoding: ^2.0.4
   geolocator: ^8.2.1

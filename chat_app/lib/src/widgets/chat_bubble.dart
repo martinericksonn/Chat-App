@@ -4,10 +4,12 @@ import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/chat_message_model.dart';
+import 'package:photo_view/photo_view.dart';
 
 // ignore: must_be_immutable
 class ChatCard extends StatefulWidget {
@@ -111,12 +113,31 @@ class _ChatCardState extends State<ChatCard> {
                         );
                       }),
                 if (chat[index].isImage)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image(
-                      height: 200.0,
-                      width: 200.0,
-                      image: NetworkImage(chat[index].image),
+                  GestureDetector(
+                    // onTap: () {
+                    //   Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    //     return DetailScreen(chat[index].image);
+                    //   }));
+                    // },
+                    child: ClipRRect(
+                      // clipper: ,
+                      borderRadius: BorderRadius.circular(20.0),
+
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: 200.0,
+                          maxHeight: 200.0,
+                        ),
+                        child: Container(
+                          color: chat[index].sentBy ==
+                                  FirebaseAuth.instance.currentUser?.uid
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
+                          child: PhotoView(
+                              imageProvider:
+                                  NetworkImage(chat[index].image, scale: 5)),
+                        ),
+                      ),
                     ),
                   )
                 else
@@ -294,3 +315,17 @@ class Spacer extends StatelessWidget {
         ));
   }
 }
+
+// class DetailScreen extends StatelessWidget {
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Photo View Example App',
+
+//       home: Scaffold(
+//         body: HomeScreen(),
+//       ),
+//     );
+//   }
+// }
