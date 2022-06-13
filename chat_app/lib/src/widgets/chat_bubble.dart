@@ -5,12 +5,11 @@ import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import '../models/chat_message_model.dart';
-import 'package:photo_view/photo_view.dart';
 
 // ignore: must_be_immutable
 class ChatCard extends StatefulWidget {
@@ -64,121 +63,149 @@ class _ChatCardState extends State<ChatCard> {
       children: [
         // Text('asd'),
         editedLeft(context),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: GestureDetector(
-            onTap: () {
-              // int num = 60;
-              setState(() {
-                // scrollBottom(isVisible ? -num : num);
-                isVisible = !isVisible;
-              });
-            },
-            onLongPress: () {
-              chat[index].isDeleted
-                  ? null
-                  : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
-                      ? bottomModal(context, chatroom)
-                      : null;
-            },
-            child: Column(
-              crossAxisAlignment:
-                  chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
-              children: [
-                if ((chat[index].sentBy !=
-                        FirebaseAuth.instance.currentUser?.uid) &&
-                    (index == 0 ||
-                        chat[index - 1].sentBy != chat[index].sentBy))
-                  FutureBuilder<ChatUser>(
-                      future: ChatUser.fromUid(uid: chat[index].sentBy),
-                      builder: (context, AsyncSnapshot<ChatUser> snap) {
-                        if (!snap.hasData) {
-                          return CircularProgressIndicator();
-                        }
-
-                        return Row(
-                          children: [
-                            SizedBox(
-                                width: 30,
-                                child: AvatarImage(uid: snap.data?.uid ?? "")),
-                            Container(
-                                padding:
-                                    EdgeInsets.only(left: 5, top: 5, bottom: 3),
-                                child: Text(
-                                  '${snap.data?.username}',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                )),
-                          ],
-                        );
-                      }),
-                if (chat[index].isImage)
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return ImageScreen(image: chat[index].image);
-                      }));
-                    },
-                    child: ClipRRect(
-                      // clipper: ,
-                      borderRadius: BorderRadius.circular(20.0),
-
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: 200.0,
-                          maxHeight: 200.0,
-                        ),
-                        child: Container(
-                            color: chat[index].sentBy ==
-                                    FirebaseAuth.instance.currentUser?.uid
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.tertiary,
-                            // child: FittedBox(
-                            //     fit: BoxFit.fitWidth,
-                            child: Image(
-                              image: NetworkImage(
-                                chat[index].image,
-                                scale: 5,
-                              ),
-                            )
-                            //  PhotoView(
-                            //   imageProvider: NetworkImage(
-                            //     chat[index].image,
-                            //     scale: 5,
-                            //   ),
-                            // ),
-                            ),
-                      ),
-                    ),
-                    // ),
-                  )
-                else
-                  Container(
-                    constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 1.3),
-                    padding: const EdgeInsets.all(12),
-                    decoration: backgroundColor(context),
-                    // color: Colors.black,
-                    child: Text(
-                      overflow: TextOverflow.visible,
-                      chat[index].message,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: chat[index].isDeleted
-                              ? Theme.of(context).textTheme.titleMedium?.color
-                              : chat[index].sentBy ==
-                                      FirebaseAuth.instance.currentUser?.uid
-                                  ? Theme.of(context).scaffoldBackgroundColor
-                                  : Theme.of(context).colorScheme.onBackground),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
+        messageBody(context),
         editedRight(context),
       ],
+    );
+  }
+
+  Container messageBody(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: GestureDetector(
+        onTap: () {
+          // int num = 60;
+          setState(() {
+            // scrollBottom(isVisible ? -num : num);
+            isVisible = !isVisible;
+          });
+        },
+        onLongPress: () {
+          chat[index].isDeleted
+              ? null
+              : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                  ? bottomModal(context, chatroom)
+                  : null;
+        },
+        child: Column(
+          crossAxisAlignment:
+              chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
+          children: [
+            if ((chat[index].sentBy !=
+                    FirebaseAuth.instance.currentUser?.uid) &&
+                (index == 0 || chat[index - 1].sentBy != chat[index].sentBy))
+              FutureBuilder<ChatUser>(
+                  future: ChatUser.fromUid(uid: chat[index].sentBy),
+                  builder: (context, AsyncSnapshot<ChatUser> snap) {
+                    if (!snap.hasData) {
+                      return CircularProgressIndicator();
+                    }
+                    return Row(
+                      children: [
+                        SizedBox(
+                            width: 30,
+                            child: AvatarImage(uid: snap.data?.uid ?? "")),
+                        Container(
+                            padding:
+                                EdgeInsets.only(left: 5, top: 5, bottom: 3),
+                            child: Text(
+                              '${snap.data?.username}',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            )),
+                      ],
+                    );
+                  }),
+            if (chat[index].isDeleted)
+              deletedMessage(context)
+            else if (chat[index].isImage)
+              imageMessage(context)
+            else
+              stringMessage(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container stringMessage(BuildContext context) {
+    return Container(
+      constraints:
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 1.3),
+      padding: const EdgeInsets.all(12),
+      decoration: backgroundColor(context),
+      // color: Colors.black,
+      child: Text(
+        overflow: TextOverflow.visible,
+        chat[index].message,
+        style: TextStyle(
+            fontSize: 16,
+            color: chat[index].isDeleted
+                ? Theme.of(context).textTheme.titleMedium?.color
+                : chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                    ? Theme.of(context).scaffoldBackgroundColor
+                    : Theme.of(context).colorScheme.onBackground),
+      ),
+    );
+  }
+
+  Container deletedMessage(BuildContext context) {
+    return Container(
+      constraints:
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 1.3),
+      padding: const EdgeInsets.all(12),
+      decoration: backgroundColor(context),
+      // color: Colors.black,
+      child: Text(
+        overflow: TextOverflow.visible,
+        "message deleted",
+        style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).textTheme.titleMedium?.color),
+      ),
+    );
+  }
+
+  GestureDetector imageMessage(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) {
+          return ImageScreen(image: chat[index].image);
+        }));
+      },
+      child: ClipRRect(
+        // clipper: ,
+        borderRadius: BorderRadius.circular(20.0),
+
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 200.0,
+            maxHeight: 200.0,
+          ),
+          child: Container(
+              color:
+                  chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.tertiary,
+              // child: FittedBox(
+              //     fit: BoxFit.fitWidth,
+              child: Image(
+                image: NetworkImage(
+                  chat[index].image,
+                  scale: 5,
+                ),
+              )
+              //  PhotoView(
+              //   imageProvider: NetworkImage(
+              //     chat[index].image,
+              //     scale: 5,
+              //   ),
+              // ),
+              ),
+        ),
+      ),
+      // ),
     );
   }
 

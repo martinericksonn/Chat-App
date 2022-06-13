@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:photo_view/photo_view.dart';
 
+// ignore: must_be_immutable
 class ImageScreen extends StatelessWidget {
   ImageScreen({Key? key, required this.image}) : super(key: key);
   String image;
@@ -16,7 +14,6 @@ class ImageScreen extends StatelessWidget {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            // title: Text('Main Screen'),
           ),
           body: PhotoView(
             imageProvider: NetworkImage(

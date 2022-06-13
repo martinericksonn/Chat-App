@@ -21,29 +21,33 @@ class BottomSheetModal extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ListTile(
-                title: Text(
-                  'Edit',
-                  style: TextStyle(
+              Visibility(
+                visible: !chat.isImage,
+                child: ListTile(
+                  title: Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.edit,
                     color: Theme.of(context).colorScheme.primary,
                   ),
+                  onTap: () => {
+                    _textController.text = chat.message,
+                    Navigator.of(context).pop(),
+                    showMaterialModalBottomSheet(
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      context: context,
+                      builder: (context) => SingleChildScrollView(
+                        controller: ModalScrollController.of(context),
+                        child: SingleChildScrollView(child: rowe(context)),
+                      ),
+                    )
+                  },
                 ),
-                leading: Icon(
-                  Icons.edit,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () => {
-                  _textController.text = chat.message,
-                  Navigator.of(context).pop(),
-                  showMaterialModalBottomSheet(
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    context: context,
-                    builder: (context) => SingleChildScrollView(
-                      controller: ModalScrollController.of(context),
-                      child: SingleChildScrollView(child: rowe(context)),
-                    ),
-                  )
-                },
               ),
               ListTile(
                 title: Text(

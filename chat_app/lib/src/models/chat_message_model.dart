@@ -118,6 +118,6 @@ class ChatMessage {
         .doc(chatroom)
         .collection('messages')
         .doc(uid) //edited
-        .update({'message': 'message deleted', 'isDeleted': true});
+        .update({'isDeleted': true});
   }
 }
