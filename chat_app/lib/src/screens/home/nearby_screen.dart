@@ -28,6 +28,13 @@ class _NearbyScreenState extends State<NearbyScreen> {
   GeolocationController get geoCon => widget.geoCon;
 
   @override
+  void initState() {
+    // isSwitched = currentPosition != null;
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   dispose() {
     super.dispose();
   }
@@ -65,22 +72,45 @@ class _NearbyScreenState extends State<NearbyScreen> {
                 ),
                 trailing: Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child: Switch(
-                    value: geoCon.currentPosition != null,
-                    onChanged: (value) async {
-                      if (value) {
-                        geoCon.enableGeolocationStream();
-                        currentPosition = await geoCon.getCurrentPosition();
-                      } else {
-                        geoCon.disableGeolocationStream();
-                        currentPosition = await geoCon.getCurrentPosition();
-                      }
-                      setState(() {
-                        // isSwitched = value;
-                      });
-                    },
-                    activeColor: Theme.of(context).colorScheme.primary,
-                  ),
+                  child: AnimatedBuilder(
+                      animation: geoCon,
+                      builder: (context, Widget? child) {
+                        return Switch(
+                          value: geoCon.currentPosition != null,
+                          onChanged: (value) async {
+                            print("geoCon.geoCon.");
+                            print(geoCon.currentPosition != null);
+                            // value = !value;
+                            // isSwitched = !isSwitched;
+
+                            if (geoCon.currentPosition == null) {
+                              await geoCon.enableGeolocationStream();
+                              await geoCon.getCurrentPosition().then((value) {
+                                // isSwitched = !isSwitched;
+                                currentPosition = value;
+
+                                // print(value);
+                              });
+                            } else {
+                              await geoCon.disableGeolocationStream();
+                              await geoCon.getCurrentPosition().then((value) {
+                                // print(value);
+
+                                // isSwitched = !isSwitched;
+                                currentPosition = value;
+                              });
+                            }
+
+                            setState(() {});
+                            // if (value) {
+                            //   isSwitched = false;
+                            // } else {
+                            //   isSwitched = true;
+                            // }
+                          },
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        );
+                      }),
                 ),
               ),
               ListTile(
@@ -111,8 +141,8 @@ class _NearbyScreenState extends State<NearbyScreen> {
                               if (geoCon.center == null) {
                                 return CircularProgressIndicator();
                               }
-                              print("snap.data!.docs.length");
-                              print(snap.data!.docs.length);
+                              // print("snap.data!.docs.length");
+                              // print(snap.data!.docs.length);
                               return SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment:

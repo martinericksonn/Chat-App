@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/image_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -114,11 +115,11 @@ class _ChatCardState extends State<ChatCard> {
                       }),
                 if (chat[index].isImage)
                   GestureDetector(
-                    // onTap: () {
-                    //   Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    //     return DetailScreen(chat[index].image);
-                    //   }));
-                    // },
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return ImageScreen(image: chat[index].image);
+                      }));
+                    },
                     child: ClipRRect(
                       // clipper: ,
                       borderRadius: BorderRadius.circular(20.0),
@@ -129,16 +130,28 @@ class _ChatCardState extends State<ChatCard> {
                           maxHeight: 200.0,
                         ),
                         child: Container(
-                          color: chat[index].sentBy ==
-                                  FirebaseAuth.instance.currentUser?.uid
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.tertiary,
-                          child: PhotoView(
-                              imageProvider:
-                                  NetworkImage(chat[index].image, scale: 5)),
-                        ),
+                            color: chat[index].sentBy ==
+                                    FirebaseAuth.instance.currentUser?.uid
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.tertiary,
+                            // child: FittedBox(
+                            //     fit: BoxFit.fitWidth,
+                            child: Image(
+                              image: NetworkImage(
+                                chat[index].image,
+                                scale: 5,
+                              ),
+                            )
+                            //  PhotoView(
+                            //   imageProvider: NetworkImage(
+                            //     chat[index].image,
+                            //     scale: 5,
+                            //   ),
+                            // ),
+                            ),
                       ),
                     ),
+                    // ),
                   )
                 else
                   Container(
