@@ -4,6 +4,7 @@ import 'package:chat_app/src/screens/home/image_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -229,13 +230,13 @@ class _ChatCardState extends State<ChatCard> {
       visible: isVisible,
       child: Container(
         // color: Colors.pink,
-        padding: EdgeInsets.only(bottom: 2, top: 2),
+        // padding: EdgeInsets.only(bottom: 2, top: 2),
         alignment: Alignment.center,
         width: double.infinity,
         // color: Colors.green,
 
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 5.0, right: 10, left: 10),
+        child: Container(
+          padding: const EdgeInsets.only(right: 10, left: 10),
           child: Row(
             mainAxisAlignment:
                 chat[index].sentBy == FirebaseAuth.instance.currentUser?.uid
@@ -251,7 +252,10 @@ class _ChatCardState extends State<ChatCard> {
                 FutureBuilder(
                     future: ChatUser.fromUid(uid: uid),
                     builder: (context, AsyncSnapshot snap) {
-                      if (snap.hasData && chat[index].seenBy.length > 1) {
+                      if (snap.hasData &&
+                          chat[index].seenBy.length > 1 &&
+                          snap.data?.uid !=
+                              FirebaseAuth.instance.currentUser!.uid) {
                         return Container(
                             padding: EdgeInsets.symmetric(horizontal: 2),
                             width: 22,

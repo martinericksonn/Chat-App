@@ -86,7 +86,7 @@ class BottomSheetModal extends StatelessWidget {
                 " Editing Message",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -132,6 +132,7 @@ class BottomSheetModal extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.send_rounded,
+                  size: 35,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 onPressed: () => {

@@ -101,6 +101,14 @@ class _ChatScreenState extends State<ChatScreen> {
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
               elevation: 0,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.info_rounded,
+                  ),
+                )
+              ],
               title: Row(
                 children: [
                   AvatarImage(uid: selectedUser.data!.uid),
