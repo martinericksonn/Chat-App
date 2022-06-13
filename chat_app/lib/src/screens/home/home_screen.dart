@@ -6,7 +6,7 @@ import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
-import 'package:chat_app/src/screens/home/profile_screen.dart';
+import 'package:chat_app/src/screens/home/profile_screen_current.dart';
 import 'package:chat_app/src/screens/home/search_screen.dart';
 import 'package:chat_app/src/screens/mapdemo/home.dart';
 import 'package:chat_app/src/services/image_service.dart';

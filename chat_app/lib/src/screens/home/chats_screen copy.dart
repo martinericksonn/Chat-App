@@ -2,6 +2,7 @@
 
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/profile_screen_other.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,15 @@ class _ChatScreenState extends State<ChatScreen> {
               elevation: 0,
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreenOther(
+                          selectedUser: selectedUserUID,
+                        ),
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.info_rounded,
                   ),
