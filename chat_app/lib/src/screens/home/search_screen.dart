@@ -106,7 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                                     subtitle: null,
                                   )
-                                : SizedBox();
+                                : const SizedBox();
                           });
                   ;
                 }
@@ -131,7 +131,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                               subtitle: null,
                             )
-                          : SizedBox();
+                          : const SizedBox();
                     });
               }),
         ),

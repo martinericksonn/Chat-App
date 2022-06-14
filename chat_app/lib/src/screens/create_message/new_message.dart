@@ -13,6 +13,7 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 
 import '../../models/chat_user_model.dart';
 
+// ignore: must_be_immutable
 class NewMessage extends StatelessWidget {
   NewMessage({Key? key}) : super(key: key);
 

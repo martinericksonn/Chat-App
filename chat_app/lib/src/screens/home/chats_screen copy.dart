@@ -210,6 +210,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 size: 35,
               ),
               onPressed: () => image()),
+              
           Expanded(
             child: TextFormField(
               maxLines: null,

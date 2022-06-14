@@ -2,6 +2,7 @@
 
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/edit_profile_screen.dart';
 import 'package:chat_app/src/service_locators.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/settings/settings_controller.dart';
@@ -10,6 +11,7 @@ import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
@@ -22,7 +24,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   SettingsController get settingsController => widget.settingsController;
   final AuthController _auth = locator<AuthController>();
-  final TextEditingController _unCon = TextEditingController();
   ChatUser? user;
 
   @override
@@ -151,11 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              //mo error ang date joined
-              // Text(
-              //   DateFormat("MM:dd:yyyy").format(user!.created.toDate()),
-              //   style: Theme.of(context).textTheme.titleLarge,
-              // ),
             ],
           ),
         ),
@@ -164,8 +160,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   ProfileCard dateJoinedCard() {
-    return const ProfileCard(
-        icon: Icons.date_range, title: 'Date Joined', subtitle: '...');
+    return ProfileCard(
+        icon: Icons.date_range, title: 'Date Joined', 
+        subtitle: '...');//DateFormat("MMMM dd, yyyy").format(user!.created.toDate()));
   }
 
   ProfileCard emailCard() {
@@ -238,7 +235,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditProfile(),
+                  ),
+            );
+          },
           icon: const Icon(Icons.edit),
           color: Theme.of(context).colorScheme.primary,
         ),

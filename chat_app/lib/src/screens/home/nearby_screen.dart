@@ -3,13 +3,10 @@
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
-import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../controllers/geolocation_controller.dart';

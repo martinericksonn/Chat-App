@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:flutter/material.dart';
 import '../models/chat_list_model.dart';
 
