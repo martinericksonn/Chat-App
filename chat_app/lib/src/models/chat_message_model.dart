@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatMessage {
   final String uid, sentBy, message;
@@ -103,21 +104,47 @@ class ChatMessage {
           .snapshots()
           .map(ChatMessage.fromQuerySnap);
 
-  Future updateMessage(String newMessage, String chatroom) {
+  Future updateMessage(String newMessage, String chatroom, String recipient) {
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)
         .collection('messages')
         .doc(uid) //edited
-        .update({'message': newMessage, 'isEdited': true});
+        .update({'message': newMessage, 'isEdited': true}).then((value) => {
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('messageSnapshot')
+                  .doc(chatroom)
+                  .update({'message': newMessage}),
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(recipient)
+                  .collection('messageSnapshot')
+                  .doc(chatroom)
+                  .update({'message': newMessage}),
+            });
   }
 
-  Future deleteMessage(String chatroom) {
+  Future deleteMessage(String chatroom, String recipient) {
     return FirebaseFirestore.instance
         .collection("chats")
         .doc(chatroom)
         .collection('messages')
         .doc(uid) //edited
-        .update({'isDeleted': true});
+        .update({'isDeleted': true}).then((value) => {
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('messageSnapshot')
+                  .doc(chatroom)
+                  .update({'isDeleted': true}),
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(recipient)
+                  .collection('messageSnapshot')
+                  .doc(chatroom)
+                  .update({'isDeleted': true}),
+            });
   }
 }

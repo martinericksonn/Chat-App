@@ -74,11 +74,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   systemNavigationBarColor: Theme.of(context).bottomAppBarColor,
-    //   statusBarColor: Theme.of(context).primaryColor,
-    //   //color set to transperent or set your own color
-    // ));
     return FutureBuilder<ChatUser>(
         future: ChatUser.fromUid(uid: selectedUserUID),
         builder: (BuildContext context, AsyncSnapshot<ChatUser> selectedUser) {
@@ -210,7 +205,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 size: 35,
               ),
               onPressed: () => image()),
-              
           Expanded(
             child: TextFormField(
               maxLines: null,
@@ -276,6 +270,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             index: index,
                             chat: _chatController.chats,
                             chatroom: _chatController.chatroom ?? '',
+                            recipient: selectedUserUID,
                           );
                         }),
 

@@ -37,7 +37,7 @@ class ChatUser {
           ? List<String>.from(json['chatrooms'])
           : <String>[],
       json['blocklist'] != null
-          ? List<String>.from(json['chatrooms'])
+          ? List<String>.from(json['blocklist'])
           : <String>[],
     );
   }

@@ -14,18 +14,19 @@ import '../models/chat_message_model.dart';
 
 // ignore: must_be_immutable
 class ChatCard extends StatefulWidget {
-  const ChatCard({
-    Key? key,
-    required this.index,
-    required this.scrollController,
-    required this.chatroom,
-    required this.chat,
-  }) : super(key: key);
+  const ChatCard(
+      {Key? key,
+      required this.index,
+      required this.scrollController,
+      required this.chatroom,
+      required this.chat,
+      required this.recipient})
+      : super(key: key);
   final ScrollController scrollController;
   final int index;
   final List<ChatMessage> chat;
   final String chatroom;
-
+  final String recipient;
   @override
   State<ChatCard> createState() => _ChatCardState();
 }
@@ -336,6 +337,7 @@ class _ChatCardState extends State<ChatCard> {
         child: BottomSheetModal(
           chat: chat[index],
           chatroom: chatroom,
+          recipient: widget.recipient,
         ),
       ),
     );

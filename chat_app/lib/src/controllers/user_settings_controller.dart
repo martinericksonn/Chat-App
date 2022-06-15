@@ -7,7 +7,7 @@ class UserSettingsController {
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
-      'blockedUser': FieldValue.arrayUnion([uid])
+      'blocklist': FieldValue.arrayUnion([uid])
     });
   }
 
@@ -18,12 +18,18 @@ class UserSettingsController {
         .update({'isPrivate': isPrivate});
   }
 
-  removeBlock(String uid) {
-    FirebaseFirestore.instance
+  removeBlock(String uid) async {
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
-      'blockedUser': FieldValue.arrayRemove([uid])
+      'blocklist': FieldValue.arrayRemove([uid])
+    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      'blocklist': FieldValue.arrayRemove([uid])
     });
   }
 }

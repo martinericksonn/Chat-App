@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:chat_app/src/controllers/user_settings_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/home_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class ProfileScreenOther extends StatefulWidget {
 
 class _ProfileScreenOtherState extends State<ProfileScreenOther> {
   String get selectedUser => widget.selectedUser;
+  UserSettingsController userSC = UserSettingsController();
   ChatUser? user;
   @override
   void initState() {
@@ -53,7 +56,26 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
                 else
                   SizedBox(
                     child: Text("Account is Private"),
-                  )
+                  ),
+                Container(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: TextButton(
+                      onPressed: () {
+                        userSC.blockUser(user!.uid);
+                        Navigator.popUntil(
+                          context,
+                          ModalRoute.withName('/'),
+                        );
+                      },
+                      child: Text(
+                        "Block User",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    )
+                    //  ListTile(
+                    //   title: Text("Block User"),
+                    // ),
+                    )
               ],
             ),
           ),

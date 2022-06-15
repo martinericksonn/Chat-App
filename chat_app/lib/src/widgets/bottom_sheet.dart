@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class BottomSheetModal extends StatelessWidget {
-  BottomSheetModal({required this.chat, required this.chatroom, Key? key})
+  BottomSheetModal(
+      {required this.chat,
+      required this.chatroom,
+      Key? key,
+      required this.recipient})
       : super(key: key);
 
   final ChatMessage chat;
-
+  final String recipient;
   final String chatroom;
 
   final FocusNode _messageFN = FocusNode();
@@ -62,7 +66,7 @@ class BottomSheetModal extends StatelessWidget {
                 ),
                 onTap: () => {
                   Navigator.of(context).pop(),
-                  chat.deleteMessage(chatroom),
+                  chat.deleteMessage(chatroom, recipient),
                 },
               )
             ],
@@ -139,7 +143,8 @@ class BottomSheetModal extends StatelessWidget {
                   if (_textController.text != '')
                     {
                       _messageFN.unfocus(),
-                      chat.updateMessage(_textController.text, chatroom),
+                      chat.updateMessage(
+                          _textController.text, chatroom, recipient),
                       Navigator.of(context).pop(),
                     }
                 },

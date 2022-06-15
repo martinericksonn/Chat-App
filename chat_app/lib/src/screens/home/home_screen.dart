@@ -151,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AnimatedBuilder(
         animation: _chatListController,
         builder: (context, snapshot) {
+          print(user!.blocklist);
           return ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               reverse: true,
@@ -162,7 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     FirebaseAuth.instance.currentUser!.uid);
 
                 if (_chatListController.chats[index].uid !=
-                    FirebaseAuth.instance.currentUser!.uid) {
+                        FirebaseAuth.instance.currentUser!.uid &&
+                    !user!.blocklist.contains(chatListUser)) {
                   return FutureBuilder<ChatUser>(
                       future: ChatUser.fromUid(uid: chatListUser),
                       builder: (context, snapshot) {
@@ -179,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       });
                 }
-                return SizedBox(child: Text('asdasd'));
+                return SizedBox();
               });
         });
   }
@@ -201,8 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             chatList.sentBy == user!.uid
-                ? "You: " + chatList.message
-                : chatList.message,
+                ? "You: " +
+                    (chatList.isDeleted ? "message deleted" : chatList.message)
+                : (chatList.isDeleted ? "message deleted" : chatList.message),
             style: TextStyle(
               color: Theme.of(context).colorScheme.onBackground,
               fontWeight: chatList.seenBy.contains(user!.uid)
