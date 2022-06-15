@@ -27,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isRegisterSuccess = false;
   String prompts = '';
 
-  final GeolocationController geoCon = GeolocationController();
+  // final GeolocationController geoCon = GeolocationController();
   final TextEditingController _emailCon = TextEditingController();
   final TextEditingController _passCon = TextEditingController();
   final TextEditingController _unCon = TextEditingController();
@@ -42,7 +42,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
-    geoCon.dispose();
     super.initState();
   }
 

@@ -4,6 +4,7 @@ import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/blocked_user_screen.dart';
 import 'package:chat_app/src/screens/home/edit_profile_screen.dart';
+
 import 'package:chat_app/src/service_locators.dart';
 import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/settings/settings_controller.dart';
@@ -15,20 +16,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+import '../../controllers/geolocation_controller.dart';
 import '../../controllers/user_settings_controller.dart';
 
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key, required this.settingsController}) : super(key: key);
+  ProfileScreen(
+      {Key? key, required this.settingsController, required this.geoCon})
+      : super(key: key);
   SettingsController settingsController;
+  GeolocationController geoCon;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
   SettingsController get settingsController => widget.settingsController;
+  GeolocationController get geoCon => widget.geoCon;
+
   final UserSettingsController userSC = UserSettingsController();
   final AuthController _auth = locator<AuthController>();
+
   ChatUser? user;
 
   @override
@@ -94,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               ListTile(
-                onTap: () => {_auth.logout()},
+                onTap: () => {geoCon.dispose(), _auth.logout()},
                 leading: CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,

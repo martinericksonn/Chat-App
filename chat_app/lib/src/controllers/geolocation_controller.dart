@@ -12,8 +12,8 @@ class GeolocationController with ChangeNotifier {
   LocationPermission? permission;
   StreamSubscription<Position>? positionStream;
   Position? currentPosition;
-
-  GeolocationController() {
+  String userUID;
+  GeolocationController(this.userUID) {
     checkPermissions().onError((error, stackTrace) {
       print(error);
     });
@@ -44,12 +44,12 @@ class GeolocationController with ChangeNotifier {
   String parseLocation(DocumentSnapshot doc) {
     Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
     GeoPoint point = json['position']['geopoint'];
-    return '${Geolocator.distanceBetween(
-      center!.latitude,
-      center!.longitude,
-      point.latitude,
-      point.longitude,
-    ).toStringAsFixed(2)}m';
+    return '${(Geolocator.distanceBetween(
+          center!.latitude,
+          center!.longitude,
+          point.latitude,
+          point.longitude,
+        ) / 1000).toStringAsFixed(1)} km';
     // return 'name: [${point.latitude},${point.longitude}] - ${Geolocator.distanceBetween(
     //   center!.latitude,
     //   center!.longitude,
@@ -114,7 +114,7 @@ class GeolocationController with ChangeNotifier {
   disableGeolocationStream() {
     FirebaseFirestore.instance
         .collection('locations')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(userUID)
         .update({'isEnable': false});
     positionStream?.cancel();
     currentPosition = null;

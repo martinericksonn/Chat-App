@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ChatListController _chatListController = ChatListController();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
-  final GeolocationController geoCon = GeolocationController();
+  late GeolocationController geoCon;
   ChatUser? user;
 
   @override
@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() {
           user = value;
+          geoCon = GeolocationController(value.uid);
         });
       }
     });
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    geoCon.disableGeolocationStream();
     geoCon.dispose();
     _messageFN.dispose();
     _messageController.dispose();
@@ -145,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return AnimatedBuilder(
         animation: _chatListController,
         builder: (context, snapshot) {
-          print(user!.blocklist);
           return ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               reverse: true,
@@ -155,7 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 var chatListUser = _chatListController.extractUID(
                     _chatListController.chats[index].uid,
                     FirebaseAuth.instance.currentUser!.uid);
-
+                if (user == null) {
+                  return CircularProgressIndicator();
+                }
                 if (_chatListController.chats[index].uid !=
                         FirebaseAuth.instance.currentUser!.uid &&
                     !user!.blocklist.contains(chatListUser)) {
@@ -259,6 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(
                     builder: (context) => ProfileScreen(
                       settingsController: settingsController,
+                      geoCon: geoCon,
                     ),
                   ),
                 );

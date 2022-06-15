@@ -77,13 +77,9 @@ class _NearbyScreenState extends State<NearbyScreen> {
                           onChanged: (value) async {
                             print("geoCon.geoCon.");
                             print(geoCon.currentPosition != null);
-                            // value = !value;
-                            // isSwitched = !isSwitched;
-
                             if (geoCon.currentPosition == null) {
                               await geoCon.enableGeolocationStream();
                               await geoCon.getCurrentPosition().then((value) {
-                                // isSwitched = !isSwitched;
                                 currentPosition = value;
 
                                 // print(value);
@@ -91,19 +87,11 @@ class _NearbyScreenState extends State<NearbyScreen> {
                             } else {
                               await geoCon.disableGeolocationStream();
                               await geoCon.getCurrentPosition().then((value) {
-                                // print(value);
-
-                                // isSwitched = !isSwitched;
                                 currentPosition = value;
                               });
                             }
 
                             setState(() {});
-                            // if (value) {
-                            //   isSwitched = false;
-                            // } else {
-                            //   isSwitched = true;
-                            // }
                           },
                           activeColor: Theme.of(context).colorScheme.primary,
                         );
