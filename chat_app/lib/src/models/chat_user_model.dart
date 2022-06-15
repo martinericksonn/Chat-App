@@ -5,7 +5,7 @@ class ChatUser {
   bool isPrivate;
   Timestamp created, updated;
 
-  List<String> chatrooms, blocklist;
+  List<String> chatrooms, blocklist, blocklistedme;
 
   ChatUser(
     this.uid,
@@ -19,6 +19,7 @@ class ChatUser {
     this.isPrivate,
     this.chatrooms,
     this.blocklist,
+    this.blocklistedme,
   );
 
   static ChatUser fromDocumentSnap(DocumentSnapshot snap) {
@@ -35,6 +36,9 @@ class ChatUser {
       json['isPrivate'] ?? false,
       json['chatrooms'] != null
           ? List<String>.from(json['chatrooms'])
+          : <String>[],
+      json['blocklist'] != null
+          ? List<String>.from(json['blocklist'])
           : <String>[],
       json['blocklist'] != null
           ? List<String>.from(json['blocklist'])
@@ -85,6 +89,7 @@ class ChatUser {
         'updated': updated,
         'chatrooms': chatrooms,
         'isPrivate': isPrivate,
-        'blocklist': blocklist
+        'blocklist': blocklist,
+        'blocklistedme': blocklistedme
       };
 }

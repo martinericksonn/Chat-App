@@ -9,6 +9,7 @@ import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen_current.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -59,32 +60,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return FutureBuilder(
-    //     future: GeolocationController(value.uid),
-    //     builder: (context, snapshot) {});
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder:
+            (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
+          if (!snap.hasData) {
+            print("no");
+            return Center(child: CircularProgressIndicator());
+          }
+          List<dynamic> blocklist = [];
+          for (var doc in snap.data!.docs) {
+            blocklist.addAll(doc["blocklistedme"]);
+            blocklist.addAll(doc["blocklist"]);
+            print(blocklist);
+          }
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: appBar(),
+            body: body(context, blocklist),
+            floatingActionButton: floatingButton(context),
+          );
+        });
+  }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: appBar(),
-      body: body(context),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: () => {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => NearbyScreen(
-                geoCon: geoCon,
-              ),
+  FloatingActionButton floatingButton(BuildContext context) {
+    return FloatingActionButton.extended(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      onPressed: () => {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => NearbyScreen(
+              geoCon: geoCon,
             ),
-          )
-        },
-        label: Text("Find Nearby",
-            style: Theme.of(context).textTheme.headlineMedium),
-      ),
+          ),
+        )
+      },
+      label: Text("Find Nearby",
+          style: Theme.of(context).textTheme.headlineMedium),
     );
   }
 
-  SizedBox body(BuildContext context) {
+  SizedBox body(BuildContext context, List<dynamic> blocklist) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -96,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Searchbar(),
-              messageList(),
+              messageList(blocklist),
             ],
           ),
         ),
@@ -105,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 //AsyncSnapshot<dynamic> snapshot
-  Widget messageList() {
+  Widget messageList(List<dynamic> blocklist) {
     return Column(
       children: [
         SizedBox(
@@ -116,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: _chatListController.chats.isEmpty
                 ? bodyNoMessage()
-                : bodyWithMessage(),
+                : bodyWithMessage(blocklist),
           ),
         ),
 
@@ -145,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget bodyWithMessage() {
+  Widget bodyWithMessage(List<dynamic> blocklist) {
     return AnimatedBuilder(
         animation: _chatListController,
         builder: (context, snapshot) {
@@ -155,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
               shrinkWrap: true,
               itemCount: _chatListController.chats.length,
               itemBuilder: (context, index) {
-                var chatListUser = _chatListController.extractUID(
+                var chatFriends = _chatListController.extractUID(
                     _chatListController.chats[index].uid,
                     FirebaseAuth.instance.currentUser!.uid);
                 if (user == null) {
@@ -163,9 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 if (_chatListController.chats[index].uid !=
                         FirebaseAuth.instance.currentUser!.uid &&
-                    !user!.blocklist.contains(chatListUser)) {
+                    !blocklist.contains(chatFriends)) {
                   return FutureBuilder<ChatUser>(
-                      future: ChatUser.fromUid(uid: chatListUser),
+                      future: ChatUser.fromUid(uid: chatFriends),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return SizedBox(

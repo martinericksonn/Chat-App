@@ -70,7 +70,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.dispose();
 
     if (_chatController.messages.isNotEmpty) {
-      print(_chatController.messages);
       _chatController.dispose();
     }
     super.dispose();
@@ -296,7 +295,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/no_message.png", width: 300),
-            Text('some message here'),
+            Text('No message yet'),
             SizedBox(
               height: 60,
             )

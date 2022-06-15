@@ -49,38 +49,46 @@ class _BlockedUserScreenState extends State<BlockedUserScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              for (var user in blockedUser)
-                if (user != '')
-                  FutureBuilder<ChatUser>(
-                      future: ChatUser.fromUid(uid: user),
-                      builder: ((context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
-                        } else {
-                          return ListTile(
-                            trailing: TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  blockedUser.remove(snapshot.data!.uid);
-                                  UserSettingsController.removeBlock(
-                                      snapshot.data!.uid);
-                                });
-                              },
-                              child: Text(
-                                "Unblock",
-                                style: TextStyle(
-                                  color: Colors.red,
+              if (blockedUser.length < 2)
+                SizedBox(
+                  height: 300,
+                  child: Center(
+                    child: Text("No blocked user"),
+                  ),
+                )
+              else
+                for (var user in blockedUser)
+                  if (user != '')
+                    FutureBuilder<ChatUser>(
+                        future: ChatUser.fromUid(uid: user),
+                        builder: ((context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          } else {
+                            return ListTile(
+                              trailing: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    blockedUser.remove(snapshot.data!.uid);
+                                    UserSettingsController.removeBlock(
+                                        snapshot.data!.uid);
+                                  });
+                                },
+                                child: Text(
+                                  "Unblock",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
-                            ),
-                            leading: AvatarImage(uid: snapshot.data!.uid),
-                            title: Text(
-                              snapshot.data!.username,
-                            ),
-                            subtitle: null,
-                          );
-                        }
-                      }))
+                              leading: AvatarImage(uid: snapshot.data!.uid),
+                              title: Text(
+                                snapshot.data!.username,
+                              ),
+                              subtitle: null,
+                            );
+                          }
+                        }))
             ],
           ),
         ),

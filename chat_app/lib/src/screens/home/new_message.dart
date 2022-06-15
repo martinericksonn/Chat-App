@@ -83,12 +83,10 @@ class NewMessage extends StatelessWidget {
                   // GeoFirePoint myLocation =
                   //     geo.point(latitude: 0, longitude: 0);
                   // FirebaseFirestore.instance
-                  //     .collection('locations')
+                  //     .collection('users')
                   //     .doc(snapshot.data![index].uid)
-                  //     .set({
-                  //   'userUID': snapshot.data![index].uid,
-                  //   'isEnable': false,
-                  //   'position': myLocation.data
+                  //     .update({
+                  //   'blocklistedme': [],
                   // });
 
                   if (snapshot.data?[index].username == null) {

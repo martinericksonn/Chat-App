@@ -94,8 +94,16 @@ class AuthController with ChangeNotifier {
       UserCredential createdUser = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (createdUser.user != null) {
-        ChatUser userModel = ChatUser(createdUser.user!.uid, username, email,
-            age, gender, '', Timestamp.now(), Timestamp.now(), false, [], []);
+        ChatUser userModel = ChatUser(
+            createdUser.user!.uid,
+            username,
+            email,
+            age,
+            gender,
+            '',
+            Timestamp.now(),
+            Timestamp.now(),
+            false, [], [], []);
 
         return FirebaseFirestore.instance
             .collection('users')
