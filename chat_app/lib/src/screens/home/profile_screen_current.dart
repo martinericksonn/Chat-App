@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ListTile(
                 onTap: () => {
-                  // geoCon.dispose(),
+                  geoCon.disableGeolocationStream(),
                   _auth.logout(),
                 },
                 leading: CircleAvatar(
