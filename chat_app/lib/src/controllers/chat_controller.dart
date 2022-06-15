@@ -108,6 +108,7 @@ class ChatController with ChangeNotifier {
         .json;
     var newImage = ChatMessage(
             sentBy: FirebaseAuth.instance.currentUser!.uid,
+            message: "sent an image",
             isImage: true,
             image: image)
         .json;
@@ -237,6 +238,7 @@ class ChatController with ChangeNotifier {
         .set(ChatMessage(
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
                 image: image,
+                message: 'sent an image',
                 isImage: true)
             .json);
     await FirebaseFirestore.instance
@@ -247,6 +249,7 @@ class ChatController with ChangeNotifier {
         .set(ChatMessage(
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
                 image: image,
+                message: 'sent an image',
                 isImage: true)
             .json);
     return await FirebaseFirestore.instance
@@ -256,6 +259,7 @@ class ChatController with ChangeNotifier {
         .add(ChatMessage(
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
                 image: image,
+                message: 'sent an image',
                 isImage: true)
             .json);
   }
