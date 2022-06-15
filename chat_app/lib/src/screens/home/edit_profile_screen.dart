@@ -1,5 +1,8 @@
+import 'package:chat_app/src/widgets/avatar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
- 
+
+import '../../services/image_service.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -9,16 +12,73 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  final TextEditingController _unCon = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       appBar: appBar(),
-      body: const SafeArea(
-        child: Text("Welcome to Edit Profile")
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            profilePic(context),
+            lowerBody(context),
+          ],
+        ),
       ),
     );
   }
 
+  Padding lowerBody(BuildContext context) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+        child: SizedBox(
+           height: MediaQuery.of(context).size.height * .75,
+          child: Column(
+            children: [
+              usernameTextField(context),
+            ],
+          ),
+        ),
+      );
+  }
+
+  SizedBox profilePic(BuildContext context) {
+    return SizedBox(
+      height: 120,
+      width: 120,
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Stack(
+          children: [
+            SizedBox(
+              width: 180,
+              height: 180,
+              child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+            ),
+            Positioned(
+              right: 15,
+              bottom: 0,
+              child: InkWell(
+                onTap: () {
+                  ImageService.updateProfileImage();
+                },
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(
+                    Icons.camera_alt,
+                    size: 30,
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   AppBar appBar() {
     return AppBar(
@@ -29,5 +89,42 @@ class _EditProfileState extends State<EditProfile> {
         style: Theme.of(context).textTheme.titleLarge,
       ),
     );
+  }
+
+  Container usernameTextField(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              // width: isUsernameEmpty ? 2.0 : 1.0,
+            ), // set
+            // color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(20)),
+        child: TextFormField(
+          controller: _unCon,
+          // validator: (value) {
+          //   setState(() {
+          //     isUsernameEmpty = (value == null || value.isEmpty) ? true : false;
+          //   });
+          //   return null;
+          // },
+          style: const TextStyle(fontWeight: FontWeight.bold),
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            // hintStyle: TextStyle(
+            //     color: isUsernameEmpty
+            //         ? Colors.red
+            //         : Theme.of(context).colorScheme.primary),
+            hintText: "Username",
+            contentPadding:
+                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+          ),
+        ));
   }
 }

@@ -13,7 +13,6 @@ import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../controllers/geolocation_controller.dart';
@@ -36,6 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final UserSettingsController userSC = UserSettingsController();
   final AuthController _auth = locator<AuthController>();
+  
 
   ChatUser? user;
 
@@ -357,24 +357,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 180,
             child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
           ),
-          Positioned(
-            right: 15,
-            bottom: 0,
-            child: InkWell(
-              onTap: () {
-                ImageService.updateProfileImage();
-              },
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 30,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-              ),
-            ),
-          ),
+         
         ],
       ),
     );

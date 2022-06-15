@@ -295,7 +295,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/no_message.png", width: 300),
-            Text('No message yet'),
+            Text('Start a conversation with your fellow Tabian.' ),
             SizedBox(
               height: 60,
             )
