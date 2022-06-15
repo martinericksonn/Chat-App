@@ -8,10 +8,13 @@ import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/settings/settings_controller.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/profile_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+
+import '../../controllers/user_settings_controller.dart';
 
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
@@ -23,6 +26,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   SettingsController get settingsController => widget.settingsController;
+  final UserSettingsController userSC = UserSettingsController();
   final AuthController _auth = locator<AuthController>();
   ChatUser? user;
 
@@ -41,19 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   systemNavigationBarIconBrightness:
-    //       Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-    //           ? Brightness.dark
-    //           : Brightness.light,
-    //   statusBarIconBrightness:
-    //       Theme.of(context).scaffoldBackgroundColor.computeLuminance() > 0.5
-    //           ? Brightness.dark
-    //           : Brightness.light,
-    //   systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-    //   statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-    //   //color set to transperent or set your own color
-    // ));
     return Scaffold(
       appBar: appBar(),
       body: SafeArea(
@@ -75,54 +66,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  foregroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(Icons.dark_mode_rounded),
-                ),
-                title: DropdownButton<ThemeMode>(
-                  elevation: 1,
-
-                  underline: SizedBox(),
-                  // Read the selected themeMode from the controller
-                  value: settingsController.themeMode,
-                  // Call the updateThemeMode method any time the user selects a theme.
-                  onChanged: settingsController.updateThemeMode,
-                  items: const [
-                    DropdownMenuItem(
-                      value: ThemeMode.system,
-                      child: Text(
-                        'System Theme',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: ThemeMode.light,
-                      child: Text(
-                        'Light Theme',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: ThemeMode.dark,
-                      child: Text(
-                        'Dark Theme',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              themeChange(context),
+              accountPrivacyChange(context),
+              locationChange(context),
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -159,10 +105,195 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  ListTile themeChange(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.dark_mode_rounded),
+      ),
+      title: Text("Theme"),
+      trailing: DropdownButton<ThemeMode>(
+        elevation: 1,
+
+        underline: SizedBox(),
+        // Read the selected themeMode from the controller
+        value: settingsController.themeMode,
+        // Call the updateThemeMode method any time the user selects a theme.
+        onChanged: settingsController.updateThemeMode,
+        items: const [
+          DropdownMenuItem(
+            value: ThemeMode.system,
+            child: Text(
+              'System',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          DropdownMenuItem(
+            value: ThemeMode.light,
+            child: Text(
+              'Light',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          DropdownMenuItem(
+            value: ThemeMode.dark,
+            child: Text(
+              'Dark',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  ListTile locationChange(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.location_on_rounded),
+      ),
+      title: Text("Location"),
+      trailing: DropdownButton<ThemeMode>(
+        elevation: 1,
+
+        underline: SizedBox(),
+        // Read the selected themeMode from the controller
+        value: settingsController.themeMode,
+        // Call the updateThemeMode method any time the user selects a theme.
+        onChanged: settingsController.updateThemeMode,
+        items: const [
+          DropdownMenuItem(
+            value: ThemeMode.system,
+            child: Text(
+              'Disabled',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          DropdownMenuItem(
+            value: ThemeMode.light,
+            child: Text(
+              'Enabled',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void dropDownCallBack(String? value) {
+    setState(() {
+      print("dropDownCallBack " + value.toString());
+      userSC.togglePrivate(value == "Private" ? true : false);
+    });
+    // print("insideeeeeeee"); // print(value ?? 'test');
+  }
+
+  Widget accountPrivacyChange(BuildContext context) {
+    // return FutureBuilder(
+    //     future: FirebaseFirestore.instance
+    //         .collection('users')
+    //         .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    //         .get(),
+    //     builder: ((context, snapshot) {
+    //       print(FirebaseAuth.instance.currentUser!.uid);
+    //       if (!snapshot.hasData) return CircularProgressIndicator();
+    //       return SizedBox(
+    //         child: Column(
+    //           children: [
+    //           for (var doc in snapshot.data!.docs)
+
+    //           ],
+
+    //           snapshot.data!),
+    //       );
+    //     }));
+
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder:
+            (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
+          //  var user = snap.data!.docs[0];
+          if (!snap.hasData) {
+            return CircularProgressIndicator();
+          }
+          for (var doc in snap.data!.docs) {
+            print("Account: " + doc["isPrivate"].toString());
+            return ListTile(
+              // textColor: Colors.red,
+              title: Text("Account Type"),
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                foregroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(Icons.shield_rounded),
+              ),
+              trailing: DropdownButton<String>(
+                dropdownColor: Theme.of(context).colorScheme.tertiary,
+                elevation: 1,
+                underline: SizedBox(),
+
+                // Read the selected themeMode from the controller
+                value: doc['isPrivate'] ? "Private" : "Public",
+                // Call the updateThemeMode method any time the user selects a theme.
+                onChanged: dropDownCallBack,
+
+                // ignore: prefer_const_literals_to_create_immutables
+                items: [
+                  DropdownMenuItem(
+                    value: "Public",
+                    child: Text(
+                      'Public',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "Private",
+                    child: Text(
+                      'Private',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return SizedBox();
+        });
+  }
+
   ProfileCard dateJoinedCard() {
     return ProfileCard(
-        icon: Icons.date_range, title: 'Date Joined', 
-        subtitle: '...');//DateFormat("MMMM dd, yyyy").format(user!.created.toDate()));
+        icon: Icons.date_range,
+        title: 'Date Joined',
+        subtitle:
+            '...'); //DateFormat("MMMM dd, yyyy").format(user!.created.toDate()));
   }
 
   ProfileCard emailCard() {
@@ -237,9 +368,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditProfile(),
-                  ),
+              MaterialPageRoute(
+                builder: (context) => EditProfile(),
+              ),
             );
           },
           icon: const Icon(Icons.edit),

@@ -15,7 +15,7 @@ class UserSettingsController {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({'isPrivate': !isPrivate});
+        .update({'isPrivate': isPrivate});
   }
 
   removeBlock(String uid) {
@@ -26,6 +26,4 @@ class UserSettingsController {
       'blockedUser': FieldValue.arrayRemove([uid])
     });
   }
-
-
 }

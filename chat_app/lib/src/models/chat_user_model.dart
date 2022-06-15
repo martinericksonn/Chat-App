@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatUser {
   final String uid, username, email, image, age, gender;
-  // bool isPrivate;
+  bool isPrivate;
   Timestamp created, updated;
-  List<String> chatrooms;
-  // List<String> chatrooms, blocklist;
+
+  List<String> chatrooms, blocklist;
 
   ChatUser(
     this.uid,
@@ -16,9 +16,9 @@ class ChatUser {
     this.image,
     this.created,
     this.updated,
-    // this.isPrivate,
+    this.isPrivate,
     this.chatrooms,
-    // this.blocklist,
+    this.blocklist,
   );
 
   static ChatUser fromDocumentSnap(DocumentSnapshot snap) {
@@ -32,13 +32,13 @@ class ChatUser {
       json['image'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
-      // json['isPrivate'] ?? '',
+      json['isPrivate'] ?? false,
       json['chatrooms'] != null
           ? List<String>.from(json['chatrooms'])
           : <String>[],
-      // json['blocklist'] != null
-      //     ? List<String>.from(json['chatrooms'])
-      //     : <String>[],
+      json['blocklist'] != null
+          ? List<String>.from(json['chatrooms'])
+          : <String>[],
     );
   }
 
@@ -83,8 +83,8 @@ class ChatUser {
         'image': image,
         'created': created,
         'updated': updated,
-        // 'chatrooms':chatrooms,
-        // 'isPrivate':isPrivate,
-        // 'blocklist':blocklist
+        'chatrooms': chatrooms,
+        'isPrivate': isPrivate,
+        'blocklist': blocklist
       };
 }

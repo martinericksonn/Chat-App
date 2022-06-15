@@ -37,21 +37,25 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
       appBar: appBar(),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              profilePic(context),
-              spacer(context),
-              // emailCard(),
-              ageCard(),
-              genderCard(),
-              dateJoinedCard(),
-
-              //mo error ang date joined
-              // Text(
-              //   DateFormat("MM:dd:yyyy").format(user!.created.toDate()),
-              //   style: Theme.of(context).textTheme.titleLarge,
-              // ),
-            ],
+          child: Center(
+            child: Column(
+              children: [
+                profilePic(context),
+                spacer(context),
+                if (!(user?.isPrivate ?? true))
+                  Column(
+                    children: [
+                      ageCard(),
+                      genderCard(),
+                      dateJoinedCard(),
+                    ],
+                  )
+                else
+                  SizedBox(
+                    child: Text("Account is Private"),
+                  )
+              ],
+            ),
           ),
         ),
       ),
