@@ -102,7 +102,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               ListTile(
-                onTap: () => {geoCon.dispose(), _auth.logout()},
+                onTap: () => {
+                  // geoCon.dispose(),
+                  _auth.logout(),
+                },
                 leading: CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,

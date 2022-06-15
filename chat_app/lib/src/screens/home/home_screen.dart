@@ -3,7 +3,7 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
-import 'package:chat_app/src/screens/create_message/new_message.dart';
+import 'package:chat_app/src/screens/home/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen_current.dart';
@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    super.initState();
     ChatUser.fromUid(uid: _auth.currentUser?.uid ?? "").then((value) {
       if (mounted) {
         setState(() {
@@ -45,13 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     });
-
-    super.initState();
   }
 
   @override
   void dispose() {
-    geoCon.disableGeolocationStream();
     geoCon.dispose();
     _messageFN.dispose();
     _messageController.dispose();
@@ -61,6 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // return FutureBuilder(
+    //     future: GeolocationController(value.uid),
+    //     builder: (context, snapshot) {});
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: appBar(),

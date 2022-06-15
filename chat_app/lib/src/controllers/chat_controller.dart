@@ -11,7 +11,7 @@ class ChatController with ChangeNotifier {
   Stream<String?> get stream => _controller.stream;
   ChatUser? user;
   late String recipient;
-  List<ChatMessage> chats = [];
+  List<ChatMessage> messages = [];
 
   String? chatroom;
   ChatController() {
@@ -94,7 +94,7 @@ class ChatController with ChangeNotifier {
       } else {}
     }
 
-    chats = update;
+    messages = update;
     notifyListeners();
   }
 

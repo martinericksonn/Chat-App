@@ -90,6 +90,10 @@ class NewMessage extends StatelessWidget {
                   //   'isEnable': false,
                   //   'position': myLocation.data
                   // });
+
+                  if (snapshot.data?[index].username == null) {
+                    return CircularProgressIndicator();
+                  }
                   return snapshot.data![index].uid !=
                           FirebaseAuth.instance.currentUser?.uid
                       ? ListTile(

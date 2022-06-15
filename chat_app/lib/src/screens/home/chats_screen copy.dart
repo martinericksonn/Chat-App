@@ -68,7 +68,11 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     _messageFN.dispose();
     _messageController.dispose();
-    _chatController.dispose();
+
+    if (_chatController.messages.isNotEmpty) {
+      print(_chatController.messages);
+      _chatController.dispose();
+    }
     super.dispose();
   }
 
@@ -263,12 +267,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         physics: NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: _chatController.chats.length,
+                        itemCount: _chatController.messages.length,
                         itemBuilder: (context, index) {
                           return ChatCard(
                             scrollController: _scrollController,
                             index: index,
-                            chat: _chatController.chats,
+                            chat: _chatController.messages,
                             chatroom: _chatController.chatroom ?? '',
                             recipient: selectedUserUID,
                           );

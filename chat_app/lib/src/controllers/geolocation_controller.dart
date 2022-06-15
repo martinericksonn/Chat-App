@@ -119,7 +119,7 @@ class GeolocationController with ChangeNotifier {
     positionStream?.cancel();
     currentPosition = null;
     positionStream = null;
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<Position?> getLastKnownPosition() {
