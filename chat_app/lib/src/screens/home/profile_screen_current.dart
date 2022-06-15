@@ -2,6 +2,7 @@
 
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/blocked_user_screen.dart';
 import 'package:chat_app/src/screens/home/edit_profile_screen.dart';
 import 'package:chat_app/src/service_locators.dart';
 import 'package:chat_app/src/services/image_service.dart';
@@ -68,18 +69,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               themeChange(context),
               accountPrivacyChange(context),
-              locationChange(context),
+              // locationChange(context),
               ListTile(
+                onTap: () => {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => BlockedUserScreen(
+                        blockeduser: user!.blocklist,
+                      ),
+                    ),
+                  )
+                },
                 leading: CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(Icons.block_outlined),
                 ),
                 title: Text(
-                  "Block User",
+                  "Blocked User",
                   style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w500,
-                    // color: Theme.of(context).colorScheme.onPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -115,17 +125,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: Text("Theme"),
       trailing: DropdownButton<ThemeMode>(
         elevation: 1,
-
         underline: SizedBox(),
-        // Read the selected themeMode from the controller
         value: settingsController.themeMode,
-        // Call the updateThemeMode method any time the user selects a theme.
         onChanged: settingsController.updateThemeMode,
         items: const [
           DropdownMenuItem(
             value: ThemeMode.system,
             child: Text(
-              'System',
+              'System Theme',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -135,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           DropdownMenuItem(
             value: ThemeMode.light,
             child: Text(
-              'Light',
+              'Light Theme',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -145,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           DropdownMenuItem(
             value: ThemeMode.dark,
             child: Text(
-              'Dark',
+              'Dark Theme',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -157,52 +164,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  ListTile locationChange(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        child: Icon(Icons.location_on_rounded),
-      ),
-      title: Text("Location"),
-      trailing: DropdownButton<ThemeMode>(
-        elevation: 1,
+  // ListTile locationChange(BuildContext context) {
+  //   return ListTile(
+  //     leading: CircleAvatar(
+  //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+  //       foregroundColor: Theme.of(context).colorScheme.primary,
+  //       child: Icon(Icons.location_on_rounded),
+  //     ),
+  //     title: Text("Location"),
+  //     trailing: DropdownButton<String>(
+  //       elevation: 1,
 
-        underline: SizedBox(),
-        // Read the selected themeMode from the controller
-        value: settingsController.themeMode,
-        // Call the updateThemeMode method any time the user selects a theme.
-        onChanged: settingsController.updateThemeMode,
-        items: const [
-          DropdownMenuItem(
-            value: ThemeMode.system,
-            child: Text(
-              'Disabled',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          DropdownMenuItem(
-            value: ThemeMode.light,
-            child: Text(
-              'Enabled',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  //       underline: SizedBox(),
+  //       // Read the selected themeMode from the controller
+  //       value: settingsController.themeMode,
+  //       // Call the updateThemeMode method any time the user selects a theme.
+  //       onChanged: settingsController.updateThemeMode,
+  //       items: const [
+  //         DropdownMenuItem(
+  //           value: ThemeMode.system,
+  //           child: Text(
+  //             'Disabled',
+  //             style: TextStyle(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w500,
+  //             ),
+  //           ),
+  //         ),
+  //         DropdownMenuItem(
+  //           value: ThemeMode.light,
+  //           child: Text(
+  //             'Enabled',
+  //             style: TextStyle(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w500,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void dropDownCallBack(String? value) {
     setState(() {
       print("dropDownCallBack " + value.toString());
-      userSC.togglePrivate(value == "Private" ? true : false);
+      UserSettingsController.togglePrivate(value == "Private" ? true : false);
     });
     // print("insideeeeeeee"); // print(value ?? 'test');
   }
@@ -242,7 +249,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             print("Account: " + doc["isPrivate"].toString());
             return ListTile(
               // textColor: Colors.red,
-              title: Text("Account Type"),
+              title: Text(
+                "Account Type",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               leading: CircleAvatar(
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 foregroundColor: Theme.of(context).colorScheme.primary,

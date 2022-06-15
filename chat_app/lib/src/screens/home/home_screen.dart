@@ -7,22 +7,16 @@ import 'package:chat_app/src/screens/create_message/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen_current.dart';
-import 'package:chat_app/src/screens/home/search_screen.dart';
-import 'package:chat_app/src/screens/mapdemo/home.dart';
-import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../controllers/chat_list_controller.dart';
 import '../../controllers/geolocation_controller.dart';
-import '../../controllers/navigation/navigation_service.dart';
 import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
 import '../../settings/settings_controller.dart';
-import '../authentication/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
@@ -70,10 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: appBar(),
       body: body(context),
       floatingActionButton: FloatingActionButton.extended(
-        // icon: Icon(
-        //   Icons.near_me_rounded,
-        //   color: Theme.of(context).scaffoldBackgroundColor,
-        // ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => {
           Navigator.of(context).push(
@@ -134,7 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget bodyNoMessage() {
     return RefreshIndicator(
       onRefresh: () async {
-        setState(() {});
+        setState(() {
+          ChatUser.fromUid(uid: _auth.currentUser?.uid ?? "").then((value) {
+            user = value;
+          });
+        });
       },
       child: Center(
         child: Column(children: [

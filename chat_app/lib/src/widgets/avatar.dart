@@ -14,14 +14,20 @@ class AvatarImage extends StatelessWidget {
         builder: (context, AsyncSnapshot<ChatUser?> snap) {
           if (snap.error != null || !snap.hasData) {
             // print('1');
-            return tempProfile(context);
+            return FittedBox(
+              child: tempProfile(context),
+            );
           } else {
             // print('2');
             if (snap.data!.image.isEmpty) {
-              return tempProfile(context);
+              return FittedBox(
+                child: tempProfile(context),
+              );
             } else if (snap.connectionState == ConnectionState.waiting) {
               // print('3');
-              return tempProfile(context);
+              return FittedBox(
+                child: tempProfile(context),
+              );
             } else {
               // print('4');
               return CircleAvatar(
@@ -35,7 +41,7 @@ class AvatarImage extends StatelessWidget {
 
   CircleAvatar tempProfile(BuildContext context) {
     return CircleAvatar(
-      child: const Icon(Icons.person_rounded),
+      child: Icon(Icons.person_rounded),
       backgroundColor: Theme.of(context).colorScheme.primary,
     );
   }

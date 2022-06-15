@@ -61,7 +61,7 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
                     alignment: FractionalOffset.bottomCenter,
                     child: TextButton(
                       onPressed: () {
-                        userSC.blockUser(user!.uid);
+                        UserSettingsController.blockUser(user!.uid);
                         Navigator.popUntil(
                           context,
                           ModalRoute.withName('/'),
