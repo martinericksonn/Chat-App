@@ -15,8 +15,8 @@ import '../../models/chat_user_model.dart';
 
 // ignore: must_be_immutable
 class NewMessage extends StatelessWidget {
-  NewMessage({Key? key}) : super(key: key);
-
+  NewMessage({Key? key, required this.blocklist}) : super(key: key);
+  List<dynamic> blocklist;
   // late Future<List<ChatUser>> gettingUsers;
 
   @override
@@ -43,7 +43,9 @@ class NewMessage extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              Searchbar(),
+              Searchbar(
+                blocklist: blocklist,
+              ),
               newGroupChat(context),
               ListTile(
                 title: Text(
@@ -93,7 +95,8 @@ class NewMessage extends StatelessWidget {
                     return CircularProgressIndicator();
                   }
                   return snapshot.data![index].uid !=
-                          FirebaseAuth.instance.currentUser?.uid
+                              FirebaseAuth.instance.currentUser?.uid &&
+                          !blocklist.contains(snapshot.data![index].uid)
                       ? ListTile(
                           onTap: () {
                             Navigator.of(context).push(

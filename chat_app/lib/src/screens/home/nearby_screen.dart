@@ -13,8 +13,10 @@ import '../../controllers/geolocation_controller.dart';
 import '../../models/chat_user_model.dart';
 
 class NearbyScreen extends StatefulWidget {
-  NearbyScreen({Key? key, required this.geoCon}) : super(key: key);
+  NearbyScreen({Key? key, required this.geoCon, required this.blocklist})
+      : super(key: key);
   final GeolocationController geoCon;
+  List<dynamic> blocklist;
   @override
   State<NearbyScreen> createState() => _NearbyScreenState();
 }
@@ -23,7 +25,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
   bool isSwitched = false;
   Position? lastKnownPosition, currentPosition;
   GeolocationController get geoCon => widget.geoCon;
-
+  List<dynamic> get blocklist => widget.blocklist;
   @override
   void initState() {
     // isSwitched = currentPosition != null;
@@ -165,8 +167,9 @@ class _NearbyScreenState extends State<NearbyScreen> {
                                       for (var doc in snap.data!.docs)
                                         if (doc['isEnable'] &&
                                             doc['userUID'] !=
-                                                FirebaseAuth
-                                                    .instance.currentUser!.uid)
+                                                FirebaseAuth.instance
+                                                    .currentUser!.uid &&
+                                            !blocklist.contains(doc['userUID']))
                                           FutureBuilder(
                                             future:
                                                 ChatUser.fromUid(uid: doc.id),

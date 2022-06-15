@@ -6,16 +6,16 @@ import '../../widgets/avatar.dart';
 import 'chats_screen copy.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({
-    Key? key,
-  }) : super(key: key);
+  SearchScreen({Key? key, required this.blocklist}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
+  List<dynamic> blocklist;
 }
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  List<dynamic> get blocklist => widget.blocklist;
   // ignore: prefer_typing_uninitialized_variables
   var getUsers;
 
@@ -89,7 +89,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemCount: searchResult.length,
                           itemBuilder: (context, index) {
                             return searchResult[index].uid !=
-                                    FirebaseAuth.instance.currentUser?.uid
+                                        FirebaseAuth
+                                            .instance.currentUser?.uid &&
+                                    !blocklist.contains(searchResult[index].uid)
                                 ? ListTile(
                                     onTap: () {
                                       Navigator.of(context).pushReplacement(

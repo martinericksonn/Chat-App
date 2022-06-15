@@ -79,14 +79,14 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return Scaffold(
             resizeToAvoidBottomInset: true,
-            appBar: appBar(),
+            appBar: appBar(blocklist),
             body: body(context, blocklist),
-            floatingActionButton: floatingButton(context),
+            floatingActionButton: floatingButton(context, blocklist),
           );
         });
   }
 
-  FloatingActionButton floatingButton(BuildContext context) {
+  FloatingActionButton floatingButton(BuildContext context, blocklist) {
     return FloatingActionButton.extended(
       backgroundColor: Theme.of(context).colorScheme.primary,
       onPressed: () => {
@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialPageRoute(
             builder: (context) => NearbyScreen(
               geoCon: geoCon,
+              blocklist: blocklist,
             ),
           ),
         )
@@ -114,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Searchbar(),
+              Searchbar(blocklist: blocklist),
               messageList(blocklist),
             ],
           ),
@@ -266,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  AppBar appBar() {
+  AppBar appBar(blocklist) {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
@@ -305,7 +306,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => NewMessage(),
+                builder: (context) => NewMessage(
+                  blocklist: blocklist,
+                ),
               ),
             );
           },

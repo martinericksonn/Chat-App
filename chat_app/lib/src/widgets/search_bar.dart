@@ -4,8 +4,8 @@ import 'package:chat_app/src/screens/home/search_screen.dart';
 import 'package:flutter/material.dart';
 
 class Searchbar extends StatelessWidget {
-  const Searchbar({Key? key}) : super(key: key);
-
+  Searchbar({Key? key, required this.blocklist}) : super(key: key);
+  List<dynamic> blocklist;
   @override
   Widget build(BuildContext context) {
     return searchBar(context);
@@ -24,7 +24,9 @@ class Searchbar extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => SearchScreen(),
+                builder: (context) => SearchScreen(
+                  blocklist: blocklist,
+                ),
               ),
             );
           },
