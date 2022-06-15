@@ -14,6 +14,7 @@ class GeolocationController with ChangeNotifier {
   Position? currentPosition;
   String userUID;
   GeolocationController(this.userUID) {
+    print(currentPosition == null);
     checkPermissions().onError((error, stackTrace) {
       print(error);
     });
@@ -88,6 +89,7 @@ class GeolocationController with ChangeNotifier {
   }
 
   enableGeolocationStream() {
+    serviceEnabled = true;
     positionStream = Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
         distanceFilter: 10, //in meters
@@ -112,6 +114,7 @@ class GeolocationController with ChangeNotifier {
   }
 
   disableGeolocationStream() {
+    serviceEnabled = false;
     FirebaseFirestore.instance
         .collection('locations')
         .doc(userUID)
@@ -119,7 +122,7 @@ class GeolocationController with ChangeNotifier {
     positionStream?.cancel();
     currentPosition = null;
     positionStream = null;
-    // notifyListeners();
+    notifyListeners();
   }
 
   Future<Position?> getLastKnownPosition() {

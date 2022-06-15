@@ -11,7 +11,6 @@ class ChatListController with ChangeNotifier {
 
   String? chatroom;
   ChatListController() {
-    print("ChatListController");
     chatSub = ChatList.currentChats().listen(chatUpdateHandler);
   }
 
@@ -22,8 +21,6 @@ class ChatListController with ChangeNotifier {
   }
 
   chatUpdateHandler(List<ChatList> update) {
-    print(
-        "chatUpdateHandlerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
     chats = update;
     notifyListeners();
     _controller.add("");

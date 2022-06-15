@@ -189,8 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
       AsyncSnapshot<ChatUser> chatUser) {
     return ListTile(
         onTap: () => {
-              print("on tap"),
-              print(chatList.uid),
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) =>

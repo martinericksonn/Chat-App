@@ -75,8 +75,6 @@ class _NearbyScreenState extends State<NearbyScreen> {
                         return Switch(
                           value: geoCon.currentPosition != null,
                           onChanged: (value) async {
-                            print("geoCon.geoCon.");
-                            print(geoCon.currentPosition != null);
                             if (geoCon.currentPosition == null) {
                               await geoCon.enableGeolocationStream();
                               await geoCon.getCurrentPosition().then((value) {
