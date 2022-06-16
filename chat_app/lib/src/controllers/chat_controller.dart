@@ -281,6 +281,24 @@ class ChatController with ChangeNotifier {
             .json);
   }
 
+  Future sendImageInGroup({required String image}) async {
+    return await FirebaseFirestore.instance
+        .collection('chats')
+        .doc('globalchat')
+        .collection('messages')
+        .add(ChatMessage(
+                sentBy: FirebaseAuth.instance.currentUser!.uid,
+                image: image,
+                message: 'sent an image',
+                isImage: true)
+            .json);
+  }
+
+  // Future<DocumentReference<Map<String, dynamic>>> sendMessageImageGroup(
+  //     String recipient, String image, String thisUser) async {
+
+  // }
+
   Future<DocumentReference<Map<String, dynamic>>> _sendMessageText(
       String recipient, String message, String thisUser) async {
     await FirebaseFirestore.instance

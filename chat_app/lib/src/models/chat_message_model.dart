@@ -122,18 +122,21 @@ class ChatMessage {
         .collection('messages')
         .doc(uid) //edited
         .update({'message': newMessage, 'isEdited': true}).then((value) => {
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection('messageSnapshot')
-                  .doc(chatroom)
-                  .update({'message': newMessage}),
-              FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(recipient)
-                  .collection('messageSnapshot')
-                  .doc(chatroom)
-                  .update({'message': newMessage}),
+              if (chatroom != 'globalchat')
+                {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection('messageSnapshot')
+                      .doc(chatroom)
+                      .update({'message': newMessage}),
+                  FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(recipient)
+                      .collection('messageSnapshot')
+                      .doc(chatroom)
+                      .update({'message': newMessage}),
+                }
             });
   }
 
@@ -144,18 +147,21 @@ class ChatMessage {
         .collection('messages')
         .doc(uid) //edited
         .update({'isDeleted': true}).then((value) => {
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection('messageSnapshot')
-                  .doc(chatroom)
-                  .update({'isDeleted': true}),
-              FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(recipient)
-                  .collection('messageSnapshot')
-                  .doc(chatroom)
-                  .update({'isDeleted': true}),
+              if (chatroom != 'globalchat')
+                {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection('messageSnapshot')
+                      .doc(chatroom)
+                      .update({'isDeleted': true}),
+                  FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(recipient)
+                      .collection('messageSnapshot')
+                      .doc(chatroom)
+                      .update({'isDeleted': true}),
+                }
             });
   }
 }
