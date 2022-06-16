@@ -67,6 +67,17 @@ class ChatMessage {
     return !seenBy.contains(uid);
   }
 
+  Future updateSeenGlobal(String userUid) {
+    return FirebaseFirestore.instance
+        .collection('chats')
+        .doc("globalchat")
+        .collection('messages')
+        .doc(uid)
+        .update({
+      'seenBy': FieldValue.arrayUnion([userUid])
+    });
+  }
+
   Future updateSeen(String userID, String chatroom, String recipient) {
     return FirebaseFirestore.instance
         .collection("chats")

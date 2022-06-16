@@ -16,12 +16,15 @@ class ChatController with ChangeNotifier {
   String? chatroom;
   ChatController() {
     if (chatroom != null) {
+      print("chat room emptyyyyyyyyyyyyyyyyyyyy");
       return;
     }
     _controller.add("empty");
   }
 
   _subscibe() {
+    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    print(chatroom);
     _chatSub = ChatMessage.currentChats(chatroom!).listen(chatUpdateHandler);
     _controller.add("success");
   }
@@ -31,10 +34,13 @@ class ChatController with ChangeNotifier {
       recipient = currentRecipient;
       user = value;
       if (user != null && user!.chatrooms.contains(room)) {
+        print("1111111111111111111111111111111111111111111111111111");
         _subscibe();
       } else {
+        print("22222222222222222222222222222222222222222222");
         _controller.add("empty");
       }
+      print("333333333333333333333333333333333333333" + room);
       chatroom = room;
     });
   }
@@ -226,6 +232,17 @@ class ChatController with ChangeNotifier {
     } else {
       return await _sendMessageImage(recipient, image, thisUser);
     }
+  }
+
+  Future sendMessageWorld({required String message}) {
+    return FirebaseFirestore.instance
+        .collection('chats')
+        .doc("globalchat")
+        .collection('messages')
+        .add(ChatMessage(
+                sentBy: FirebaseAuth.instance.currentUser!.uid,
+                message: message)
+            .json);
   }
 
   Future<DocumentReference<Map<String, dynamic>>> _sendMessageImage(

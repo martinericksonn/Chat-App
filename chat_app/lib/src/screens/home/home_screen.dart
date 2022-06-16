@@ -3,6 +3,7 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
 import 'package:chat_app/src/screens/home/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_private.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
@@ -19,6 +20,7 @@ import '../../controllers/geolocation_controller.dart';
 import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
 import '../../settings/settings_controller.dart';
+import 'chats_global.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
@@ -118,6 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Searchbar(blocklist: blocklist),
+              globalChat(context),
+              // Divider(
+              //   color: Theme.of(context).colorScheme.tertiary,
+              // ),
               messageList(blocklist),
             ],
           ),
@@ -218,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
           -1) {
         return DateFormat("d MMM").format(chatList.ts.toDate());
       } else {
-        return DateFormat("EEE").format(chatList.ts.toDate());
+        return DateFormat.EEEE().format(chatList.ts.toDate());
       }
     } else {
       return DateFormat("hh:mm aaa").format(chatList.ts.toDate());
@@ -227,25 +233,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ListTile messageListTile(BuildContext context, ChatList chatList,
       AsyncSnapshot<ChatUser> chatUser) {
-    // print(chatList.ts
-    //     .toDate()
-    //     .compareTo(DateTime.now().subtract(Duration(days: 1))));
-    // if (chatList.ts
-    //         .toDate()
-    //         .compareTo(DateTime.now().subtract(Duration(days: 1))) ==
-    //     -1) {
-    //   if (chatList.ts
-    //           .toDate()
-    //           .compareTo(DateTime.now().subtract(Duration(days: 7))) ==
-    //       -1) {
-    //     print(DateFormat("d MMM").format(chatList.ts.toDate()));
-    //   } else {
-    //     print(DateFormat("d MMM").format(chatList.ts.toDate()));
-    //   }
-    // } else {
-    //   print(DateFormat("EEE").format(chatList.ts.toDate()));
-    // }
-
     return ListTile(
         onTap: () => {
               Navigator.of(context).push(
@@ -306,6 +293,42 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
+  Widget globalChat(
+    BuildContext context,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3.0),
+      child: ListTile(
+        onTap: () => {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => GlobalChat(),
+            ),
+          )
+        },
+        leading: FittedBox(
+          // color: Colors.red,
+
+          child: CircleAvatar(
+            radius: 40,
+            child: Image.asset("assets/images/tabi_lightmode.png"),
+            backgroundColor: Colors.transparent,
+            // backgroundImage:  DecorationImage(image: NetworkImage("urlImage"),
+
+            // backgroundImage: ,
+          ),
+        ),
+        title: Text(
+          "Tabi-Tabi Global",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            // color: Theme.of(context).colorScheme.tertiary,
+          ),
+        ),
+      ),
+    );
+  }
+
   AppBar appBar(blocklist) {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -336,9 +359,13 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             width: 20,
           ),
-          Text(
-            user?.username ?? '...',
-            style: Theme.of(context).textTheme.titleLarge,
+          Flexible(
+            child: Text(
+              user?.username ?? '...',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
           ),
         ],
       ),

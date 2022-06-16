@@ -331,10 +331,13 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
         recipient: selectedUserUID,
       );
       _messageController.text = '';
-
-      setState(() {
-        _chatController.initChatRoom(chatroom, selectedUserUID);
-      });
+      try {
+        setState(() {
+          _chatController.initChatRoom(chatroom, selectedUserUID);
+        });
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }
