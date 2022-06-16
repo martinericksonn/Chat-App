@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:chat_app/src/models/chat_user_model.dart';
-import 'package:chat_app/src/screens/home/chats_screen_copy.dart';
+import 'package:chat_app/src/screens/home/chats_private.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -186,7 +186,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            ChatScreen(
+                                                            ChatScreenPrivate(
                                                                 selectedUserUID:
                                                                     snapshot
                                                                         .data!

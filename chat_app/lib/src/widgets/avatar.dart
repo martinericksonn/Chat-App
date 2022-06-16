@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -14,35 +16,40 @@ class AvatarImage extends StatelessWidget {
         builder: (context, AsyncSnapshot<ChatUser?> snap) {
           if (snap.error != null || !snap.hasData) {
             // print('1');
-            return FittedBox(
-              child: tempProfile(context),
-            );
+            return tempProfile(context);
           } else {
             // print('2');
             if (snap.data!.image.isEmpty) {
-              return FittedBox(
-                child: tempProfile(context),
-              );
+              return tempProfile(context);
             } else if (snap.connectionState == ConnectionState.waiting) {
               // print('3');
-              return FittedBox(
-                child: tempProfile(context),
-              );
+              return tempProfile(context);
             } else {
               // print('4');
-              return CircleAvatar(
-                radius: radius,
-                backgroundImage: NetworkImage(snap.data!.image),
+              return FittedBox(
+                child: CircleAvatar(
+                  radius: radius,
+                  backgroundImage: NetworkImage(snap.data!.image),
+                ),
               );
             }
           }
         });
   }
 
-  CircleAvatar tempProfile(BuildContext context) {
-    return CircleAvatar(
-      child: const Icon(Icons.person_rounded),
-      backgroundColor: Theme.of(context).colorScheme.primary,
+  Widget tempProfile(BuildContext context) {
+    return FittedBox(
+      // color: Colors.red,
+
+      child: CircleAvatar(
+        radius: radius,
+        child: Icon(
+          Icons.person_rounded,
+          size: radius,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        // backgroundImage: ,
+      ),
     );
   }
 }

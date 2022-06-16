@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/avatar.dart';
-import 'chats_screen_copy.dart';
+import 'chats_private.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({Key? key, required this.blocklist}) : super(key: key);
@@ -96,9 +96,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                     onTap: () {
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
-                                            builder: (context) => ChatScreen(
-                                                selectedUserUID:
-                                                    searchResult[index].uid)),
+                                            builder: (context) =>
+                                                ChatScreenPrivate(
+                                                    selectedUserUID:
+                                                        searchResult[index]
+                                                            .uid)),
                                       );
                                     },
                                     leading: AvatarImage(
@@ -120,7 +122,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               onTap: () {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
+                                      builder: (context) => ChatScreenPrivate(
                                           selectedUserUID:
                                               snapshot.data![index].uid)),
                                 );

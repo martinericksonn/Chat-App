@@ -4,10 +4,11 @@ import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/new_message.dart';
-import 'package:chat_app/src/screens/home/chats_screen_copy.dart';
+import 'package:chat_app/src/screens/home/chats_private.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen_current.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
+import 'package:chat_app/src/widgets/chat_tiles.dart';
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -213,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) =>
-                      ChatScreen(selectedUserUID: chatUser.data!.uid),
+                      ChatScreenPrivate(selectedUserUID: chatUser.data!.uid),
                 ),
               )
             },
@@ -232,6 +233,70 @@ class _HomeScreenState extends State<HomeScreen> {
             )),
         leading: AvatarImage(
           uid: chatUser.data!.uid,
+          radius: 50,
+        ),
+        title: Text(
+          chatUser.data!.username,
+          style: TextStyle(
+            fontWeight: chatList.seenBy.contains(user!.uid)
+                ? FontWeight.normal
+                : FontWeight.bold,
+            // color: Theme.of(context).colorScheme.tertiary,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Text("data"),
+            Text(
+              DateFormat("hh:mm aaa").format(chatList.ts.toDate()),
+              style: TextStyle(
+                fontWeight: chatList.seenBy.contains(user!.uid)
+                    ? FontWeight.normal
+                    : FontWeight.bold,
+              ),
+            ),
+            chatList.seenBy.contains(user!.uid)
+                ? SizedBox()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Icon(
+                      Icons.fiber_manual_record_rounded,
+                      size: 15,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+          ],
+        ));
+  }
+
+  Widget chatTile(BuildContext context, ChatList chatList,
+      AsyncSnapshot<ChatUser> chatUser) {
+    // onTap: () => {
+    //       Navigator.of(context).push(
+    //         MaterialPageRoute(
+    //           builder: (context) =>
+    //               ChatScreenPrivate(selectedUserUID: chatUser.data!.uid),
+    //         ),
+    //       )
+    //     },
+    return ChatTile(
+        subtitle: Text(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            chatList.sentBy == user!.uid
+                ? "You: " +
+                    (chatList.isDeleted ? "message deleted" : chatList.message)
+                : (chatList.isDeleted ? "message deleted" : chatList.message),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontWeight: chatList.seenBy.contains(user!.uid)
+                  ? FontWeight.normal
+                  : FontWeight.bold,
+            )),
+        profile: AvatarImage(
+          uid: chatUser.data!.uid,
+          radius: 50,
         ),
         title: Text(
           chatUser.data!.username,
@@ -289,8 +354,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               child: SizedBox(
-                  child:
-                      AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid)),
+                child: AvatarImage(
+                  uid: FirebaseAuth.instance.currentUser!.uid,
+                ),
+              ),
             ),
           ),
           SizedBox(

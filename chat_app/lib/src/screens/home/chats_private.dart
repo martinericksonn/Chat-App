@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/profile_screen_other.dart';
@@ -9,18 +11,17 @@ import '../../services/image_service.dart';
 
 // import '. ./../service_locators.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreenPrivate extends StatefulWidget {
   final String chatroom;
   final String selectedUserUID;
-  // ignore: use_key_in_widget_constructors
-  const ChatScreen(
+  const ChatScreenPrivate(
       {Key? key, required this.selectedUserUID, this.chatroom = ""});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<ChatScreenPrivate> createState() => _ChatScreenPrivateState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
   // final AuthController _auth = locator<AuthController>();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
@@ -86,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     child: CircularProgressIndicator(),
                     height: 50.0,
                     width: 50.0,
@@ -110,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     );
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.info_rounded,
                   ),
                 )
@@ -118,7 +119,7 @@ class _ChatScreenState extends State<ChatScreen> {
               title: Row(
                 children: [
                   AvatarImage(uid: selectedUser.data!.uid),
-                  const SizedBox(
+                  SizedBox(
                     width: 15,
                   ),
                   Text(
@@ -168,7 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
             children: <Widget>[
-          const CircularProgressIndicator(),
+          CircularProgressIndicator(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text("Loading" + num),
@@ -211,15 +212,15 @@ class _ChatScreenState extends State<ChatScreen> {
             child: TextFormField(
               maxLines: null,
               keyboardType: TextInputType.multiline,
-              style: const TextStyle(fontWeight: FontWeight.normal),
+              style: TextStyle(fontWeight: FontWeight.normal),
               focusNode: _messageFN,
               controller: _messageController,
               decoration: InputDecoration(
                 // prefixIcon: Icon(Icons.image_rounded),
                 isDense: true,
-                contentPadding: const EdgeInsets.all(12),
+                contentPadding: EdgeInsets.all(12),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
                   borderSide: BorderSide(
                     width: 1,
                     color: Theme.of(context).colorScheme.primary,
@@ -229,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   borderSide: BorderSide(
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  borderRadius: const BorderRadius.all(
+                  borderRadius: BorderRadius.all(
                     Radius.circular(20),
                   ),
                 ),
@@ -255,14 +256,14 @@ class _ChatScreenState extends State<ChatScreen> {
           animation: _chatController,
           builder: (context, Widget? w) {
             return SingleChildScrollView(
-              physics: const ScrollPhysics(),
+              physics: ScrollPhysics(),
               controller: _scrollController,
               child: SizedBox(
                 width: double.infinity,
                 child: Column(
                   children: [
                     ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: _chatController.messages.length,
@@ -294,8 +295,8 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/no_message.png", width: 300),
-            const Text('Start a conversation with your fellow Tabian.' ),
-            const SizedBox(
+            Text('No message yet'),
+            SizedBox(
               height: 60,
             )
           ],
