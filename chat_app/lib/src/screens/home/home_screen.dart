@@ -321,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "Tabi-Tabi Global",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
             // color: Theme.of(context).colorScheme.tertiary,
           ),
         ),

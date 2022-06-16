@@ -99,14 +99,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               ListTile(
-                onTap: () => {},
+                onTap: () => {
+                  resetPass(),
+                },
                 leading: CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(Icons.block_outlined),
+                  child: Icon(Icons.password_rounded),
                 ),
                 title: Text(
-                  "Send Password Reset",
+                  "Password Reset",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -136,6 +138,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> resetPass() async {
+    try {
+      bool result = await _auth.ressetPassword(email: user!.email);
+      if (result) {
+        FocusScope.of(context).unfocus();
+        final snackBar = SnackBar(
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
+          content: Text(
+            'Check your email for passwod reset link',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
+          action: SnackBarAction(
+            label: 'ok',
+            onPressed: () {},
+          ),
+        );
+
+        // Find the ScaffoldMessenger in the widget tree
+        // and use it to show a SnackBar.
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (error) {
+      print(error);
+    }
   }
 
   ListTile themeChange(BuildContext context) {

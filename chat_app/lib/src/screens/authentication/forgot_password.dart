@@ -134,7 +134,13 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
       if (result) {
         FocusScope.of(context).unfocus();
         final snackBar = SnackBar(
-          content: const Text('Check your email for passwod reset link'),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
+          content: Text(
+            'Check your email for passwod reset link',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
           action: SnackBarAction(
             label: 'ok',
             onPressed: () {},
@@ -211,7 +217,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           Text(
-            "Forgot Password?.",
+            "Forgot Password?",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -272,12 +278,13 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
 
   Stack upperBody(BuildContext context) {
     return Stack(children: [
-     Padding(
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset("assets/images/tabi_lightmode.png", width: 45, height: 45),
+            Image.asset("assets/images/tabi_lightmode.png",
+                width: 45, height: 45),
             Text(
               " Tabi-Tabi",
               style: TextStyle(
