@@ -6,6 +6,7 @@ import 'package:chat_app/src/screens/home/home_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class ProfileScreenOther extends StatefulWidget {
@@ -96,8 +97,13 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
   }
 
   ProfileCard dateJoinedCard() {
-    return const ProfileCard(
-        icon: Icons.date_range, title: 'Date Joined', subtitle: '...');
+    return ProfileCard(
+        icon: Icons.date_range,
+        title: 'Date Joined',
+        subtitle: user?.created == null
+            ? "..."
+            : DateFormat("MMMM dd, yyyy").format(user!.created
+                .toDate())); //DateFormat("MMMM dd, yyyy").format(user!.created.toDate()));
   }
 
   ProfileCard emailCard() {

@@ -10,6 +10,7 @@ import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../controllers/geolocation_controller.dart';
 import '../../controllers/user_settings_controller.dart';
 
@@ -91,6 +92,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 title: Text(
                   "Blocked User",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () => {},
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.block_outlined),
+                ),
+                title: Text(
+                  "Send Password Reset",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -288,8 +304,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ProfileCard(
         icon: Icons.date_range,
         title: 'Date Joined',
-        subtitle:
-            '...'); //DateFormat("MMMM dd, yyyy").format(user!.created.toDate()));
+        subtitle: user?.created == null
+            ? "..."
+            : DateFormat("MMMM dd, yyyy").format(user!.created
+                .toDate())); //DateFormat("MMMM dd, yyyy").format(user!.created.toDate()));
   }
 
   ProfileCard emailCard() {
