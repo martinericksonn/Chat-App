@@ -20,7 +20,6 @@ class ProfileScreen extends StatefulWidget {
       : super(key: key);
   SettingsController settingsController;
   GeolocationController geoCon;
-  
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -32,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final UserSettingsController userSC = UserSettingsController();
   final AuthController _auth = locator<AuthController>();
-  
 
   ChatUser? user;
 
@@ -58,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: [
               profilePic(context),
-              userName(context),
+              usernameCard(),
               emailCard(),
               ageCard(),
               genderCard(),
@@ -74,6 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               themeChange(context),
               accountPrivacyChange(context),
+              locationChange(context),
               // locationChange(context),
               ListTile(
                 onTap: () => {
@@ -172,47 +171,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ListTile locationChange(BuildContext context) {
-  //   return ListTile(
-  //     leading: CircleAvatar(
-  //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-  //       foregroundColor: Theme.of(context).colorScheme.primary,
-  //       child: Icon(Icons.location_on_rounded),
-  //     ),
-  //     title: Text("Location"),
-  //     trailing: DropdownButton<String>(
-  //       elevation: 1,
-
-  //       underline: SizedBox(),
-  //       // Read the selected themeMode from the controller
-  //       value: settingsController.themeMode,
-  //       // Call the updateThemeMode method any time the user selects a theme.
-  //       onChanged: settingsController.updateThemeMode,
-  //       items: const [
-  //         DropdownMenuItem(
-  //           value: ThemeMode.system,
-  //           child: Text(
-  //             'Disabled',
-  //             style: TextStyle(
-  //               fontSize: 16,
-  //               fontWeight: FontWeight.w500,
-  //             ),
-  //           ),
-  //         ),
-  //         DropdownMenuItem(
-  //           value: ThemeMode.light,
-  //           child: Text(
-  //             'Enabled',
-  //             style: TextStyle(
-  //               fontSize: 16,
-  //               fontWeight: FontWeight.w500,
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  ListTile locationChange(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.location_on_rounded),
+      ),
+      title: Text("Location"),
+      trailing: Text(
+        geoCon.currentPosition != null ? "Enabled" : 'Disabled',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
 
   void dropDownCallBack(String? value) {
     setState(() {
@@ -319,7 +294,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   ProfileCard emailCard() {
     return ProfileCard(
-        icon: Icons.email, title: 'Email', subtitle: user?.email ?? '...');
+        icon: Icons.email_rounded,
+        title: 'Email',
+        subtitle: user?.email ?? '...');
+  }
+
+  ProfileCard usernameCard() {
+    return ProfileCard(
+        icon: Icons.account_circle_rounded,
+        title: 'Username',
+        subtitle: user?.username ?? '...');
   }
 
   ProfileCard ageCard() {
@@ -329,7 +313,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   ProfileCard genderCard() {
     return ProfileCard(
-        icon: Icons.animation,
+        icon: Icons.animation_rounded,
         title: 'Gender',
         subtitle: user?.gender ?? '...');
   }
@@ -354,7 +338,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 180,
             child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
           ),
-         
         ],
       ),
     );

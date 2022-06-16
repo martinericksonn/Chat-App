@@ -207,8 +207,45 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  String formatDateReceived(ChatList chatList) {
+    if (chatList.ts
+            .toDate()
+            .compareTo(DateTime.now().subtract(Duration(days: 1))) ==
+        -1) {
+      if (chatList.ts
+              .toDate()
+              .compareTo(DateTime.now().subtract(Duration(days: 7))) ==
+          -1) {
+        return DateFormat("d MMM").format(chatList.ts.toDate());
+      } else {
+        return DateFormat("EEE").format(chatList.ts.toDate());
+      }
+    } else {
+      return DateFormat("hh:mm aaa").format(chatList.ts.toDate());
+    }
+  }
+
   ListTile messageListTile(BuildContext context, ChatList chatList,
       AsyncSnapshot<ChatUser> chatUser) {
+    // print(chatList.ts
+    //     .toDate()
+    //     .compareTo(DateTime.now().subtract(Duration(days: 1))));
+    // if (chatList.ts
+    //         .toDate()
+    //         .compareTo(DateTime.now().subtract(Duration(days: 1))) ==
+    //     -1) {
+    //   if (chatList.ts
+    //           .toDate()
+    //           .compareTo(DateTime.now().subtract(Duration(days: 7))) ==
+    //       -1) {
+    //     print(DateFormat("d MMM").format(chatList.ts.toDate()));
+    //   } else {
+    //     print(DateFormat("d MMM").format(chatList.ts.toDate()));
+    //   }
+    // } else {
+    //   print(DateFormat("EEE").format(chatList.ts.toDate()));
+    // }
+
     return ListTile(
         onTap: () => {
               Navigator.of(context).push(
@@ -233,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )),
         leading: AvatarImage(
           uid: chatUser.data!.uid,
-          radius: 50,
+          radius: 40,
         ),
         title: Text(
           chatUser.data!.username,
@@ -247,72 +284,8 @@ class _HomeScreenState extends State<HomeScreen> {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Text("data"),
             Text(
-              DateFormat("hh:mm aaa").format(chatList.ts.toDate()),
-              style: TextStyle(
-                fontWeight: chatList.seenBy.contains(user!.uid)
-                    ? FontWeight.normal
-                    : FontWeight.bold,
-              ),
-            ),
-            chatList.seenBy.contains(user!.uid)
-                ? SizedBox()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Icon(
-                      Icons.fiber_manual_record_rounded,
-                      size: 15,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-          ],
-        ));
-  }
-
-  Widget chatTile(BuildContext context, ChatList chatList,
-      AsyncSnapshot<ChatUser> chatUser) {
-    // onTap: () => {
-    //       Navigator.of(context).push(
-    //         MaterialPageRoute(
-    //           builder: (context) =>
-    //               ChatScreenPrivate(selectedUserUID: chatUser.data!.uid),
-    //         ),
-    //       )
-    //     },
-    return ChatTile(
-        subtitle: Text(
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            chatList.sentBy == user!.uid
-                ? "You: " +
-                    (chatList.isDeleted ? "message deleted" : chatList.message)
-                : (chatList.isDeleted ? "message deleted" : chatList.message),
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontWeight: chatList.seenBy.contains(user!.uid)
-                  ? FontWeight.normal
-                  : FontWeight.bold,
-            )),
-        profile: AvatarImage(
-          uid: chatUser.data!.uid,
-          radius: 50,
-        ),
-        title: Text(
-          chatUser.data!.username,
-          style: TextStyle(
-            fontWeight: chatList.seenBy.contains(user!.uid)
-                ? FontWeight.normal
-                : FontWeight.bold,
-            // color: Theme.of(context).colorScheme.tertiary,
-          ),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Text("data"),
-            Text(
-              DateFormat("hh:mm aaa").format(chatList.ts.toDate()),
+              formatDateReceived(chatList),
               style: TextStyle(
                 fontWeight: chatList.seenBy.contains(user!.uid)
                     ? FontWeight.normal

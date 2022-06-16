@@ -30,7 +30,6 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
         });
       }
     });
-
     super.initState();
   }
 
@@ -48,6 +47,7 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
                 if (!(user?.isPrivate ?? true))
                   Column(
                     children: [
+                      usernameCard(),
                       ageCard(),
                       genderCard(),
                       dateJoinedCard(),
@@ -57,31 +57,42 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
                   SizedBox(
                     child: Text("Account is Private"),
                   ),
-                Container(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: TextButton(
-                      onPressed: () {
-                        UserSettingsController.blockUser(user!.uid);
-                        Navigator.popUntil(
-                          context,
-                          ModalRoute.withName('/'),
-                        );
-                      },
-                      child: Text(
-                        "Block User",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    )
-                    //  ListTile(
-                    //   title: Text("Block User"),
-                    // ),
-                    )
+                blockedUser(context)
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Container blockedUser(BuildContext context) {
+    return Container(
+        alignment: FractionalOffset.bottomCenter,
+        child: TextButton(
+          onPressed: () {
+            UserSettingsController.blockUser(user!.uid);
+            Navigator.popUntil(
+              context,
+              ModalRoute.withName('/'),
+            );
+          },
+          child: Text(
+            "Block User",
+            style: TextStyle(color: Colors.red),
+          ),
+        )
+        //  ListTile(
+        //   title: Text("Block User"),
+        // ),
+        );
+  }
+
+  ProfileCard usernameCard() {
+    return ProfileCard(
+        icon: Icons.account_circle_rounded,
+        title: 'Username',
+        subtitle: user?.username ?? '...');
   }
 
   ProfileCard dateJoinedCard() {
@@ -130,7 +141,7 @@ class _ProfileScreenOtherState extends State<ProfileScreenOther> {
       elevation: 0,
       centerTitle: true,
       title: Text(
-        user?.username ?? '...',
+        'User Info',
         style: Theme.of(context).textTheme.titleLarge,
       ),
     );
