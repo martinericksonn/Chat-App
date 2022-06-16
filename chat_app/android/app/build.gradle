@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.tabi.chat_app"
+        applicationId "com.tabi_tabi.chat_app"
         minSdkVersion 31
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
