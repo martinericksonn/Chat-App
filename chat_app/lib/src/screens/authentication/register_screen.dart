@@ -23,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
   bool isUsernameEmpty = false;
-  bool isAgeValid = false;
+  bool isAgeValid = true;
   bool isRegisterSuccess = false;
   String prompts = '';
 
@@ -183,18 +183,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(50)),
       child: TextButton(
         onPressed: () {
-          print("iiiiiiiiiiiiiiiiiiiiiiiiiiinz");
           if (_formKey.currentState!.validate() && isFieldEmpty()) {
-            print("iiiiiiiiiiiiiiiiiiiiiiiiiiin");
             setState(() {
-              var username = UsernameGen().generate();
-              print(username);
-
               register();
             });
           } else {
             setState(() {
-              prompts = "Fields cannot be empty";
+              print(isAgeValid);
+
+              prompts = isAgeValid
+                  ? "Fields cannot be empty"
+                  : "Sorry, you're too young for this app";
             });
           }
         },
@@ -292,10 +291,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
-              color: isAgeValid
+              color: !isAgeValid
                   ? Colors.red
                   : Theme.of(context).colorScheme.primary, // set border
-              width: isAgeValid ? 2.0 : 1.0,
+              width: !isAgeValid ? 2.0 : 1.0,
             ), // set
             // color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20)),
@@ -305,16 +304,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
           ],
           validator: (value) {
+            print(isAgeValid);
+            print(value);
             setState(() {
-              if ((value == null || value.isEmpty)) {
+              if ((value == null ||
+                  value.isEmpty ||
+                  (int.parse(value) < 18 && int.parse(value) > 100))) {
+                print("value");
                 isAgeValid = false;
-                print('111111111111111111');
-              } else {
-                if (int.parse(value) < 18 && int.parse(value) < 100) {
-                  print('1111111111122221111111');
-                  isAgeValid = false;
-                  prompts = "Age cannot be less than 18";
-                }
+              } else if (!(int.parse(value) < 18 && int.parse(value) > 100)) {
+                isAgeValid = true;
               }
             });
             return null;
@@ -328,7 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: isAgeValid
+                color: !isAgeValid
                     ? Colors.red
                     : Theme.of(context).colorScheme.primary),
             hintText: "Age",
@@ -505,9 +504,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool isFieldEmpty() {
-    print("isAgeValid");
-    print(isAgeValid);
-    return false;
-    // return !(isEmailEmpty && isPasswordEmpty && isAgeValid);
+    return !(isEmailEmpty || isPasswordEmpty || !isAgeValid);
   }
 }
