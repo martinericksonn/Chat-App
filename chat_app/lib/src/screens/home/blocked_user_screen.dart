@@ -51,7 +51,14 @@ class _BlockedUserScreenState extends State<BlockedUserScreen> {
                 SizedBox(
                   height: 300,
                   child: Center(
-                    child: Text("No Blocked Tabians"),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Image(
+                        image: AssetImage("assets/images/block-user.png"), height: 200, width: 200),
+                        Text("No Blocked Tabians"),
+                      ],
+                    ),
                   ),
                 )
               else
