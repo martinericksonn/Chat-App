@@ -3,9 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../controllers/chat_controller.dart';
-import '../models/chat_message_model.dart';
 
 class ImageService {
   static updateProfileImage() async {
@@ -20,6 +18,7 @@ class ImageService {
         File file = File(image.path);
         print(image.path);
         TaskSnapshot result = await profileRef.putFile(file);
+        print(result);
         String publicUrl = await profileRef.getDownloadURL();
         print(publicUrl);
         FirebaseFirestore.instance

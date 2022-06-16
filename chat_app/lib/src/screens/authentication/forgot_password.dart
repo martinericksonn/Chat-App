@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/auth_controller.dart';
 
-class ForgetPassScreen extends StatefulWidget {
+class ForgotPassScreen extends StatefulWidget {
   final AuthController auth;
 
-  const ForgetPassScreen(
+  const ForgotPassScreen(
     this.auth, {
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
+  State<ForgotPassScreen> createState() => _ForgotPassScreenState();
 }
 
-class _ForgetPassScreenState extends State<ForgetPassScreen> {
+class _ForgotPassScreenState extends State<ForgotPassScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isEmailEmpty = false;
   String prompts = '';
@@ -187,13 +187,13 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
     );
   }
 
-  Container forgetPassword(BuildContext context) {
+  Container forgotPassword(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
         onPressed: () {},
         child: Text(
-          "Forget password?",
+          "Forgot password?",
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -211,7 +211,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           Text(
-            "Forget Password?.",
+            "Forgot Password?.",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

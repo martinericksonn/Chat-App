@@ -1,21 +1,15 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/blocked_user_screen.dart';
 import 'package:chat_app/src/screens/home/edit_profile_screen.dart';
-
 import 'package:chat_app/src/service_locators.dart';
-import 'package:chat_app/src/services/image_service.dart';
 import 'package:chat_app/src/settings/settings_controller.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/profile_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-
 import '../../controllers/geolocation_controller.dart';
 import '../../controllers/user_settings_controller.dart';
 
@@ -26,6 +20,8 @@ class ProfileScreen extends StatefulWidget {
       : super(key: key);
   SettingsController settingsController;
   GeolocationController geoCon;
+  
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -36,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final UserSettingsController userSC = UserSettingsController();
   final AuthController _auth = locator<AuthController>();
+  
 
   ChatUser? user;
 
@@ -357,24 +354,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 180,
             child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
           ),
-          Positioned(
-            right: 15,
-            bottom: 0,
-            child: InkWell(
-              onTap: () {
-                ImageService.updateProfileImage();
-              },
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 30,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-              ),
-            ),
-          ),
+         
         ],
       ),
     );

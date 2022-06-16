@@ -1,9 +1,5 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
-
 import 'package:flutter/material.dart';
-
 import '../../controllers/auth_controller.dart';
-import '../../controllers/geolocation_controller.dart';
 
 class RegisterScreen extends StatefulWidget {
   final AuthController auth;
@@ -138,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               style: TextButton.styleFrom(
                 // backgroundColor: Colors.red,
-                minimumSize: Size(10, 10),
+                minimumSize: const Size(10, 10),
                 padding: EdgeInsets.zero,
               ),
               child: Text(
@@ -221,9 +217,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Container title() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       alignment: Alignment.topLeft,
-      child: Text(
+      child: const Text(
         "Join Tabi-Tabi now.",
         style: TextStyle(
           fontSize: 18,
@@ -235,8 +231,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Container genderDropDownButton(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5),
-      padding: EdgeInsets.all(15),
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
           border: Border.all(
             color: Theme.of(context).colorScheme.primary, // set border
@@ -246,7 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(20)),
       child: DropdownButtonFormField(
         value: dropdownValue,
-        icon: Icon(Icons.arrow_drop_down),
+        icon: const Icon(Icons.arrow_drop_down),
         decoration: InputDecoration(
           labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
           labelText: "Gender",
@@ -279,8 +275,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Container ageTextField(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
               color: isAgeEmpty
@@ -299,7 +295,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             return null;
           },
           keyboardType: TextInputType.number,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -312,15 +308,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : Theme.of(context).colorScheme.primary),
             hintText: "Age",
             contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
           ),
         ));
   }
 
   Container passwordTextField(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
               color: isPasswordEmpty
@@ -342,7 +338,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           obscureText: true,
           enableSuggestions: false,
           autocorrect: false,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -355,15 +351,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : Theme.of(context).colorScheme.primary),
             hintText: "Password",
             contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
           ),
         ));
   }
 
   Container usernameTextField(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
               color: isUsernameEmpty
@@ -381,7 +377,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             });
             return null;
           },
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -394,15 +390,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : Theme.of(context).colorScheme.primary),
             hintText: "Username",
             contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
           ),
         ));
   }
 
   Container emailTextField(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
               color: isEmailEmpty
@@ -422,7 +418,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             });
             return null;
           },
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -435,7 +431,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : Theme.of(context).colorScheme.primary),
             hintText: "Email",
             contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
           ),
         ));
   }
@@ -462,8 +458,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height * 0.40,
-        padding: EdgeInsets.only(top: 18.0),
-        child: Image(
+        padding: const EdgeInsets.only(top: 18.0),
+        child: const Image(
           image: AssetImage("assets/images/register.png"),
         ),
       )

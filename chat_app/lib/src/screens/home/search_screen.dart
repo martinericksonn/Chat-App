@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/avatar.dart';
-import 'chats_screen copy.dart';
+import 'chats_screen_copy.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({Key? key, required this.blocklist}) : super(key: key);
@@ -110,7 +110,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                   )
                                 : const SizedBox();
                           });
-                  ;
                 }
                 return ListView.builder(
                     itemCount: snapshot.data!.length,

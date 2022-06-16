@@ -1,12 +1,10 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import '../../controllers/auth_controller.dart';
 import '../../service_locators.dart';
 import '../home/home_screen.dart';
-import 'forget_password.dart';
+import 'forgot_password.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -97,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20),
                 emailTextField(context),
                 passwordTextField(context),
-                forgetPassword(context),
+                forgotPassword(context),
               ],
             ),
             promptMessage(),
@@ -187,16 +185,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Container forgetPassword(BuildContext context) {
+  Container forgotPassword(BuildContext context) {
     return Container(
       alignment: Alignment.topRight,
       child: TextButton(
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => ForgetPassScreen(_auth)));
+              MaterialPageRoute(builder: (context) => ForgotPassScreen(_auth)));
         },
         child: Text(
-          "Forget password?",
+          "Forgot password?",
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
           ),
