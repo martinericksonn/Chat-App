@@ -4,7 +4,7 @@ import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/screens/home/new_message.dart';
-import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
+import 'package:chat_app/src/screens/home/chats_screen_copy.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen_current.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
@@ -19,6 +19,7 @@ import '../../models/chat_user_model.dart';
 import '../../service_locators.dart';
 import '../../settings/settings_controller.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
   HomeScreen({Key? key, required this.settingsController}) : super(key: key);

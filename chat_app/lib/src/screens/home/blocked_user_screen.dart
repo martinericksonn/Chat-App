@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/service_locators.dart';
@@ -7,9 +6,8 @@ import 'package:flutter/material.dart';
 import '../../controllers/user_settings_controller.dart';
 import '../../widgets/avatar.dart';
 
-// ignore: must_be_immutable
 class BlockedUserScreen extends StatefulWidget {
-  BlockedUserScreen({Key? key, required this.blockeduser}) : super(key: key);
+  const BlockedUserScreen({Key? key, required this.blockeduser}) : super(key: key);
   final List<String> blockeduser;
   @override
   State<BlockedUserScreen> createState() => _BlockedUserScreenState();
@@ -53,7 +51,7 @@ class _BlockedUserScreenState extends State<BlockedUserScreen> {
                 SizedBox(
                   height: 300,
                   child: Center(
-                    child: Text("No blocked user"),
+                    child: Text("No Blocked Tabians"),
                   ),
                 )
               else

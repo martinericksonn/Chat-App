@@ -4,7 +4,6 @@ import 'package:chat_app/src/screens/home/image_screen.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:chat_app/src/widgets/bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
