@@ -103,19 +103,22 @@ class _ChatCardState extends State<ChatCard> {
                     if (!snap.hasData) {
                       return CircularProgressIndicator();
                     }
-                    return Row(
-                      children: [
-                        SizedBox(
-                            width: 30,
-                            child: AvatarImage(uid: snap.data?.uid ?? "")),
-                        Container(
-                            padding:
-                                EdgeInsets.only(left: 5, top: 5, bottom: 3),
-                            child: Text(
-                              '${snap.data?.username}',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            )),
-                      ],
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                              width: 30,
+                              child: AvatarImage(uid: snap.data?.uid ?? "")),
+                          Container(
+                              padding:
+                                  EdgeInsets.only(left: 5, top: 5, bottom: 3),
+                              child: Text(
+                                '${snap.data?.username}',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              )),
+                        ],
+                      ),
                     );
                   }),
             if (chat[index].isDeleted)

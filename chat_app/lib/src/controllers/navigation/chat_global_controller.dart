@@ -40,6 +40,18 @@ class ChatControllerGlobal with ChangeNotifier {
             .json);
   }
 
+  Future sendImageInGroup({required String image}) async {
+    return await FirebaseFirestore.instance
+        .collection('chats')
+        .doc('globalchat')
+        .collection('messages')
+        .add(ChatMessage(
+                sentBy: FirebaseAuth.instance.currentUser!.uid,
+                image: image,
+                message: 'sent an image',
+                isImage: true)
+            .json);
+  }
   // Future sendMessage({required String message}) {
   //   ChatMessage payload = ChatMessage(
   //     sentBy: FirebaseAuth.instance.currentUser!.uid,

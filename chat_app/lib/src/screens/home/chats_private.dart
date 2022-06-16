@@ -202,12 +202,13 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           IconButton(
-              icon: Icon(
-                Icons.add_circle,
-                color: Theme.of(context).colorScheme.primary,
-                size: 35,
-              ),
-              onPressed: () => image()),
+            icon: Icon(
+              Icons.add_circle,
+              color: Theme.of(context).colorScheme.primary,
+              size: 35,
+            ),
+            onPressed: () => image(),
+          ),
           Expanded(
             child: TextFormField(
               maxLines: null,

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../../models/chat_user_model.dart';
 
 import '../../service_locators.dart';
+import '../../services/image_service.dart';
 
 class GlobalChat extends StatefulWidget {
   const GlobalChat({Key? key}) : super(key: key);
@@ -153,6 +154,14 @@ class _GlobalChatState extends State<GlobalChat> {
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.add_circle,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 35,
+                    ),
+                    onPressed: () => sendImage(),
+                  ),
                   Expanded(
                     child: TextFormField(
                       onFieldSubmitted: (String text) {
@@ -184,6 +193,7 @@ class _GlobalChatState extends State<GlobalChat> {
                   IconButton(
                     icon: Icon(
                       Icons.send_rounded,
+                      size: 35,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: send,
@@ -195,6 +205,10 @@ class _GlobalChatState extends State<GlobalChat> {
         ),
       ),
     );
+  }
+
+  sendImage() {
+    ImageService.sendImageInGroup(_chatControllerGlobal);
   }
 
   send() {
