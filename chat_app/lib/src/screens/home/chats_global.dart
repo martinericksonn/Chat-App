@@ -86,9 +86,9 @@ class _GlobalChatState extends State<GlobalChat> {
               // color: Colors.red,
 
               child: CircleAvatar(
-                // radius: 40,
                 child: Image.asset("assets/images/tabi_lightmode.png"),
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Colors.transparent,
+
                 // backgroundImage:  DecorationImage(image: NetworkImage("urlImage"),
 
                 // backgroundImage: ,
@@ -106,7 +106,8 @@ class _GlobalChatState extends State<GlobalChat> {
           ],
         ),
       ),
-      body: SizedBox(
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -133,6 +134,7 @@ class _GlobalChatState extends State<GlobalChat> {
                                   // return Text(_chatControllerGlobal
                                   //     .chats[index].message);
                                   return ChatCard(
+                                    isGroup: true,
                                     scrollController: _scrollController,
                                     index: index,
                                     chat: _chatControllerGlobal.chats,

@@ -33,29 +33,38 @@ class NewMessage extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+      body: Container(
+        // padding: const EdgeInsets.symmetric(horizontal: 5),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              Searchbar(
-                blocklist: blocklist,
-              ),
-              newGroupChat(context),
-              ListTile(
-                title: Text(
-                  "People on Tabi",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.secondary,
+          child: RefreshIndicator(
+            onRefresh: () async {},
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Searchbar(
+                    blocklist: blocklist,
                   ),
-                ),
+                  // newGroupChat(context),
+                  title(context),
+                  showUserList(),
+                ],
               ),
-              showUserList(),
-            ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  ListTile title(BuildContext context) {
+    return ListTile(
+      title: Text(
+        "People on Tabi",
+        style: TextStyle(
+          fontSize: 14,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );
@@ -64,55 +73,56 @@ class NewMessage extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   Geoflutterfire geo = Geoflutterfire();
   var getUsers;
-  Expanded showUserList() {
+  Widget showUserList() {
     getUsers ??= ChatUser.getUsers();
-    return Expanded(
-      child: FutureBuilder<List<ChatUser>>(
-          future: getUsers,
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List<ChatUser>> snapshot,
-          ) {
-            if (!snapshot.hasData) {
-              return SizedBox();
-            }
-            return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  // GeoFirePoint myLocation =
-                  //     geo.point(latitude: 0, longitude: 0);
-                  // FirebaseFirestore.instance
-                  //     .collection('users')
-                  //     .doc(snapshot.data![index].uid)
-                  //     .update({
-                  //   'chatrooms': FieldValue.arrayUnion(["globalchat"]),
-                  // });
+    return FutureBuilder<List<ChatUser>>(
+        future: getUsers,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<ChatUser>> snapshot,
+        ) {
+          if (!snapshot.hasData) {
+            return SizedBox();
+          }
+          return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              reverse: true,
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                // GeoFirePoint myLocation =
+                //     geo.point(latitude: 0, longitude: 0);
+                // FirebaseFirestore.instance
+                //     .collection('users')
+                //     .doc(snapshot.data![index].uid)
+                //     .update({
+                //   'chatrooms': FieldValue.arrayUnion(["globalchat"]),
+                // });
 
-                  if (snapshot.data?[index].username == null) {
-                    return CircularProgressIndicator();
-                  }
-                  return snapshot.data![index].uid !=
-                              FirebaseAuth.instance.currentUser?.uid &&
-                          !blocklist.contains(snapshot.data![index].uid)
-                      ? ListTile(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => ChatScreenPrivate(
-                                      selectedUserUID:
-                                          snapshot.data![index].uid)),
-                            );
-                          },
-                          leading: AvatarImage(uid: snapshot.data![index].uid),
-                          title: Text(
-                            snapshot.data![index].username,
-                          ),
-                          subtitle: null,
-                        )
-                      : SizedBox();
-                });
-          }),
-    );
+                if (snapshot.data?[index].username == null) {
+                  return CircularProgressIndicator();
+                }
+                return snapshot.data![index].uid !=
+                            FirebaseAuth.instance.currentUser?.uid &&
+                        !blocklist.contains(snapshot.data![index].uid)
+                    ? ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => ChatScreenPrivate(
+                                    selectedUserUID:
+                                        snapshot.data![index].uid)),
+                          );
+                        },
+                        leading: AvatarImage(uid: snapshot.data![index].uid),
+                        title: Text(
+                          snapshot.data![index].username,
+                        ),
+                        subtitle: null,
+                      )
+                    : SizedBox();
+              });
+        });
   }
 
   ListTile newGroupChat(BuildContext context) {

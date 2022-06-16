@@ -126,14 +126,14 @@ class _NearbyScreenState extends State<NearbyScreen> {
                               if (geoCon.center == null) {
                                 return CircularProgressIndicator();
                               }
-                              // print("snap.data!.docs.length");
-                              // print(snap.data!.docs.length);
+
+                              print(blocklist.length);
                               return SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                    if (snap.data!.docs.length == 1)
+                                    if (snap.data!.docs.length < 2)
                                       Column(
                                         children: [
                                           SizedBox(

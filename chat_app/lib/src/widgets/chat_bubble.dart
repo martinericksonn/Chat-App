@@ -15,14 +15,17 @@ import '../models/chat_message_model.dart';
 class ChatCard extends StatefulWidget {
   const ChatCard(
       {Key? key,
+      this.isGroup = false,
       required this.index,
       required this.scrollController,
       required this.chatroom,
       required this.chat,
       required this.recipient})
       : super(key: key);
+
   final ScrollController scrollController;
   final int index;
+  final bool isGroup;
   final List<ChatMessage> chat;
   final String chatroom;
   final String recipient;
@@ -32,7 +35,7 @@ class ChatCard extends StatefulWidget {
 
 class _ChatCardState extends State<ChatCard> {
   var isVisible = false;
-
+  double space = 0;
   List<ChatMessage> get chat => widget.chat;
   ScrollController get scrollController => widget.scrollController;
   int get index => widget.index;
@@ -104,7 +107,9 @@ class _ChatCardState extends State<ChatCard> {
                       return CircularProgressIndicator();
                     }
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0),
+                      padding: widget.isGroup
+                          ? EdgeInsets.only(top: 20.0, bottom: 5)
+                          : EdgeInsets.only(top: 10.0, bottom: 5),
                       child: Row(
                         children: [
                           SizedBox(
@@ -122,11 +127,26 @@ class _ChatCardState extends State<ChatCard> {
                     );
                   }),
             if (chat[index].isDeleted)
-              deletedMessage(context)
+              Container(
+                padding: widget.isGroup
+                    ? EdgeInsets.only(left: space)
+                    : EdgeInsets.only(left: 0),
+                child: deletedMessage(context),
+              )
             else if (chat[index].isImage)
-              imageMessage(context)
+              Container(
+                padding: widget.isGroup
+                    ? EdgeInsets.only(left: space)
+                    : EdgeInsets.only(left: 0),
+                child: imageMessage(context),
+              )
             else
-              stringMessage(context),
+              Container(
+                padding: widget.isGroup
+                    ? EdgeInsets.only(left: space)
+                    : EdgeInsets.only(left: 0),
+                child: stringMessage(context),
+              ),
           ],
         ),
       ),

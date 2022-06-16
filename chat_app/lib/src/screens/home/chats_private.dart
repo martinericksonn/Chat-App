@@ -122,11 +122,15 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
                   SizedBox(
                     width: 15,
                   ),
-                  Text(
-                    selectedUser.data!.username,
-                    style: TextStyle(
-                        fontSize: 21,
-                        color: Theme.of(context).textTheme.bodyLarge!.color),
+                  Flexible(
+                    child: Text(
+                      selectedUser.data!.username,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 21,
+                          color: Theme.of(context).textTheme.bodyLarge!.color),
+                    ),
                   ),
                 ],
               ),

@@ -93,7 +93,7 @@ class ChatUser {
         'blocklistedme': blocklistedme
       };
 
-    Future updateUsername(String newUsername) {
+  Future updateUsername(String newUsername) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(uid)

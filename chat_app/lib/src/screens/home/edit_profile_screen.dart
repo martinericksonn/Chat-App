@@ -1,3 +1,6 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:chat_app/src/controllers/user_settings_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,26 +9,24 @@ import 'package:flutter/material.dart';
 import '../../services/image_service.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key? key}) : super(key: key);
-
+  EditProfile({Key? key, required this.uid}) : super(key: key);
+  String uid;
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
-  final TextEditingController _unCon = TextEditingController();
-  final FocusNode _messageFN = FocusNode();
-  // final ChatUser chatUser;
+final TextEditingController _unCon = TextEditingController();
+final FocusNode _messageFN = FocusNode();
+// final ChatUser chatUser;
 
 class _EditProfileState extends State<EditProfile> {
-
- 
+  String get uid => widget.uid;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
       body: SingleChildScrollView(
         child: Column(
-          
           children: [
             profilePic(context),
             lowerBody(context),
@@ -36,19 +37,23 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Padding lowerBody(BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0),
-        child: SizedBox(
-           height: MediaQuery.of(context).size.height * .75,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              usernameTextField(context),
-              submitButton(context),
-            ],
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * .75,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            usernameTextField(context),
+            submitButton(context),
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Padding profilePic(BuildContext context) {
@@ -100,7 +105,6 @@ class _EditProfileState extends State<EditProfile> {
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          
             border: Border.all(
               color: Theme.of(context).colorScheme.primary,
               // width: isUsernameEmpty ? 2.0 : 1.0,
@@ -108,6 +112,7 @@ class _EditProfileState extends State<EditProfile> {
             // color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20)),
         child: TextFormField(
+          maxLength: 20,
           controller: _unCon,
           focusNode: _messageFN,
           // validator: (value) {
@@ -118,6 +123,7 @@ class _EditProfileState extends State<EditProfile> {
           // },
           style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: const InputDecoration(
+            counterText: '',
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -133,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ));
   }
-  
+
   Widget submitButton(BuildContext context) {
     return Container(
       // color: Colors.red,
@@ -144,11 +150,11 @@ class _EditProfileState extends State<EditProfile> {
           borderRadius: BorderRadius.circular(50)),
       child: TextButton(
         onPressed: () {
-            // if (_unCon.text != '')
-            //         {
-            //          chatUser.updateUsername(_unCon.text);
-            //           Navigator.of(context).pop();
-            //         }
+          if (_unCon.text != '') {
+            UserSettingsController.changeUsername(
+                uid: uid, username: _unCon.text.trim());
+            Navigator.of(context).pop();
+          }
         },
         child: Center(
           child: Text(
@@ -164,5 +170,4 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
-
 }

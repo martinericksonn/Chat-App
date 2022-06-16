@@ -35,4 +35,10 @@ class UserSettingsController {
           FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
     });
   }
+
+  static changeUsername({required String username, required String uid}) {
+    return FirebaseFirestore.instance.collection('users').doc(uid).update({
+      'username': username,
+    });
+  }
 }

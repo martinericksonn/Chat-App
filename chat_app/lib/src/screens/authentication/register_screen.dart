@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:username_gen/username_gen.dart';
 import '../../controllers/auth_controller.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -19,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isEmailEmpty = false;
   bool isPasswordEmpty = false;
   bool isUsernameEmpty = false;
-  bool isAgeEmpty = false;
+  bool isAgeValid = false;
   bool isRegisterSuccess = false;
   String prompts = '';
 
@@ -93,6 +97,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               children: [
                 registerButton(context),
+                SizedBox(
+                  height: 5,
+                ),
                 loginButton(context),
               ],
             ),
@@ -152,7 +159,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> register() async {
     try {
       await _auth.register(
-        username: _unCon.text.trim(),
+        username:
+            _unCon.text.isEmpty ? UsernameGen().generate() : _unCon.text.trim(),
         email: _emailCon.text.trim(),
         password: _passCon.text.trim(),
         age: _ageCon.text.trim(),
@@ -175,8 +183,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(50)),
       child: TextButton(
         onPressed: () {
+          print("iiiiiiiiiiiiiiiiiiiiiiiiiiinz");
           if (_formKey.currentState!.validate() && isFieldEmpty()) {
+            print("iiiiiiiiiiiiiiiiiiiiiiiiiiin");
             setState(() {
+              var username = UsernameGen().generate();
+              print(username);
+
               register();
             });
           } else {
@@ -279,18 +292,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
-              color: isAgeEmpty
+              color: isAgeValid
                   ? Colors.red
                   : Theme.of(context).colorScheme.primary, // set border
-              width: isAgeEmpty ? 2.0 : 1.0,
+              width: isAgeValid ? 2.0 : 1.0,
             ), // set
             // color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20)),
         child: TextFormField(
           controller: _ageCon,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ],
           validator: (value) {
             setState(() {
-              isAgeEmpty = (value == null || value.isEmpty) ? true : false;
+              if ((value == null || value.isEmpty)) {
+                isAgeValid = false;
+                print('111111111111111111');
+              } else {
+                if (int.parse(value) < 18 && int.parse(value) < 100) {
+                  print('1111111111122221111111');
+                  isAgeValid = false;
+                  prompts = "Age cannot be less than 18";
+                }
+              }
             });
             return null;
           },
@@ -303,7 +328,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: isAgeEmpty
+                color: isAgeValid
                     ? Colors.red
                     : Theme.of(context).colorScheme.primary),
             hintText: "Age",
@@ -362,33 +387,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             border: Border.all(
-              color: isUsernameEmpty
-                  ? Colors.red
-                  : Theme.of(context).colorScheme.primary,
-              width: isUsernameEmpty ? 2.0 : 1.0,
+              color: Theme.of(context).colorScheme.primary,
+              width: 1.0,
             ), // set
             // color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20)),
         child: TextFormField(
+          maxLength: 20,
           controller: _unCon,
           validator: (value) {
             setState(() {
-              isUsernameEmpty = (value == null || value.isEmpty) ? true : false;
+              // isUsernameEmpty = (value == null || value.isEmpty) ? true : false;
             });
             return null;
           },
           style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
+            counterText: '',
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-            hintStyle: TextStyle(
-                color: isUsernameEmpty
-                    ? Colors.red
-                    : Theme.of(context).colorScheme.primary),
-            hintText: "Username",
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+            hintText: "Username (optional)",
             contentPadding:
                 const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
           ),
@@ -483,6 +505,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool isFieldEmpty() {
-    return !(isEmailEmpty || isPasswordEmpty || isUsernameEmpty || isAgeEmpty);
+    print("isAgeValid");
+    print(isAgeValid);
+    return false;
+    // return !(isEmailEmpty && isPasswordEmpty && isAgeValid);
   }
 }

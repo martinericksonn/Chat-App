@@ -177,6 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       title: Text("Theme"),
       trailing: DropdownButton<ThemeMode>(
+        dropdownColor: Theme.of(context).colorScheme.tertiary,
         elevation: 1,
         underline: SizedBox(),
         value: settingsController.themeMode,
@@ -404,7 +405,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => EditProfile(),
+                builder: (context) => EditProfile(uid: user!.uid),
               ),
             );
           },

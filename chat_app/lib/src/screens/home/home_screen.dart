@@ -76,14 +76,16 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(child: CircularProgressIndicator());
           }
           List<dynamic> blocklist = [];
+          String username = '';
           for (var doc in snap.data!.docs) {
+            username = doc['username'];
             blocklist.addAll(doc["blocklistedme"]);
             blocklist.addAll(doc["blocklist"]);
             print(blocklist);
           }
           return Scaffold(
             resizeToAvoidBottomInset: true,
-            appBar: appBar(blocklist),
+            appBar: appBar(blocklist, username),
             body: body(context, blocklist),
             floatingActionButton: floatingButton(context, blocklist),
           );
@@ -121,9 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Searchbar(blocklist: blocklist),
               globalChat(context),
-              // Divider(
-              //   color: Theme.of(context).colorScheme.tertiary,
-              // ),
               messageList(blocklist),
             ],
           ),
@@ -329,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  AppBar appBar(blocklist) {
+  AppBar appBar(blocklist, String username) {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       automaticallyImplyLeading: false,
@@ -362,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Flexible(
             child: Text(
-              user?.username ?? '...',
+              username,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style: Theme.of(context).textTheme.titleLarge,
