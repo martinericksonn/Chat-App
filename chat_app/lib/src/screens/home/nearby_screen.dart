@@ -67,7 +67,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 5.0),
                   child: Text(
-                      "With on device location, geocoding and geolocator, find nearby allows you to find people near you"),
+                      "Find nearby feature will allow you to find other people near you in real time."),
                 ),
                 trailing: Padding(
                   padding: const EdgeInsets.only(top: 5.0),
@@ -81,7 +81,6 @@ class _NearbyScreenState extends State<NearbyScreen> {
                               await geoCon.enableGeolocationStream();
                               await geoCon.getCurrentPosition().then((value) {
                                 currentPosition = value;
-
                                 // print(value);
                               });
                             } else {

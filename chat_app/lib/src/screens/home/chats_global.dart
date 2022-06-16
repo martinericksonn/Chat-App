@@ -98,7 +98,7 @@ class _GlobalChatState extends State<GlobalChat> {
               width: 15,
             ),
             Text(
-              "Tabi Global",
+              "Tabi-Tabi Global",
               style: TextStyle(
                   fontSize: 21,
                   color: Theme.of(context).textTheme.bodyLarge!.color),

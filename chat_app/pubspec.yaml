@@ -38,6 +38,7 @@ flutter_native_splash:
   color: "#f9f9f9"
   image_dark: assets/images/tabi_darkmode.png
   color_dark: "#000000"
+  ios: true
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.2"
