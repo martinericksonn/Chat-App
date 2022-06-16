@@ -332,6 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar appBar(blocklist) {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      automaticallyImplyLeading: false,
       elevation: 0,
       title: Row(
         children: [
