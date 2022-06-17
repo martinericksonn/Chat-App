@@ -7,7 +7,8 @@ import '../../controllers/user_settings_controller.dart';
 import '../../widgets/avatar.dart';
 
 class BlockedUserScreen extends StatefulWidget {
-  const BlockedUserScreen({Key? key, required this.blockeduser}) : super(key: key);
+  const BlockedUserScreen({Key? key, required this.blockeduser})
+      : super(key: key);
   final List<String> blockeduser;
   @override
   State<BlockedUserScreen> createState() => _BlockedUserScreenState();
@@ -36,6 +37,7 @@ class _BlockedUserScreenState extends State<BlockedUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(
           "Blocked User",
           style: TextStyle(
@@ -55,7 +57,9 @@ class _BlockedUserScreenState extends State<BlockedUserScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [
                         Image(
-                        image: AssetImage("assets/images/block-user.png"), height: 200, width: 200),
+                            image: AssetImage("assets/images/block-user.png"),
+                            height: 200,
+                            width: 200),
                         Text("No Blocked Tabians"),
                       ],
                     ),

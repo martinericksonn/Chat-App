@@ -39,6 +39,7 @@ class _GlobalChatState extends State<GlobalChat> {
       }
     });
     _chatControllerGlobal.addListener(scrollToBottom);
+    _messageFN.addListener(scrollToBottom);
     super.initState();
   }
 
@@ -106,8 +107,7 @@ class _GlobalChatState extends State<GlobalChat> {
           ],
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(

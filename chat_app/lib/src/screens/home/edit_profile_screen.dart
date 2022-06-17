@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_const_constructors
 
 import 'package:chat_app/src/controllers/user_settings_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
@@ -40,11 +40,16 @@ class _EditProfileState extends State<EditProfile> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 28.0),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * .75,
+        height: MediaQuery.of(context).size.height * .98,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            usernameTextField(context),
+            Column(
+              children: [
+                title(),
+                usernameTextField(context),
+              ],
+            ),
             submitButton(context),
             Padding(
               padding: EdgeInsets.only(
@@ -52,6 +57,26 @@ class _EditProfileState extends State<EditProfile> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Container title() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      alignment: Alignment.topLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          Text(
+            "Change username",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -158,7 +183,7 @@ class _EditProfileState extends State<EditProfile> {
         },
         child: Center(
           child: Text(
-            "Submit",
+            "Save",
             style: TextStyle(
               fontSize: 18,
               color: Theme.of(context).scaffoldBackgroundColor,

@@ -34,35 +34,34 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
 
   @override
   void initState() {
-    print('ChatScreen IN');
-    print(selectedUserUID);
     _chatController.initChatRoom(
         _chatController.generateRoomId(selectedUserUID), selectedUserUID);
-    print('ChatScreen END');
+
     _chatController.addListener(scrollToBottom);
+    _messageFN.addListener(scrollToBottom);
     super.initState();
   }
 
   scrollToBottom() async {
     await Future.delayed(const Duration(milliseconds: 250));
-    print('scrolling to bottom');
+
     if (_scrollController.hasClients) {
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
           curve: Curves.easeIn, duration: const Duration(milliseconds: 250));
     }
   }
 
-  scrollBottom() async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    print('scrolling to bottom');
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-          _scrollController.position.viewportDimension +
-              _scrollController.position.maxScrollExtent,
-          curve: Curves.easeIn,
-          duration: const Duration(milliseconds: 250));
-    }
-  }
+  // scrollBottom() async {
+  //   await Future.delayed(const Duration(milliseconds: 250));
+  //   print('scrolling to bottom');
+  //   if (_scrollController.hasClients) {
+  //     _scrollController.animateTo(
+  //         _scrollController.position.viewportDimension +
+  //             _scrollController.position.maxScrollExtent,
+  //         curve: Curves.easeIn,
+  //         duration: const Duration(milliseconds: 250));
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -186,8 +185,7 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
         child: Column(
           children: [
             message(),
@@ -214,29 +212,32 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
             onPressed: () => image(),
           ),
           Expanded(
-            child: TextFormField(
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              style: TextStyle(fontWeight: FontWeight.normal),
-              focusNode: _messageFN,
-              controller: _messageController,
-              decoration: InputDecoration(
-                // prefixIcon: Icon(Icons.image_rounded),
-                isDense: true,
-                contentPadding: EdgeInsets.all(12),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide(
-                    width: 1,
-                    color: Theme.of(context).colorScheme.primary,
+            child: GestureDetector(
+              onTap: () => scrollToBottom(),
+              child: TextFormField(
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                style: TextStyle(fontWeight: FontWeight.normal),
+                focusNode: _messageFN,
+                controller: _messageController,
+                decoration: InputDecoration(
+                  // prefixIcon: Icon(Icons.image_rounded),
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(12),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
                   ),
                 ),
               ),
@@ -281,10 +282,6 @@ class _ChatScreenPrivateState extends State<ChatScreenPrivate> {
                             recipient: selectedUserUID,
                           );
                         }),
-
-                    // for (ChatMessage chat in _chatController.chats)
-                    //   ChatCard(
-                    //       chat: chat, chatController: _chatController)
                   ],
                 ),
               ),

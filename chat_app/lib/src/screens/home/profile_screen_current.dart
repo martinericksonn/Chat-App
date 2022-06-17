@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
+import 'package:chat_app/src/screens/home/about_us.dart';
 import 'package:chat_app/src/screens/home/blocked_user_screen.dart';
 import 'package:chat_app/src/screens/home/edit_profile_screen.dart';
 import 'package:chat_app/src/service_locators.dart';
@@ -98,6 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
+
               ListTile(
                 onTap: () => {
                   resetPass(),
@@ -109,6 +111,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 title: Text(
                   "Password Reset",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () => {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AboutTabiScreen(),
+                    ),
+                  )
+                },
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.chat_rounded),
+                ),
+                title: Text(
+                  "About Tabi Tabi",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -242,6 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         geoCon.currentPosition != null ? "Enabled" : 'Disabled',
         style: TextStyle(
           fontSize: 16,
+          color: Theme.of(context).colorScheme.secondary,
           fontWeight: FontWeight.w500,
         ),
       ),
