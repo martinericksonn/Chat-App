@@ -177,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           action: SnackBarAction(
-            label: 'ok',
+            label: 'Ok',
             onPressed: () {},
           ),
         );
