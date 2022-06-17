@@ -3,7 +3,7 @@
 # Tabi-Tabi
 
 Mobile Application Development 2 - Final Project  
-Realtime chat with nearby users privately and globally  
+Realtime chat privately with find nearby feature
 Apk download: https://github.com/martinericksonn/Tabi-Tabi_Chat-App/releases
 
 ## Features
