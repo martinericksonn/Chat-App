@@ -1,12 +1,10 @@
  <img src="chat_app/assets/images/tabi_lightmode.png" alt="Logo" width="80" height="80">
 
-# Tabi-Tabi Chat App
+# Tabi-Tabi
 
-Mobile Application Development 2 - Final Project
-
-<!-- ## Description
-
-Chat app -->
+Mobile Application Development 2 - Final Project  
+Realtime chat with nearby users privately and globally  
+Apk download: https://github.com/martinericksonn/Tabi-Tabi_Chat-App/releases
 
 ## Features
 
@@ -55,6 +53,24 @@ Chat app -->
 - Log in
 - Forget password
 - Auto logged in (if already logged in)
+
+## Screenshots
+
+|                                                     |                                                       |
+| :-------------------------------------------------: | :---------------------------------------------------: |
+| <img src="screenshots/light_login.jpg" width="300"> | <img src="screenshots/dark_settings.jpg" width="300"> |
+
+|                                                          |                                                   |
+| :------------------------------------------------------: | :-----------------------------------------------: |
+| <img src="screenshots/light_newmessage.jpg" width="300"> | <img src="screenshots/dark_home.jpg" width="300"> |
+
+|                                                      |                                                 |
+| :--------------------------------------------------: | :---------------------------------------------: |
+| <img src="screenshots/light_global.jpg" width="300"> | <img src="screenshots/dark_dm.jpg" width="300"> |
+
+|                                                         |                                                     |
+| :-----------------------------------------------------: | :-------------------------------------------------: |
+| <img src="screenshots/light_abouttabi.jpg" width="300"> | <img src="screenshots/dark_nearby.jpg" width="300"> |
 
 ## Developers
 
