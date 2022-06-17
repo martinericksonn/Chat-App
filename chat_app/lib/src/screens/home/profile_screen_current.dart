@@ -175,7 +175,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         foregroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.dark_mode_rounded),
       ),
-      title: Text("Theme"),
+      title: Text(
+        "Theme",
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       trailing: DropdownButton<ThemeMode>(
         dropdownColor: Theme.of(context).colorScheme.tertiary,
         elevation: 1,
@@ -225,7 +231,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         foregroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.location_on_rounded),
       ),
-      title: Text("Location"),
+      title: Text(
+        "Location",
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       trailing: Text(
         geoCon.currentPosition != null ? "Enabled" : 'Disabled',
         style: TextStyle(
@@ -245,25 +257,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget accountPrivacyChange(BuildContext context) {
-    // return FutureBuilder(
-    //     future: FirebaseFirestore.instance
-    //         .collection('users')
-    //         .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    //         .get(),
-    //     builder: ((context, snapshot) {
-    //       print(FirebaseAuth.instance.currentUser!.uid);
-    //       if (!snapshot.hasData) return CircularProgressIndicator();
-    //       return SizedBox(
-    //         child: Column(
-    //           children: [
-    //           for (var doc in snapshot.data!.docs)
-
-    //           ],
-
-    //           snapshot.data!),
-    //       );
-    //     }));
-
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('users')

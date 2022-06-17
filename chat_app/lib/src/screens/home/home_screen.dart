@@ -3,13 +3,13 @@
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/models/chat_list_model.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
-import 'package:chat_app/src/screens/home/chats_screen%20copy.dart';
+
 import 'package:chat_app/src/screens/home/new_message.dart';
 import 'package:chat_app/src/screens/home/chats_private.dart';
 import 'package:chat_app/src/screens/home/nearby_screen.dart';
 import 'package:chat_app/src/screens/home/profile_screen_current.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
-import 'package:chat_app/src/widgets/chat_tiles.dart';
+
 import 'package:chat_app/src/widgets/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
         builder:
             (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
           if (!snap.hasData) {
-            print("no");
             return Center(child: CircularProgressIndicator());
           }
           List<dynamic> blocklist = [];
@@ -186,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _chatListController.chats[index].uid,
                     FirebaseAuth.instance.currentUser!.uid);
                 if (user == null) {
-                  return CircularProgressIndicator();
+                  return Center(child: CircularProgressIndicator());
                 }
                 if (_chatListController.chats[index].uid !=
                         FirebaseAuth.instance.currentUser!.uid &&
