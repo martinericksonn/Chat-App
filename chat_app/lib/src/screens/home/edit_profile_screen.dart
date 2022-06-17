@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:chat_app/src/controllers/user_settings_controller.dart';
-import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:chat_app/src/widgets/avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +13,11 @@ class EditProfile extends StatefulWidget {
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
+final _formKey = GlobalKey<FormState>();
 
 final TextEditingController _unCon = TextEditingController();
 final FocusNode _messageFN = FocusNode();
-// final ChatUser chatUser;
+
 
 class _EditProfileState extends State<EditProfile> {
   String get uid => widget.uid;
@@ -29,6 +29,7 @@ class _EditProfileState extends State<EditProfile> {
         child: Column(
           children: [
             profilePic(context),
+             
             lowerBody(context),
           ],
         ),
@@ -116,9 +117,7 @@ class _EditProfileState extends State<EditProfile> {
           controller: _unCon,
           focusNode: _messageFN,
           // validator: (value) {
-          //   setState(() {
-          //     isUsernameEmpty = (value == null || value.isEmpty) ? true : false;
-          //   });
+          //   if(value.isEmpty && value.)
           //   return null;
           // },
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -129,11 +128,11 @@ class _EditProfileState extends State<EditProfile> {
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
+            hintText: 'Username',
             // hintStyle: TextStyle(
             //     color: isUsernameEmpty
             //         ? Colors.red
             //         : Theme.of(context).colorScheme.primary),
-            hintText: "Username",
             contentPadding:
                 EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
           ),
@@ -170,4 +169,5 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
 }
