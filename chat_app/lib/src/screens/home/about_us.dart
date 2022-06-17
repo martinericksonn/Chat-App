@@ -27,7 +27,7 @@ class AboutTabiScreen extends StatelessWidget {
                   profilePic(context),
                   title(context),
                   SizedBox(
-                    height: 30,
+                    height: 5,
                   ),
                   theDevelopers(context),
                 ],
@@ -65,99 +65,98 @@ class AboutTabiScreen extends StatelessWidget {
     );
   }
 
-  Padding theDevelopers(context) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Column(
-        // ignore: prefer_const_literals_to_create_immutables
-        children: [
-          // Text(
-          //   "The Developers:",
-          //   style: TextStyle(
-          //     color: Theme.of(context).colorScheme.secondary,
-          //     fontWeight: FontWeight.w500,
-          //     fontSize: 16,
-          //   ),
-          // ),
-          SizedBox(
-            height: 10,
+  Column theDevelopers(context) {
+    return Column(
+      // ignore: prefer_const_literals_to_create_immutables
+      children: [
+        Text(
+          "Meet the Developers:",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
           ),
-          Column(
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        Column(
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage("assets/images/martin.jpg"),
+              // backgroundColor: Colors.red,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text("Martin Erickson Lapetaje", style: textStyle),
+            Text("BSCS-3"),
+          ],
+        ),
+
+        SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              AvatarImage(
-                uid: "mWvWyIwldUXrUzaSjeVV5X2FAqk2",
-                radius: 50,
+              Column(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/franz.jpg"),
+                    radius: 50,
+                  ),
+                  // CircleAvatar(
+                  //   radius: 50,
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Franz Lesly Rocha", style: textStyle),
+                  Text("BSIT-3"),
+                ],
               ),
-              SizedBox(
-                height: 10,
+              Column(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("assets/images/lloyde.jpg"),
+                    // backgroundColor: Colors.red,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("John Lloyde Quizeo", style: textStyle),
+                  Text(
+                    "BSIT-3",
+                  ),
+                ],
               ),
-              Text("Martin Erickson Lapetaje", style: textStyle),
-              Text("BSCS-3"),
             ],
           ),
+        ),
 
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    AvatarImage(
-                      uid: "7Zmz2iboQkX9Fsye9tNS7QYhVJx1",
-                      radius: 50,
-                    ),
-                    // CircleAvatar(
-                    //   radius: 50,
-                    // ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text("Franz Lesly Rocha", style: textStyle),
-                    Text("BSIT-3"),
-                  ],
-                ),
-                Column(
-                  children: [
-                    AvatarImage(
-                      uid: "Eko5ToDMmWg3Tsl8QiA7BUHqhuK2",
-                      radius: 50,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text("John Lloyde Quizeo", style: textStyle),
-                    Text(
-                      "BSIT-3",
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+        // SizedBox(
+        //   height: 3,
+        // ),
+        // Text("Franz Lesly Rocha, BSIT-3", style: textStyle),
+        // SizedBox(
+        //   height: 1,
+        // ),
+        // Text("Martin Erickson Lapetaje, BSCS-3", style: textStyle),
+        // SizedBox(
+        //   height: 1,
+        // ),
+        // Text("John Lloyde Quizeo, BSIT-3", style: textStyle),
+        // SizedBox(
+        //   height: 100,
+        // ),
 
-          // SizedBox(
-          //   height: 3,
-          // ),
-          // Text("Franz Lesly Rocha, BSIT-3", style: textStyle),
-          // SizedBox(
-          //   height: 1,
-          // ),
-          // Text("Martin Erickson Lapetaje, BSCS-3", style: textStyle),
-          // SizedBox(
-          //   height: 1,
-          // ),
-          // Text("John Lloyde Quizeo, BSIT-3", style: textStyle),
-          // SizedBox(
-          //   height: 100,
-          // ),
-
-          // Text("2022"),
-        ],
-      ),
+        // Text("2022"),
+      ],
     );
   }
 

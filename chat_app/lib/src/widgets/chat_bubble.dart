@@ -217,7 +217,7 @@ class _ChatCardState extends State<ChatCard> {
               child: Image(
                 image: NetworkImage(
                   chat[index].image,
-                  scale: 5,
+                  scale: 1,
                 ),
               )
               //  PhotoView(

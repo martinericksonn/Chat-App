@@ -92,8 +92,7 @@ class GeolocationController with ChangeNotifier {
     serviceEnabled = true;
     positionStream = Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
-        distanceFilter: 10, //in meters
-        timeLimit: Duration(seconds: 30),
+        distanceFilter: 100, //in meters
       ),
     ).listen(
       (event) {

@@ -189,11 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             });
           } else {
             setState(() {
-              print(isAgeValid);
-
-              prompts = isAgeValid
-                  ? "Fields cannot be empty"
-                  : "Sorry, you're too young for this app";
+              prompts = "invalid or empty fields";
             });
           }
         },
