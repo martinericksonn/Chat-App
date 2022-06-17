@@ -304,18 +304,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
           ],
           validator: (value) {
-            print(isAgeValid);
-            print(value);
             setState(() {
               if ((value == null ||
                   value.isEmpty ||
-                  (int.parse(value) < 18 && int.parse(value) > 100))) {
-                print("value");
+                  !(int.parse(value) > 17 && int.parse(value) < 100))) {
                 isAgeValid = false;
-              } else if (!(int.parse(value) < 18 && int.parse(value) > 100)) {
+                print("dapat false");
+              } else if (int.parse(value) > 17 && int.parse(value) < 100) {
+                print("dapat true");
                 isAgeValid = true;
               }
             });
+            print(isAgeValid.toString() + ' age');
             return null;
           },
           keyboardType: TextInputType.number,
