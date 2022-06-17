@@ -4,7 +4,7 @@ description: A Mobile Dev Final project.
 # Prevent accidental publishing to pub.dev.
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ">=2.17.1 <3.0.0"
